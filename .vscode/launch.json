@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "python",
+      "request": "launch",
+      "name": "Remote Visualizer",
+      "cwd": "${workspaceFolder}/remote-vizualizer",
+      "program": "${workspaceFolder}/remote-vizualizer/main.py",
+      "console": "internalConsole",
+      "pythonPath": "/usr/local/bin/pvpython",
+      "args": ["--port", "1234"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Web Client",
+      "cwd": "${workspaceFolder}/web-client",
+      "program": "${workspaceFolder}/web-client/node_modules/.bin/webpack-dev-server",
+      "args": ["--mode", "development"],
+      "console": "internalConsole"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All",
+      "configurations": ["Remote Visualizer", "Web Client"]
+    }
+  ]
+}

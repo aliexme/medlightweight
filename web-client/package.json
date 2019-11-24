@@ -1,0 +1,36 @@
+{
+  "name": "medlightweight-web-client",
+  "version": "1.0.0",
+  "description": "MedLightweight Web Client",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "webpack-dev-server --mode development",
+    "build": "webpack --mode production",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' && eslint webpack.config.js"
+  },
+  "dependencies": {
+    "hammerjs": "2.0.8",
+    "monologue.js": "0.3.5",
+    "normalize.css": "8.0.1",
+    "paraviewweb": "3.2.12",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "wslink": "0.1.12"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "3.0.0",
+    "css-loader": "3.2.0",
+    "eslint": "6.7.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-react": "7.16.0",
+    "eslint-plugin-react-hooks": "2.3.0",
+    "html-webpack-plugin": "3.2.0",
+    "mini-css-extract-plugin": "0.8.0",
+    "node-sass": "4.13.0",
+    "sass-loader": "8.0.0",
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.9.0"
+  }
+}
