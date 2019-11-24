@@ -1,0 +1,16 @@
+name: WebClient
+
+on:
+  push:
+    paths:
+      - web-client/**
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: yarn --frozen-lockfile
+        working-directory: ./web-client
+      - run: yarn lint
+        working-directory: ./web-client
