@@ -6,11 +6,17 @@ on:
       - web-client/**
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: yarn --frozen-lockfile
+      - uses: actions/cache@v1
+        with:
+          path: web-client/node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('web-client/yarn.lock') }}
+      - run: yarn install --frozen-lockfile
         working-directory: ./web-client
       - run: yarn lint
+        working-directory: ./web-client
+      - run: yarn ts-compile
         working-directory: ./web-client
