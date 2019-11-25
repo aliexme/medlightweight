@@ -1,12 +1,12 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es6": true
-  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
   ],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -34,5 +34,22 @@ module.exports = {
     "object-curly-spacing": ["error", "always"],
     "no-trailing-spaces": "error",
     "no-multi-spaces": "error",
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "parser": '@typescript-eslint/parser',
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+      ],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/member-delimiter-style": ["error", {
+          "multiline": { "delimiter": "none" },
+          "singleline": { "delimiter": "comma" },
+        }],
+      },
+    },
+  ],
 }
