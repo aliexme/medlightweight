@@ -1,5 +1,6 @@
 # remote-vizualizer
 remote-vizualizer/env
+remote-vizualizer/**/*.pyc
 
 # web-client
 web-client/.idea
