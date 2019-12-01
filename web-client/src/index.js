@@ -19,14 +19,15 @@ divRenderer.style.overflow = 'hidden'
 
 const config = { sessionURL: 'ws://localhost:1234/ws' }
 const smartConnect = SmartConnect.newInstance({ config })
-smartConnect.onConnectionReady((connection) => {
+smartConnect.onConnectionReady(async (connection) => {
   const pvwClient = ParaViewWebClient.createClient(connection, [
     'MouseHandler',
     'ViewPort',
     'ViewPortImageDelivery',
   ])
-  const renderer = new RemoteRenderer(pvwClient)
-  renderer.setContainer(divRenderer)
+  const viewId = await pvwClient.session.call('renderer.initialize')
+  const renderer = new RemoteRenderer(pvwClient, divRenderer, viewId)
+
   renderer.onImageReady(() => {
     console.log('We are good')
   })

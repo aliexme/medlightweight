@@ -1,3 +1,6 @@
 {
-  "eslint.workingDirectories": ["./web-client"]
+  "eslint.enable": true,
+  "eslint.workingDirectories": ["./web-client"],
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
 }
