@@ -2,6 +2,11 @@
 remote-vizualizer/env
 remote-vizualizer/**/*.pyc
 
+#api-server
+api-server/env
+api-server/**/__pycache__
+api-server/**/db.sqlite3
+
 # web-client
 web-client/.idea
 web-client/node_modules

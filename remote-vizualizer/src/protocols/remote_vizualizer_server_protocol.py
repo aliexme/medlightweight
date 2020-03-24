@@ -1,7 +1,7 @@
 from paraview.web import pv_wslink
 from paraview.web import protocols as pv_protocols
 
-from protocols.remote_render_protocol import RemoteRenderProtocol
+from src.protocols.remote_render_protocol import RemoteRenderProtocol
 
 
 class RemoteVizualizerServerProtocol(pv_wslink.PVServerProtocol):
