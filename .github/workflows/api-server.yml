@@ -14,4 +14,4 @@ jobs:
         run: pip install -r requirements.txt
         working-directory: ./api-server
       - name: pylint
-        run: pylint api-server --rcfile=.pylintrc --ignore=env
+        run: pylint api-server --rcfile=.pylintrc

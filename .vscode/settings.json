@@ -3,4 +3,5 @@
   "eslint.workingDirectories": ["./web-client"],
   "python.linting.pylintEnabled": true,
   "python.linting.enabled": true,
+  "python.linting.pylintPath": "./api-server/env/bin/pylint"
 }
