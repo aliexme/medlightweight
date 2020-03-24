@@ -2,7 +2,7 @@ import argparse
 
 from wslink import server
 
-from protocols.remote_vizualizer_server_protocol import RemoteVizualizerServerProtocol
+from src.protocols.remote_vizualizer_server_protocol import RemoteVizualizerServerProtocol
 
 
 def start_remote_vizualizer_server():
