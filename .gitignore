@@ -11,3 +11,6 @@ api-server/**/db.sqlite3
 web-client/.idea
 web-client/node_modules
 web-client/dist
+
+#idea
+**/.idea
