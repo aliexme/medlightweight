@@ -26,7 +26,7 @@ module.exports = {
   "rules": {
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "max-len": ["error", 120],
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0, "maxBOF": 0 }],
     "jsx-quotes": ["error", "prefer-single"],
@@ -34,6 +34,7 @@ module.exports = {
     "object-curly-spacing": ["error", "always"],
     "no-trailing-spaces": "error",
     "no-multi-spaces": "error",
+    'react/prop-types': 'off',
   },
   "overrides": [
     {
@@ -49,6 +50,9 @@ module.exports = {
           "multiline": { "delimiter": "none" },
           "singleline": { "delimiter": "comma" },
         }],
+        '@typescript-eslint/no-namespace': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
       },
     },
   ],

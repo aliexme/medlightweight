@@ -3,5 +3,5 @@ from django.urls import path
 from .views import AuthToken
 
 urlpatterns = [
-    path('login', AuthToken.as_view()),
+    path('signin', AuthToken.as_view()),
 ]

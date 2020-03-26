@@ -13,13 +13,14 @@ module.exports = (env, options) => {
   const isProd = mode === 'production'
 
   return {
-    entry: path.resolve(PATH_SRC, 'index.js'),
+    entry: path.resolve(PATH_SRC, 'index.tsx'),
     output: {
       path: PATH_DIST,
       filename: 'index.js',
     },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      modules: [PATH_SRC, 'node_modules'],
     },
     stats: {
       all: false,
@@ -47,6 +48,12 @@ module.exports = (env, options) => {
     ],
     devServer: {
       contentBase: PATH_DIST,
+      historyApiFallback: true,
+      proxy: {
+        '/api/': {
+          target: 'http://localhost:8000',
+        },
+      },
     },
     module: {
       rules: [
@@ -68,8 +75,21 @@ module.exports = (env, options) => {
                 hmr: !isProd,
               },
             },
-            'css-loader',
-            'sass-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                modules: {
+                  localIdentName: '[name]--[local]--[hash:base64:5]',
+                },
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
           ],
         },
       ],
