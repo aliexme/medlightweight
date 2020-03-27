@@ -30,6 +30,9 @@ export namespace Actions {
   export const API_SIGN_IN = 'API_SIGN_IN' as const
   export type ApiSignIn = A<typeof API_SIGN_IN, API.MlwAuth.SignIn.Req>
 
+  export const LOGOUT = 'LOGOUT' as const
+  export type Logout = AE<typeof LOGOUT>
+
   export const HISTORY_PUSH = 'HISTORY_PUSH' as const
   export type HistoryPush = A<typeof HISTORY_PUSH, { path: string }>
 }
@@ -39,5 +42,6 @@ export type Action = (
   | Actions.SetAuthorizedState
   | Actions.ChangeRequestStatus
   | Actions.ApiSignIn
+  | Actions.Logout
   | Actions.HistoryPush
 )
