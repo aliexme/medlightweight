@@ -27,21 +27,40 @@ export namespace Actions {
     status: CLIENT.RequestStatus
   }>
 
-  export const API_SIGN_IN = 'API_SIGN_IN' as const
-  export type ApiSignIn = A<typeof API_SIGN_IN, API.MlwAuth.SignIn.Req>
+  export const SIGN_IN = 'SIGN_IN' as const
+  export type SignIn = A<typeof SIGN_IN, API.MlwAuth.SignIn.Req>
 
   export const LOGOUT = 'LOGOUT' as const
   export type Logout = AE<typeof LOGOUT>
 
   export const HISTORY_PUSH = 'HISTORY_PUSH' as const
   export type HistoryPush = A<typeof HISTORY_PUSH, { path: string }>
+
+  export const FETCH_SURVEYS_LIST = 'FETCH_SURVEYS_LIST' as const
+  export type FetchSurveysList = AE<typeof FETCH_SURVEYS_LIST>
+
+  export const SET_SURVEYS_LIST = 'SET_SURVEYS_LIST' as const
+  export type SetSurveysList = A<typeof SET_SURVEYS_LIST, {
+    surveys: CLIENT.Survey[]
+    totalCount: number
+    concat?: boolean
+  }>
+
+  export const CHANGE_SURVEYS_LIST_FILTERS = 'CHANGE_SURVEYS_LIST_FILTERS' as const
+  export type ChangeSurveysListFilters = A<typeof CHANGE_SURVEYS_LIST_FILTERS, {
+    filters: CLIENT.SurveysListFilters
+    options: CLIENT.SurveysListFiltersOptions
+  }>
 }
 
 export type Action = (
   Actions.AppLoadedState
   | Actions.SetAuthorizedState
   | Actions.ChangeRequestStatus
-  | Actions.ApiSignIn
+  | Actions.SignIn
   | Actions.Logout
   | Actions.HistoryPush
+  | Actions.FetchSurveysList
+  | Actions.SetSurveysList
+  | Actions.ChangeSurveysListFilters
 )

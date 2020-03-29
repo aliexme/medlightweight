@@ -7,7 +7,8 @@ import { URLS } from 'urls'
 import { ProtectedRoute } from 'components/common/ProtectedRoute/ProtectedRoute'
 
 import { SignInPage } from './SignInPage/SignInPage'
-import { MainPage } from './MainPage/MainPage'
+import { IndexPage } from './IndexPage/IndexPage'
+import { SurveysPage } from './SurveysPage/SurveysPage'
 
 type ConnectedProps = {
   authorized: boolean
@@ -21,7 +22,8 @@ const AppCmp: React.FC<Props> = (props) => {
   return (
     <Switch>
       <Route path={URLS.SIGN_IN} component={SignInPage}/>
-      <ProtectedRoute path={URLS.INDEX} component={MainPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
+      <ProtectedRoute path={URLS.SURVEYS} component={SurveysPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
+      <ProtectedRoute path={URLS.INDEX} component={IndexPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
       <Redirect to={URLS.INDEX}/>
     </Switch>
   )

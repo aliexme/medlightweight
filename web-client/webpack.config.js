@@ -14,6 +14,7 @@ module.exports = (env, options) => {
 
   return {
     entry: path.resolve(PATH_SRC, 'index.tsx'),
+    devtool: isProd ? 'source-map' : 'inline-source-map',
     output: {
       path: PATH_DIST,
       filename: 'index.js',

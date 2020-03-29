@@ -6,6 +6,7 @@ import { Action, Actions } from 'actions'
 export type RequestName = (
   'signInRequest'
   | 'loadAppRequest'
+  | 'fetchSurveysListRequest'
 )
 
 export type RequestsState = {
@@ -15,6 +16,7 @@ export type RequestsState = {
 export const defaultRequestsState: RequestsState = {
   signInRequest: CLIENT.RequestStatus.NOT_STARTED,
   loadAppRequest: CLIENT.RequestStatus.NOT_STARTED,
+  fetchSurveysListRequest: CLIENT.RequestStatus.NOT_STARTED,
 }
 
 export const requestsReducer: Reducer<RequestsState, Action> = (state = defaultRequestsState, action) => {

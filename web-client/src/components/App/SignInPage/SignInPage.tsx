@@ -115,7 +115,7 @@ const mapStateToProps = (state: Store): ConnectedProps => {
 }
 
 const mapDispatchToProps: DispatchedProps = {
-  signIn: (data) => createAction(Actions.API_SIGN_IN, data),
+  signIn: (data) => createAction(Actions.SIGN_IN, data),
 }
 
 export const SignInPage = connect(mapStateToProps, mapDispatchToProps)(

@@ -8,7 +8,9 @@
     "noImplicitAny": true,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "sourceMap": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"

@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, Box, Toolbar } from '@material-ui/core'
+import { AppBar, Box, Toolbar, Typography } from '@material-ui/core'
 
 import styles from './PageAppBar.scss'
 
@@ -11,6 +11,9 @@ const PageAppBarCmp: React.FC<Props> = () => {
   return (
     <AppBar position='static'>
       <Toolbar>
+        <Typography variant='h6'>
+          Medlightweight
+        </Typography>
         <Box className={styles.rightContent}>
           <AccountMenuButton/>
         </Box>

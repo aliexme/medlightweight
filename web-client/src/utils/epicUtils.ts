@@ -1,12 +1,16 @@
-import { EMPTY, from, ObservableInput, OperatorFunction } from 'rxjs'
+import { EMPTY, from, Observable, ObservableInput, of, OperatorFunction } from 'rxjs'
 import { catchError, exhaustMap, mergeMap, switchMap } from 'rxjs/operators'
 import { AjaxError } from 'rxjs/ajax'
 
 import { logAjaxError, logError } from 'logging'
+import { Actions, createActionEmpty } from 'actions'
 
 function epicCatchError(error: Error) {
   if (error instanceof AjaxError) {
     logAjaxError(error)
+    if (error.status === 401) {
+      return of(createActionEmpty(Actions.LOGOUT)) as Observable<any>
+    }
   } else {
     logError(error)
   }

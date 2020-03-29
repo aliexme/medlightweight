@@ -6,6 +6,8 @@ remote-vizualizer/**/*.pyc
 api-server/env
 api-server/**/__pycache__
 api-server/**/db.sqlite3
+api-server/media
+api-server/static
 
 # web-client
 web-client/.idea
