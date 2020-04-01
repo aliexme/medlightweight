@@ -11,7 +11,7 @@ import { LocalStorageKey } from 'localStorage'
 import { URLS } from 'urls'
 
 export const signInEpic: Epic = (action$, _store$, deps) => action$.pipe(
-  ofType<Actions.ApiSignIn>(Actions.API_SIGN_IN),
+  ofType<Actions.SignIn>(Actions.SIGN_IN),
   guardSwitchMap((action) => {
     const req: API.MlwAuth.SignIn.Req = action.data
 

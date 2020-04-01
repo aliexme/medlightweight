@@ -35,6 +35,7 @@ module.exports = {
     "no-trailing-spaces": "error",
     "no-multi-spaces": "error",
     'react/prop-types': 'off',
+    'react/display-name': 'off',
   },
   "overrides": [
     {
@@ -53,6 +54,7 @@ module.exports = {
         '@typescript-eslint/no-namespace': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/ban-ts-ignore': 'off',
       },
     },
   ],

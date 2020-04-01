@@ -11,6 +11,12 @@ export type RequestOptions = {
   timeout?: number
 }
 
+export type QueryType = string | number | boolean | Array<QueryType>
+
+export type QueryParams = {
+  [key: string]: QueryType
+}
+
 export class AjaxObservable {
   private readonly timeout = Infinity
   private headers: RequestHeaders = {}
@@ -25,11 +31,12 @@ export class AjaxObservable {
     }
   }
 
-  get(url: string, options?: RequestOptions): Observable<any> {
+  get(url: string, queryParams: QueryParams, options?: RequestOptions): Observable<any> {
     const requestHeaders = this.mergeHeaders(options?.headers)
     const requestTimeout = options?.timeout ?? this.timeout
+    const queryUrl = this.buildUrlWithQueryParams(url, queryParams)
 
-    return ajax.get(url, requestHeaders).pipe(
+    return ajax.get(queryUrl, requestHeaders).pipe(
       timeout(requestTimeout),
       map((result) => result.response),
     )
@@ -54,5 +61,25 @@ export class AjaxObservable {
       ...this.headers,
       ...headers,
     }
+  }
+
+  private buildUrlWithQueryParams(url: string, queryParams: QueryParams) {
+    if (Object.values(queryParams).length === 0) {
+      return url
+    }
+
+    let result = url + '?'
+
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          result += `${key}=${item}&`
+        })
+      } else {
+        result += `${key}=${value}&`
+      }
+    }
+
+    return result.slice(0, -1)
   }
 }

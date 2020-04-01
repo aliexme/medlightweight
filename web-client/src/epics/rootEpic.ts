@@ -9,6 +9,7 @@ import { logError } from 'logging'
 
 import { authEpics } from './authEpics/authEpics'
 import { navigationEpics } from './navigationEpics/navigationEpics'
+import { surveysEpics } from './surveysEpics/surveysEpics'
 
 export type EpicDependencies = {
   history: History
@@ -20,6 +21,7 @@ export type Epic = ReduxObservableEpic<Action, Action, Store, EpicDependencies>
 const epics: Epic[] = [
   ...authEpics,
   ...navigationEpics,
+  ...surveysEpics,
 ]
 
 export const rootEpic: Epic = (action$, store$, dependencies) => {
