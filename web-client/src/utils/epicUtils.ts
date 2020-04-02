@@ -1,9 +1,11 @@
-import { EMPTY, from, Observable, ObservableInput, of, OperatorFunction } from 'rxjs'
-import { catchError, exhaustMap, mergeMap, switchMap } from 'rxjs/operators'
+import { EMPTY, from, MonoTypeOperatorFunction, Observable, ObservableInput, of, OperatorFunction } from 'rxjs'
+import { catchError, exhaustMap, filter, mergeMap, switchMap, takeUntil } from 'rxjs/operators'
 import { AjaxError } from 'rxjs/ajax'
 
+import { CLIENT } from 'types/client'
 import { logAjaxError, logError } from 'logging'
-import { Actions, createActionEmpty } from 'actions'
+import { Action, Actions, createActionEmpty } from 'actions'
+import { ofType } from 'redux-observable'
 
 function epicCatchError(error: Error) {
   if (error instanceof AjaxError) {
@@ -51,5 +53,17 @@ export function guardExhaustMap<T, R>(
         catchError(epicCatchError),
       )
     }),
+  )
+}
+
+export function takeUntilCancelRequest<T>(
+  action$: Observable<Action>,
+  request: CLIENT.RequestName,
+): MonoTypeOperatorFunction<T> {
+  return (input$) => input$.pipe(
+    takeUntil(action$.pipe(
+      ofType<Actions.CancelRequest>(Actions.CANCEL_REQUEST),
+      filter((action) => action.data.request === request),
+    )),
   )
 }

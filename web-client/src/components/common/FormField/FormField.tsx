@@ -4,18 +4,19 @@ import { FormControl, FormHelperText, InputLabel } from '@material-ui/core'
 type OwnProps = {
   label?: string
   disabled?: boolean
+  fullWidth?: boolean
   errors?: string[]
 }
 
 type Props = OwnProps
 
 const FormFieldCmp: React.FC<Props> = (props) => {
-  const { label, errors, disabled } = props
+  const { label, errors, disabled, fullWidth } = props
   const hasError = errors?.length > 0
 
   return (
     <FormControl
-      fullWidth
+      fullWidth={fullWidth}
       disabled={disabled}
       error={hasError}
     >

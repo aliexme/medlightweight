@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import MaterialTableLib, { MaterialTableProps, Icons, Localization } from 'material-table'
+import MuiMaterialTable, { MaterialTableProps, Icons, Localization } from 'material-table'
 
 import Add from '@material-ui/icons/Add'
 import ArrowDownward from '@material-ui/icons/ArrowDownward'
@@ -60,7 +60,7 @@ const localization: Localization = {
 class MaterialTableCmp<RowData extends object> extends React.Component<Props<RowData>> {
   render() {
     return (
-      <MaterialTableLib
+      <MuiMaterialTable
         icons={tableIcons}
         localization={localization}
         {...this.props}

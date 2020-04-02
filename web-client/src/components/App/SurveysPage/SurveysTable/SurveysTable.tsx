@@ -1,13 +1,16 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { Column, Action as MaterialTableAction } from 'material-table'
 import { Add } from '@material-ui/icons'
 import { connect } from 'react-redux'
+import { useSnackbar } from 'notistack'
 
 import { CLIENT } from 'types/client'
 import { Store } from 'store/store'
 import { Action, Actions, createAction } from 'actions'
+import { usePrevious } from 'hooks'
 import { getSurveysSelector } from 'selectors/surveySelectors'
 import { MaterialTable } from 'components/common/MaterialTable/MaterialTable'
+import { showUnexpectedError } from 'utils/snackbarUtils'
 
 type ConnectedProps = {
   surveys: CLIENT.Survey[]
@@ -16,6 +19,7 @@ type ConnectedProps = {
 }
 
 type DispatchedProps = {
+  pushModal(modal: CLIENT.Modal): Action
   changeSurveysListFilters(filters: CLIENT.SurveysListFilters, options?: CLIENT.SurveysListFiltersOptions): Action
 }
 
@@ -24,6 +28,15 @@ type Props = ConnectedProps & DispatchedProps
 const SurveysTableCmp: React.FC<Props> = (props) => {
   const { surveys, surveysTotalCount, fetchSurveysListRequest } = props
   const isLoading = fetchSurveysListRequest === CLIENT.RequestStatus.LOADING
+
+  const { enqueueSnackbar } = useSnackbar()
+  const prevRequest = usePrevious(fetchSurveysListRequest)
+
+  useEffect(() => {
+    if (prevRequest === CLIENT.RequestStatus.LOADING && fetchSurveysListRequest === CLIENT.RequestStatus.ERROR) {
+      showUnexpectedError(enqueueSnackbar)
+    }
+  }, [prevRequest, fetchSurveysListRequest])
 
   const columns = useMemo<Column<CLIENT.Survey>[]>(() => {
     return [
@@ -40,7 +53,7 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
         icon: () => <Add/>,
         tooltip: 'Добавить обследование',
         isFreeAction: true,
-        onClick: () => alert('Add'),
+        onClick: () => props.pushModal({ type: CLIENT.Modals.SURVEY_MODAL_TYPE }),
       },
     ]
   }, [])
@@ -54,25 +67,22 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
       isLoading={isLoading}
       totalCount={surveysTotalCount}
       page={0}
-      options={{
-        toolbarButtonAlignment: 'left',
-      }}
       style={{ boxShadow: 'none', borderRadius: 0 }}
     />
   )
 }
 
 const mapStateToProps = (state: Store): ConnectedProps => {
-  const { fetchSurveysListRequest } = state.requests
-
   return {
     surveys: getSurveysSelector(state),
     surveysTotalCount: state.surveys.surveysTotalCount,
-    fetchSurveysListRequest,
+    fetchSurveysListRequest: state.requests[CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST],
   }
 }
 
 const mapDispatchToProps: DispatchedProps = {
+  pushModal: (modal) => createAction(Actions.PUSH_MODAL, modal),
+
   changeSurveysListFilters: (filters, options) =>
     createAction(Actions.CHANGE_SURVEYS_LIST_FILTERS, { filters, options }),
 }

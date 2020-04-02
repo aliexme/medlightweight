@@ -1,0 +1,17 @@
+.container {
+  :global(.MuiDialog-paper) {
+    width: 500px;
+  }
+}
+
+.content {
+  overflow-y: unset;
+}
+
+.uploadLabel {
+  margin-bottom: 8px;
+}
+
+.uploadButton {
+  width: max-content;
+}

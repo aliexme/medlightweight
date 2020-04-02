@@ -10,7 +10,7 @@ import { guardMergeMap } from 'utils/epicUtils'
 import { mapApiSurveyToClient } from 'utils/surveysUtils'
 
 export const fetchSurveysListEpic: Epic = (action$, state$, deps) => action$.pipe(
-  ofType<Actions.FetchSurveysList>(Actions.FETCH_SURVEYS_LIST),
+  ofType<Actions.ApiFetchSurveysList>(Actions.API_FETCH_SURVEYS_LIST),
   guardMergeMap(() => {
     const { filters } = state$.value.surveys
     const req: API.MlwSurvey.List.Req = {
@@ -29,14 +29,14 @@ export const fetchSurveysListEpic: Epic = (action$, state$, deps) => action$.pip
             concat: req.offset !== 0,
           }),
           createAction(Actions.CHANGE_REQUEST_STATUS, {
-            request: 'fetchSurveysListRequest' as const,
+            request: CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST,
             status: CLIENT.RequestStatus.LOADED,
           }),
         )
       }),
       startWith(
         createAction(Actions.CHANGE_REQUEST_STATUS, {
-          request: 'fetchSurveysListRequest' as const,
+          request: CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST,
           status: CLIENT.RequestStatus.LOADING,
         }),
       ),
@@ -44,8 +44,8 @@ export const fetchSurveysListEpic: Epic = (action$, state$, deps) => action$.pip
         return concat(
           of(
             createAction(Actions.CHANGE_REQUEST_STATUS, {
-              request: 'fetchSurveysListRequest' as const,
-              status: CLIENT.RequestStatus.LOADED,
+              request: CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST,
+              status: CLIENT.RequestStatus.ERROR,
             }),
           ),
           throwError(error),

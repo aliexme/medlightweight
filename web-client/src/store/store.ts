@@ -8,17 +8,20 @@ import { browserHistory } from 'browserHistory'
 import { ajaxObservable } from 'network/http'
 
 import { appReducer, AppState } from './app'
+import { modalsReducer, ModalsState } from './modals'
 import { requestsReducer, RequestsState } from './requests'
 import { surveysReducer, SurveysState } from './surveys'
 
 export type Store = {
   app: AppState
+  modals: ModalsState
   requests: RequestsState
   surveys: SurveysState
 }
 
 const rootReducer = combineReducers<Store, Action>({
   app: appReducer,
+  modals: modalsReducer,
   requests: requestsReducer,
   surveys: surveysReducer,
 })
