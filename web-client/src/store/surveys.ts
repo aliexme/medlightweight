@@ -49,6 +49,27 @@ export const surveysReducer: Reducer<SurveysState, Action> = (state = defaultSur
         },
       }
     }
+
+    case Actions.ADD_SURVEYS: {
+      const { surveys } = action.data
+      const surveyIds = surveys.map((survey) => survey.id)
+
+      return {
+        ...state,
+        surveysListIds: [...surveyIds, ...state.surveysListIds],
+        surveysMap: mergeArrayToMap(state.surveysMap, surveys),
+        surveysTotalCount: state.surveysTotalCount + surveys.length,
+      }
+    }
+
+    case Actions.UPDATE_SURVEYS: {
+      const { surveys } = action.data
+
+      return {
+        ...state,
+        surveysMap: mergeArrayToMap(state.surveysMap, surveys),
+      }
+    }
   }
 
   return state

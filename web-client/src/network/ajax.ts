@@ -52,6 +52,17 @@ export class AjaxObservable {
     )
   }
 
+  postFormData(url: string, body?: object, options?: RequestOptions): Observable<any> {
+    const requestHeaders = this.mergeHeaders(options?.headers)
+    const requestTimeout = options?.timeout ?? this.timeout
+    const formData = this.mapBodyToFormData(body)
+
+    return ajax.post(url, formData, requestHeaders).pipe(
+      timeout(requestTimeout),
+      map((result) => result.response),
+    )
+  }
+
   setHeaders(headers: RequestHeaders) {
     this.headers = this.mergeHeaders(headers)
   }
@@ -64,22 +75,44 @@ export class AjaxObservable {
   }
 
   private buildUrlWithQueryParams(url: string, queryParams: QueryParams) {
-    if (Object.values(queryParams).length === 0) {
+    if (Object.keys(queryParams).length === 0) {
       return url
     }
 
-    let result = url + '?'
+    const queryString = Object.keys(queryParams)
+      .map((key) => this.encodeQueryParam(key, queryParams[key]))
+      .join('&')
 
-    for (const [key, value] of Object.entries(queryParams)) {
+    return `${encodeURI(url)}?${queryString}`
+  }
+
+  private encodeQueryParam(key: string, value: QueryType): string {
+    if (Array.isArray(value)) {
+      return value
+        .map((nestedValue) => this.encodeQueryParam(key, nestedValue))
+        .join('&')
+    }
+
+    return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+  }
+
+  private mapBodyToFormData(body?: object): FormData {
+    const formData = new FormData()
+
+    if (!body) {
+      return formData
+    }
+
+    for (const [key, value] of Object.entries(body)) {
       if (Array.isArray(value)) {
-        value.forEach((item) => {
-          result += `${key}=${item}&`
+        value.forEach((nestedValue) => {
+          formData.append(key, nestedValue)
         })
       } else {
-        result += `${key}=${value}&`
+        formData.append(key, value)
       }
     }
 
-    return result.slice(0, -1)
+    return formData
   }
 }

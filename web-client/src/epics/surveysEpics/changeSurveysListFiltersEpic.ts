@@ -12,7 +12,7 @@ export const changeSurveysListFiltersEpic: Epic = (action$) => action$.pipe(
     const actions: Action[] = []
 
     if (options && options.fetchSurveysList) {
-      actions.push(createActionEmpty(Actions.FETCH_SURVEYS_LIST))
+      actions.push(createActionEmpty(Actions.API_FETCH_SURVEYS_LIST))
     }
 
     return of(...actions)

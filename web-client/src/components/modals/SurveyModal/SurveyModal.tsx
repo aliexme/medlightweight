@@ -1,0 +1,184 @@
+import React, { useEffect, useCallback } from 'react'
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  FormHelperText,
+  Grid,
+  Input,
+} from '@material-ui/core'
+import { createForm, FormComponentProps } from 'rc-form'
+import { connect } from 'react-redux'
+import { useSnackbar } from 'notistack'
+
+import { CLIENT } from 'types/client'
+import { API } from 'types/api'
+import { Action, Actions, createAction } from 'actions'
+import { Store } from 'store/store'
+import { DialogTitle } from 'components/modals/DialogTitle/DialogTitle'
+import { FormField } from 'components/common/FormField/FormField'
+import { FORM_FIELD_IS_REQUIRED } from 'utils/formUtils'
+import { usePrevious } from 'hooks'
+import { showUnexpectedError } from 'utils/snackbarUtils'
+import { Upload } from 'components/common/Upload/Upload'
+
+import styles from './SurveyModal.scss'
+
+type OwnProps = CLIENT.ModalProps<CLIENT.Modals.AddSurveyModal>
+
+type ConnectedProps = {
+  createSurveyRequest: CLIENT.RequestStatus
+}
+
+type DispatchedProps = {
+  createSurvey(data: API.MlwSurvey.Create.Req): Action
+  cancelRequest(request: CLIENT.RequestName): Action
+}
+
+type Props = OwnProps & ConnectedProps & DispatchedProps & FormComponentProps
+
+enum SurveyModalFields {
+  NAME = 'NAME',
+  DESCRIPTION = 'DESCRIPTION',
+  FILES = 'FILES',
+}
+
+const SurveyModalCmp: React.FC<Props> = (props) => {
+  const { form, survey, createSurveyRequest } = props
+  const loading = createSurveyRequest === CLIENT.RequestStatus.LOADING
+
+  const { enqueueSnackbar } = useSnackbar()
+  const prevRequest = usePrevious(createSurveyRequest)
+
+  useEffect(() => {
+    if (prevRequest === CLIENT.RequestStatus.LOADING && createSurveyRequest === CLIENT.RequestStatus.ERROR) {
+      showUnexpectedError(enqueueSnackbar)
+    }
+  }, [prevRequest, createSurveyRequest])
+
+  const submitSurvey = useCallback(() => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        props.createSurvey({
+          name: values[SurveyModalFields.NAME],
+          description: values[SurveyModalFields.DESCRIPTION],
+          files: Array.from(values[SurveyModalFields.FILES]),
+        })
+      }
+    })
+  }, [])
+
+  const onCancelClick = useCallback(() => {
+    if (loading) {
+      props.cancelRequest(CLIENT.Requests.CREATE_SURVEY_REQUEST)
+    } else {
+      props.close()
+    }
+  }, [loading])
+
+  return (
+    <Dialog
+      open
+      disableBackdropClick={loading}
+      scroll='body'
+      onClose={props.closeAll}
+      className={styles.container}
+    >
+      <DialogTitle
+        disabled={loading}
+        onClose={props.close}
+      >
+        {survey ? 'Редактировать обследование' : 'Добавить обследование'}
+      </DialogTitle>
+      <DialogContent className={styles.content}>
+        <Grid container direction='column' spacing={3}>
+          <Grid item>
+            <FormField
+              label='Название'
+              fullWidth
+              disabled={loading}
+              errors={form.getFieldError(SurveyModalFields.NAME)}
+            >
+              {form.getFieldDecorator(SurveyModalFields.NAME, {
+                initialValue: '',
+                rules: [
+                  { required: true, message: FORM_FIELD_IS_REQUIRED },
+                ],
+              })(
+                <Input/>,
+              )}
+            </FormField>
+          </Grid>
+          <Grid item>
+            <FormField
+              label='Описание'
+              fullWidth
+              disabled={loading}
+            >
+              {form.getFieldDecorator(SurveyModalFields.DESCRIPTION, {
+                initialValue: '',
+              })(
+                <Input multiline rows={3} rowsMax={Infinity}/>,
+              )}
+            </FormField>
+          </Grid>
+          <Grid item>
+            <FormField
+              fullWidth
+              errors={form.getFieldError(SurveyModalFields.FILES)}
+            >
+              <FormHelperText className={styles.uploadLabel}>
+                Выберите файлы
+              </FormHelperText>
+              {form.getFieldDecorator(SurveyModalFields.FILES, {
+                rules: [
+                  { required: true, message: FORM_FIELD_IS_REQUIRED },
+                ],
+              })(
+                <Upload
+                  directory
+                  disabled={loading}
+                  className={styles.uploadButton}
+                />,
+              )}
+            </FormField>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          color='secondary'
+          onClick={onCancelClick}
+        >
+          Отмена
+        </Button>
+        <Button
+          color='primary'
+          type='submit'
+          disabled={loading}
+          endIcon={loading && <CircularProgress size='1em' color='secondary'/>}
+          onClick={submitSurvey}
+        >
+          {survey ? 'Редактировать' : 'Создать'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
+const mapStateToProps = (state: Store): ConnectedProps => {
+  return {
+    createSurveyRequest: state.requests[CLIENT.Requests.CREATE_SURVEY_REQUEST],
+  }
+}
+
+const mapDispatchToProps: DispatchedProps = {
+  createSurvey: (data) => createAction(Actions.API_CREATE_SURVEY, data),
+  cancelRequest: (request) => createAction(Actions.CANCEL_REQUEST, { request }),
+}
+
+export const SurveyModal = connect(mapStateToProps, mapDispatchToProps)(
+  createForm()(SurveyModalCmp),
+)

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Container, Grid, Input, CircularProgress } from '@material-ui/core'
 import { FormComponentProps, createForm } from 'rc-form'
-import { withSnackbar, WithSnackbarProps } from 'notistack'
+import { useSnackbar } from 'notistack'
 
 import { CLIENT } from 'types/client'
 import { API } from 'types/api'
@@ -10,6 +10,7 @@ import { Store } from 'store/store'
 import { createAction, Action, Actions } from 'actions'
 import { usePrevious } from 'hooks'
 import { FormField } from 'components/common/FormField/FormField'
+import { showUnexpectedError } from 'utils/snackbarUtils'
 
 import styles from './SignInPage.scss'
 
@@ -21,7 +22,7 @@ type DispatchedProps = {
   signIn(data: API.MlwAuth.SignIn.Req): Action
 }
 
-type Props = ConnectedProps & DispatchedProps & FormComponentProps & WithSnackbarProps
+type Props = ConnectedProps & DispatchedProps & FormComponentProps
 
 enum SignInFormField {
   USERNAME = 'USERNAME',
@@ -34,11 +35,12 @@ const SignInPageCmp: React.FC<Props> = (props) => {
   const username = form.getFieldValue(SignInFormField.USERNAME)
   const password = form.getFieldValue(SignInFormField.PASSWORD)
 
+  const { enqueueSnackbar } = useSnackbar()
   const prevSignInRequest = usePrevious(signInRequest)
 
   useEffect(() => {
     if (prevSignInRequest === CLIENT.RequestStatus.LOADING && signInRequest === CLIENT.RequestStatus.ERROR) {
-      props.enqueueSnackbar('Произошла ошибка', { variant: 'error' })
+      showUnexpectedError(enqueueSnackbar)
     }
   }, [signInRequest, prevSignInRequest])
 
@@ -64,6 +66,7 @@ const SignInPageCmp: React.FC<Props> = (props) => {
               <Grid item>
                 <FormField
                   label='Имя пользователя'
+                  fullWidth
                   disabled={loading}
                 >
                   {form.getFieldDecorator(SignInFormField.USERNAME, {
@@ -76,6 +79,7 @@ const SignInPageCmp: React.FC<Props> = (props) => {
               <Grid item>
                 <FormField
                   label='Пароль'
+                  fullWidth
                   disabled={loading}
                 >
                   {form.getFieldDecorator(SignInFormField.PASSWORD, {
@@ -107,10 +111,8 @@ const SignInPageCmp: React.FC<Props> = (props) => {
 }
 
 const mapStateToProps = (state: Store): ConnectedProps => {
-  const { signInRequest } = state.requests
-
   return {
-    signInRequest,
+    signInRequest: state.requests[CLIENT.Requests.SIGN_IN_REQUEST],
   }
 }
 
@@ -119,5 +121,5 @@ const mapDispatchToProps: DispatchedProps = {
 }
 
 export const SignInPage = connect(mapStateToProps, mapDispatchToProps)(
-  createForm()(withSnackbar(SignInPageCmp)),
+  createForm()(SignInPageCmp),
 )

@@ -25,7 +25,7 @@ export const signInEpic: Epic = (action$, _store$, deps) => action$.pipe(
         return of(
           createAction(Actions.SET_AUTHORIZED_STATE, { authorized: true }),
           createAction(Actions.CHANGE_REQUEST_STATUS, {
-            request: 'signInRequest' as const,
+            request: CLIENT.Requests.SIGN_IN_REQUEST,
             status: CLIENT.RequestStatus.LOADED,
           }),
           createAction(Actions.HISTORY_PUSH, { path: URLS.INDEX }),
@@ -33,7 +33,7 @@ export const signInEpic: Epic = (action$, _store$, deps) => action$.pipe(
       }),
       startWith(
         createAction(Actions.CHANGE_REQUEST_STATUS, {
-          request: 'signInRequest' as const,
+          request: CLIENT.Requests.SIGN_IN_REQUEST,
           status: CLIENT.RequestStatus.LOADING,
         }),
       ),
@@ -41,7 +41,7 @@ export const signInEpic: Epic = (action$, _store$, deps) => action$.pipe(
         return concat(
           of(
             createAction(Actions.CHANGE_REQUEST_STATUS, {
-              request: 'signInRequest' as const,
+              request: CLIENT.Requests.SIGN_IN_REQUEST,
               status: CLIENT.RequestStatus.ERROR,
             }),
           ),

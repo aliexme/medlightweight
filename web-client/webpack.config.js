@@ -38,6 +38,7 @@ module.exports = (env, options) => {
       new CleanWebpackPlugin(),
       new ForkTsCheckerWebpackPlugin({
         eslint: true,
+        checkSyntacticErrors: true,
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(PATH_SRC, 'index.html'),

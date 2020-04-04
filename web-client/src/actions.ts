@@ -1,6 +1,5 @@
 import { CLIENT } from 'types/client'
 import { API } from 'types/api'
-import { RequestName } from 'store/requests'
 
 type AE<T> = {
   type: T
@@ -23,9 +22,21 @@ export namespace Actions {
 
   export const CHANGE_REQUEST_STATUS = 'CHANGE_REQUEST_STATUS' as const
   export type ChangeRequestStatus = A<typeof CHANGE_REQUEST_STATUS, {
-    request: RequestName
+    request: CLIENT.RequestName
     status: CLIENT.RequestStatus
   }>
+
+  export const CANCEL_REQUEST = 'CANCEL_REQUEST' as const
+  export type CancelRequest = A<typeof CANCEL_REQUEST, { request: CLIENT.RequestName }>
+
+  export const PUSH_MODAL = 'PUSH_MODAL' as const
+  export type PushModal = A<typeof PUSH_MODAL, CLIENT.Modal>
+
+  export const POP_MODAL = 'POP_MODAL' as const
+  export type PopModal = AE<typeof POP_MODAL>
+
+  export const CLOSE_ALL_MODAL = 'CLOSE_ALL_MODAL' as const
+  export type CloseAllModal = AE<typeof CLOSE_ALL_MODAL>
 
   export const SIGN_IN = 'SIGN_IN' as const
   export type SignIn = A<typeof SIGN_IN, API.MlwAuth.SignIn.Req>
@@ -36,8 +47,8 @@ export namespace Actions {
   export const HISTORY_PUSH = 'HISTORY_PUSH' as const
   export type HistoryPush = A<typeof HISTORY_PUSH, { path: string }>
 
-  export const FETCH_SURVEYS_LIST = 'FETCH_SURVEYS_LIST' as const
-  export type FetchSurveysList = AE<typeof FETCH_SURVEYS_LIST>
+  export const API_FETCH_SURVEYS_LIST = 'API_FETCH_SURVEYS_LIST' as const
+  export type ApiFetchSurveysList = AE<typeof API_FETCH_SURVEYS_LIST>
 
   export const SET_SURVEYS_LIST = 'SET_SURVEYS_LIST' as const
   export type SetSurveysList = A<typeof SET_SURVEYS_LIST, {
@@ -51,16 +62,32 @@ export namespace Actions {
     filters: CLIENT.SurveysListFilters
     options: CLIENT.SurveysListFiltersOptions
   }>
+
+  export const API_CREATE_SURVEY = 'API_CREATE_SURVEY' as const
+  export type ApiCreateSurvey = A<typeof API_CREATE_SURVEY, API.MlwSurvey.Create.Req>
+
+  export const ADD_SURVEYS = 'ADD_SURVEYS' as const
+  export type AddSurveys = A<typeof ADD_SURVEYS, { surveys: CLIENT.Survey[] }>
+
+  export const UPDATE_SURVEYS = 'UPDATE_SURVEYS' as const
+  export type UpdateSurveys = A<typeof UPDATE_SURVEYS, { surveys: CLIENT.Survey[] }>
 }
 
 export type Action = (
   Actions.AppLoadedState
   | Actions.SetAuthorizedState
   | Actions.ChangeRequestStatus
+  | Actions.CancelRequest
+  | Actions.PushModal
+  | Actions.PopModal
+  | Actions.CloseAllModal
   | Actions.SignIn
   | Actions.Logout
   | Actions.HistoryPush
-  | Actions.FetchSurveysList
+  | Actions.ApiFetchSurveysList
   | Actions.SetSurveysList
   | Actions.ChangeSurveysListFilters
+  | Actions.ApiCreateSurvey
+  | Actions.AddSurveys
+  | Actions.UpdateSurveys
 )

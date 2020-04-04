@@ -19,14 +19,15 @@ declare module 'rc-form' {
     valuePropName?: string
     initialValue?: any
     trigger?: string
-    getValueFromEvent?: (...args: any[]) => any
     validateTrigger?: string | string[]
     rules?: ValidationRule[]
     exclusive?: boolean
-    normalize?: (value: any, prevValue: any, allValues: any) => any
     validateFirst?: boolean
     hidden?: boolean
     preserve?: boolean
+    getValueFromEvent?(...args: any[]): any
+    getValueProps?(value): object
+    normalize?(value: any, prevValue: any, allValues: any): any
   }
 
   type ValidateCallback = (errors: any, values: any) => void
