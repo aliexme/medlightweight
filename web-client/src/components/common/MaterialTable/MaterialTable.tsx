@@ -43,6 +43,9 @@ const localization: Localization = {
   body: {
     emptyDataSourceMessage: 'Ничего не найдено',
   },
+  header: {
+    actions: 'Действия',
+  },
   pagination: {
     labelRowsSelect: 'записей',
     labelDisplayedRows: '{from}-{to} из {count}',
