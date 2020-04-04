@@ -43,8 +43,9 @@ export namespace API {
       export const URL = MLW_SURVEY_PREFIX + ''
 
       export type Req = {
-        limit: number
-        offset: number
+        page: number
+        pageSize: number
+        searchText?: string
       }
 
       export type Resp = Pagination<Survey>

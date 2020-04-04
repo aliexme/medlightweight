@@ -70,8 +70,9 @@ export namespace CLIENT {
   export type SurveysMap = IMap<number, Survey>
 
   export type SurveysListFilters = {
-    limit?: number
-    offset?: number
+    page?: number
+    pageSize?: number
+    searchText?: string
   }
 
   export type SurveysListFiltersOptions = {
