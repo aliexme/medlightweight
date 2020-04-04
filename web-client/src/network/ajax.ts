@@ -80,6 +80,7 @@ export class AjaxObservable {
     }
 
     const queryString = Object.keys(queryParams)
+      .filter((key) => queryParams[key] !== undefined)
       .map((key) => this.encodeQueryParam(key, queryParams[key]))
       .join('&')
 

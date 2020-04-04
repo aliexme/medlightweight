@@ -1,5 +1,14 @@
-import { EMPTY, from, MonoTypeOperatorFunction, Observable, ObservableInput, of, OperatorFunction } from 'rxjs'
-import { catchError, exhaustMap, filter, mergeMap, switchMap, takeUntil } from 'rxjs/operators'
+import { EMPTY, from, MonoTypeOperatorFunction, Observable, ObservableInput, of, OperatorFunction, timer } from 'rxjs'
+import {
+  catchError,
+  debounce,
+  distinctUntilChanged,
+  exhaustMap,
+  filter,
+  mergeMap,
+  switchMap,
+  takeUntil,
+} from 'rxjs/operators'
 import { AjaxError } from 'rxjs/ajax'
 
 import { CLIENT } from 'types/client'
@@ -65,5 +74,15 @@ export function takeUntilCancelRequest<T>(
       ofType<Actions.CancelRequest>(Actions.CANCEL_REQUEST),
       filter((action) => action.data.request === request),
     )),
+  )
+}
+
+export function searchDebounce<T>(
+  pluckSearchText: (value: T) => string,
+  debounceTime = 500,
+): MonoTypeOperatorFunction<T> {
+  return (input$) => input$.pipe(
+    debounce((value) => pluckSearchText(value) ? timer(debounceTime) : timer(0)),
+    distinctUntilChanged((x, y) => pluckSearchText(x) === pluckSearchText(y)),
   )
 }

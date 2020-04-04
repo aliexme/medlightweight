@@ -16,3 +16,6 @@ class Survey(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ['-created_at']

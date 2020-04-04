@@ -2,6 +2,8 @@ import { API } from 'types/api'
 import { CLIENT } from 'types/client'
 import { getFromMap } from 'utils/immutableUtils'
 
+export const DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE = 10
+
 export function mapApiSurveyToClient(apiSurvey: API.Survey): CLIENT.Survey {
   return {
     id: apiSurvey.id,

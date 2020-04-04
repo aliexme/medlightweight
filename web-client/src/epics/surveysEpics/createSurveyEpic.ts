@@ -7,7 +7,6 @@ import { API } from 'types/api'
 import { Actions, createAction, createActionEmpty } from 'actions'
 import { Epic } from 'epics/rootEpic'
 import { guardMergeMap, takeUntilCancelRequest } from 'utils/epicUtils'
-import { mapApiSurveyToClient } from 'utils/surveysUtils'
 
 export const createSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
   ofType<Actions.ApiCreateSurvey>(Actions.API_CREATE_SURVEY),
@@ -16,12 +15,13 @@ export const createSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
 
     return deps.ajax.postFormData(API.MlwSurvey.Create.URL, req).pipe(
       takeUntilCancelRequest(action$, CLIENT.Requests.CREATE_SURVEY_REQUEST),
-      mergeMap((resp: API.MlwSurvey.Create.Resp) => {
-        const clientSurvey = mapApiSurveyToClient(resp)
-
+      mergeMap(() => {
         return of(
           createActionEmpty(Actions.POP_MODAL),
-          createAction(Actions.ADD_SURVEYS, { surveys: [clientSurvey] }),
+          createAction(Actions.CHANGE_SURVEYS_LIST_FILTERS, {
+            filters: { page: 1 },
+            options: { fetchSurveysList: true },
+          }),
           createAction(Actions.CHANGE_REQUEST_STATUS, {
             request: CLIENT.Requests.CREATE_SURVEY_REQUEST,
             status: CLIENT.RequestStatus.LOADED,

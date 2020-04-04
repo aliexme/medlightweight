@@ -54,20 +54,19 @@ export namespace Actions {
   export type SetSurveysList = A<typeof SET_SURVEYS_LIST, {
     surveys: CLIENT.Survey[]
     totalCount: number
-    concat?: boolean
   }>
 
   export const CHANGE_SURVEYS_LIST_FILTERS = 'CHANGE_SURVEYS_LIST_FILTERS' as const
   export type ChangeSurveysListFilters = A<typeof CHANGE_SURVEYS_LIST_FILTERS, {
     filters: CLIENT.SurveysListFilters
-    options: CLIENT.SurveysListFiltersOptions
+    options?: CLIENT.SurveysListFiltersOptions
   }>
+
+  export const SEARCH_SURVEYS = 'SEARCH_SURVEYS' as const
+  export type SearchSurveys = A<typeof SEARCH_SURVEYS, { searchText: string }>
 
   export const API_CREATE_SURVEY = 'API_CREATE_SURVEY' as const
   export type ApiCreateSurvey = A<typeof API_CREATE_SURVEY, API.MlwSurvey.Create.Req>
-
-  export const ADD_SURVEYS = 'ADD_SURVEYS' as const
-  export type AddSurveys = A<typeof ADD_SURVEYS, { surveys: CLIENT.Survey[] }>
 
   export const UPDATE_SURVEYS = 'UPDATE_SURVEYS' as const
   export type UpdateSurveys = A<typeof UPDATE_SURVEYS, { surveys: CLIENT.Survey[] }>
@@ -87,7 +86,7 @@ export type Action = (
   | Actions.ApiFetchSurveysList
   | Actions.SetSurveysList
   | Actions.ChangeSurveysListFilters
+  | Actions.SearchSurveys
   | Actions.ApiCreateSurvey
-  | Actions.AddSurveys
   | Actions.UpdateSurveys
 )

@@ -4,6 +4,7 @@ import { Map as IMap } from 'immutable'
 import { CLIENT } from 'types/client'
 import { Action, Actions } from 'actions'
 import { mergeArrayToMap } from 'utils/immutableUtils'
+import { DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE } from 'utils/surveysUtils'
 
 export type SurveysState = {
   surveysListIds: number[]
@@ -16,8 +17,9 @@ export const defaultSurveysState: SurveysState = {
   surveysListIds: [],
   surveysMap: IMap(),
   filters: {
-    limit: 20,
-    offset: 0,
+    page: 1,
+    pageSize: DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE,
+    searchText: '',
   },
   surveysTotalCount: 0,
 }
@@ -25,15 +27,12 @@ export const defaultSurveysState: SurveysState = {
 export const surveysReducer: Reducer<SurveysState, Action> = (state = defaultSurveysState, action): SurveysState => {
   switch (action.type) {
     case Actions.SET_SURVEYS_LIST: {
-      const { surveys, totalCount, concat } = action.data
+      const { surveys, totalCount } = action.data
       const surveyIds = surveys.map((survey) => survey.id)
-      const updatedSurveysListIds = concat
-        ? [...state.surveysListIds, ...surveyIds]
-        : surveyIds
 
       return {
         ...state,
-        surveysListIds: updatedSurveysListIds,
+        surveysListIds: surveyIds,
         surveysMap: mergeArrayToMap(state.surveysMap, surveys),
         surveysTotalCount: totalCount,
       }
@@ -45,20 +44,8 @@ export const surveysReducer: Reducer<SurveysState, Action> = (state = defaultSur
         filters: {
           ...state.filters,
           ...action.data.filters,
-          offset: action.data.filters.offset || 0,
+          page: action.data.filters.page || 1,
         },
-      }
-    }
-
-    case Actions.ADD_SURVEYS: {
-      const { surveys } = action.data
-      const surveyIds = surveys.map((survey) => survey.id)
-
-      return {
-        ...state,
-        surveysListIds: [...surveyIds, ...state.surveysListIds],
-        surveysMap: mergeArrayToMap(state.surveysMap, surveys),
-        surveysTotalCount: state.surveysTotalCount + surveys.length,
       }
     }
 
