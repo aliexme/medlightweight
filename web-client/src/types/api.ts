@@ -37,11 +37,9 @@ export namespace API {
   }
 
   export namespace MlwSurvey {
-    export const MLW_SURVEY_PREFIX = API_PREFIX + '/surveys/'
+    export const MLW_SURVEYS_BASE_URL = API_PREFIX + '/surveys/'
 
     export namespace List {
-      export const URL = MLW_SURVEY_PREFIX + ''
-
       export type Req = {
         page: number
         pageSize: number
@@ -51,9 +49,13 @@ export namespace API {
       export type Resp = Pagination<Survey>
     }
 
-    export namespace Create {
-      export const URL = MLW_SURVEY_PREFIX + ''
+    export namespace Info {
+      export type Req = {}
 
+      export type Resp = Survey
+    }
+
+    export namespace Create {
       export type Req = {
         name: string
         description?: string
@@ -64,8 +66,6 @@ export namespace API {
     }
 
     export namespace Update {
-      export const URL = MLW_SURVEY_PREFIX + ''
-
       export type Req = {
         name?: string
         description?: string

@@ -13,6 +13,7 @@ export const defaultRequestsState: RequestsState = {
   [CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
   [CLIENT.Requests.CREATE_SURVEY_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
   [CLIENT.Requests.EDIT_SURVEY_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.FETCH_SURVEY_INFO_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
 }
 
 export const requestsReducer: Reducer<RequestsState, Action> = (state = defaultRequestsState, action) => {

@@ -10,6 +10,7 @@ import { ModalsStack } from 'components/modals/ModalsStack/ModalsStack'
 import { SignInPage } from './SignInPage/SignInPage'
 import { IndexPage } from './IndexPage/IndexPage'
 import { SurveysPage } from './SurveysPage/SurveysPage'
+import { SurveyPage } from './SurveyPage/SurveyPage'
 
 type ConnectedProps = {
   authorized: boolean
@@ -25,6 +26,12 @@ const AppCmp: React.FC<Props> = (props) => {
       <Switch>
         <Route path={URLS.SIGN_IN} component={SignInPage}/>
         <ProtectedRoute path={URLS.SURVEYS} component={SurveysPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
+        <ProtectedRoute
+          path={`${URLS.SURVEY}/:surveyId`}
+          component={SurveyPage}
+          allow={authorized}
+          redirectTo={URLS.SIGN_IN}
+        />
         <ProtectedRoute path={URLS.INDEX} component={IndexPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
         <Redirect to={URLS.INDEX}/>
       </Switch>

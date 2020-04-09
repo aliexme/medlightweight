@@ -1,4 +1,5 @@
 import React, { useMemo, useEffect, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Column, Action as MaterialTableAction, Options } from 'material-table'
 import { connect } from 'react-redux'
 import { useSnackbar } from 'notistack'
@@ -14,6 +15,7 @@ import { getSurveysSelector } from 'selectors/surveySelectors'
 import { MaterialTable } from 'components/common/MaterialTable/MaterialTable'
 import { showUnexpectedError } from 'utils/snackbarUtils'
 import { DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE } from 'utils/surveysUtils'
+import { URLS } from 'urls'
 
 type ConnectedProps = {
   surveys: CLIENT.Survey[]
@@ -34,6 +36,7 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
   const { surveys, surveysTotalCount, surveysListFilters, fetchSurveysListRequest } = props
   const isLoading = fetchSurveysListRequest === CLIENT.RequestStatus.LOADING
 
+  const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
   const prevRequest = usePrevious(fetchSurveysListRequest)
 
@@ -102,6 +105,12 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
     }
   }, [])
 
+  const onSurveyClick = useCallback((event?: React.MouseEvent, rowData?: CLIENT.Survey) => {
+    if (rowData) {
+      history.push(`${URLS.SURVEY}/${rowData.id}`)
+    }
+  }, [history])
+
   const actions = useMemo<MaterialTableAction<CLIENT.Survey>[]>(() => {
     return [
       {
@@ -134,10 +143,10 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
       totalCount={surveysTotalCount}
       page={surveysListFilters.page - 1}
       options={options}
-      style={{ boxShadow: 'none', borderRadius: 0 }}
       onChangePage={onChangePage}
       onChangeRowsPerPage={onChangePageSize}
       onSearchChange={onSearchChange}
+      onRowClick={onSurveyClick}
     />
   )
 }

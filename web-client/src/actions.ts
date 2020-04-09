@@ -73,6 +73,9 @@ export namespace Actions {
 
   export const UPDATE_SURVEYS = 'UPDATE_SURVEYS' as const
   export type UpdateSurveys = A<typeof UPDATE_SURVEYS, { surveys: CLIENT.Survey[] }>
+
+  export const API_SURVEY_INFO = 'API_SURVEY_INFO' as const
+  export type ApiSurveyInfo = A<typeof API_SURVEY_INFO, { surveyId: number }>
 }
 
 export type Action = (
@@ -93,4 +96,5 @@ export type Action = (
   | Actions.ApiCreateSurvey
   | Actions.ApiEditSurvey
   | Actions.UpdateSurveys
+  | Actions.ApiSurveyInfo
 )

@@ -13,7 +13,7 @@ export const createSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
   guardMergeMap((action) => {
     const req: API.MlwSurvey.Create.Req = action.data
 
-    return deps.ajax.post(API.MlwSurvey.Create.URL, req, { formData: true }).pipe(
+    return deps.ajax.post(API.MlwSurvey.MLW_SURVEYS_BASE_URL, req, { formData: true }).pipe(
       takeUntilCancelRequest(action$, CLIENT.Requests.CREATE_SURVEY_REQUEST),
       mergeMap(() => {
         return of(

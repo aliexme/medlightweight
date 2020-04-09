@@ -5,11 +5,15 @@ import styles from './PageAppBar.scss'
 
 import { AccountMenuButton } from './AccountMenuButton/AccountMenuButton'
 
-type Props = {}
+type OwnProps = {
+  className?: string
+}
 
-const PageAppBarCmp: React.FC<Props> = () => {
+type Props = OwnProps
+
+const PageAppBarCmp: React.FC<Props> = (props) => {
   return (
-    <AppBar position='static'>
+    <AppBar position='static' className={props.className}>
       <Toolbar>
         <Typography variant='h6'>
           Medlightweight

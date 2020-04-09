@@ -17,6 +17,7 @@ module.exports = (env, options) => {
     devtool: isProd ? 'source-map' : 'inline-source-map',
     output: {
       path: PATH_DIST,
+      publicPath: '/',
       filename: 'index.js',
     },
     resolve: {
