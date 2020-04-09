@@ -68,6 +68,9 @@ export namespace Actions {
   export const API_CREATE_SURVEY = 'API_CREATE_SURVEY' as const
   export type ApiCreateSurvey = A<typeof API_CREATE_SURVEY, API.MlwSurvey.Create.Req>
 
+  export const API_EDIT_SURVEY = 'API_EDIT_SURVEY' as const
+  export type ApiEditSurvey = A<typeof API_EDIT_SURVEY, API.MlwSurvey.Update.Req & { id: number }>
+
   export const UPDATE_SURVEYS = 'UPDATE_SURVEYS' as const
   export type UpdateSurveys = A<typeof UPDATE_SURVEYS, { surveys: CLIENT.Survey[] }>
 }
@@ -88,5 +91,6 @@ export type Action = (
   | Actions.ChangeSurveysListFilters
   | Actions.SearchSurveys
   | Actions.ApiCreateSurvey
+  | Actions.ApiEditSurvey
   | Actions.UpdateSurveys
 )

@@ -30,10 +30,12 @@ type OwnProps = CLIENT.ModalProps<CLIENT.Modals.AddSurveyModal>
 
 type ConnectedProps = {
   createSurveyRequest: CLIENT.RequestStatus
+  editSurveyRequest: CLIENT.RequestStatus
 }
 
 type DispatchedProps = {
   createSurvey(data: API.MlwSurvey.Create.Req): Action
+  editSurvey(id: number, data: API.MlwSurvey.Update.Req): Action
   cancelRequest(request: CLIENT.RequestName): Action
 }
 
@@ -46,33 +48,44 @@ enum SurveyModalFields {
 }
 
 const SurveyModalCmp: React.FC<Props> = (props) => {
-  const { form, survey, createSurveyRequest } = props
-  const loading = createSurveyRequest === CLIENT.RequestStatus.LOADING
+  const { form, survey, createSurveyRequest, editSurveyRequest } = props
+  const request = survey ? editSurveyRequest : createSurveyRequest
+  const loading = request === CLIENT.RequestStatus.LOADING
 
   const { enqueueSnackbar } = useSnackbar()
-  const prevRequest = usePrevious(createSurveyRequest)
+  const prevRequest = usePrevious(request)
 
   useEffect(() => {
-    if (prevRequest === CLIENT.RequestStatus.LOADING && createSurveyRequest === CLIENT.RequestStatus.ERROR) {
+    if (prevRequest === CLIENT.RequestStatus.LOADING && request === CLIENT.RequestStatus.ERROR) {
       showUnexpectedError(enqueueSnackbar)
     }
-  }, [prevRequest, createSurveyRequest])
+  }, [prevRequest, request])
 
   const submitSurvey = useCallback(() => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        props.createSurvey({
-          name: values[SurveyModalFields.NAME],
-          description: values[SurveyModalFields.DESCRIPTION],
-          files: Array.from(values[SurveyModalFields.FILES]),
-        })
+        const fileList = values[SurveyModalFields.FILES]
+
+        if (survey) {
+          props.editSurvey(survey.id, {
+            name: values[SurveyModalFields.NAME],
+            description: values[SurveyModalFields.DESCRIPTION],
+            files: fileList && Array.from(fileList),
+          })
+        } else {
+          props.createSurvey({
+            name: values[SurveyModalFields.NAME],
+            description: values[SurveyModalFields.DESCRIPTION],
+            files: Array.from(fileList),
+          })
+        }
       }
     })
   }, [])
 
   const onCancelClick = useCallback(() => {
     if (loading) {
-      props.cancelRequest(CLIENT.Requests.CREATE_SURVEY_REQUEST)
+      props.cancelRequest(survey ? CLIENT.Requests.EDIT_SURVEY_REQUEST : CLIENT.Requests.CREATE_SURVEY_REQUEST)
     } else {
       props.close()
     }
@@ -102,7 +115,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
               errors={form.getFieldError(SurveyModalFields.NAME)}
             >
               {form.getFieldDecorator(SurveyModalFields.NAME, {
-                initialValue: '',
+                initialValue: survey && survey.name || '',
                 rules: [
                   { required: true, message: FORM_FIELD_IS_REQUIRED },
                 ],
@@ -118,7 +131,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
               disabled={loading}
             >
               {form.getFieldDecorator(SurveyModalFields.DESCRIPTION, {
-                initialValue: '',
+                initialValue: survey && survey.description || '',
               })(
                 <Input multiline rows={3} rowsMax={Infinity}/>,
               )}
@@ -134,7 +147,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
               </FormHelperText>
               {form.getFieldDecorator(SurveyModalFields.FILES, {
                 rules: [
-                  { required: true, message: FORM_FIELD_IS_REQUIRED },
+                  { required: !survey, message: FORM_FIELD_IS_REQUIRED },
                 ],
               })(
                 <Upload
@@ -171,11 +184,13 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
 const mapStateToProps = (state: Store): ConnectedProps => {
   return {
     createSurveyRequest: state.requests[CLIENT.Requests.CREATE_SURVEY_REQUEST],
+    editSurveyRequest: state.requests[CLIENT.Requests.EDIT_SURVEY_REQUEST],
   }
 }
 
 const mapDispatchToProps: DispatchedProps = {
   createSurvey: (data) => createAction(Actions.API_CREATE_SURVEY, data),
+  editSurvey: (id, data) => createAction(Actions.API_EDIT_SURVEY, { id, ...data }),
   cancelRequest: (request) => createAction(Actions.CANCEL_REQUEST, { request }),
 }
 

@@ -21,23 +21,29 @@ class SurveySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         files = validated_data.pop('files')
         owner = validated_data.get('owner')
-        survey_name = validated_data.get('name').replace(' ', '_')
 
-        validated_data['directory'] = 'id_{0}_{1}/{2}'.format(owner.pk, owner.username, survey_name)
         survey = Survey.objects.create(**validated_data)
+        survey.directory = 'owner_id_{0}/survey_id_{1}'.format(owner.id, survey.id)
+        survey.save()
 
         survey_directory_absolute_path = get_absolute_path_regarding_media(survey.directory)
-
-        try:
-            shutil.rmtree(survey_directory_absolute_path)
-        except FileNotFoundError:
-            pass
-
-        for file in files:
-            path_to_save = survey_directory_absolute_path + '/' + file.name
-            default_storage.save(path_to_save, ContentFile(file.read()))
+        self._overwrite_files(files, survey_directory_absolute_path)
 
         return survey
+
+    @transaction_atomic
+    def update(self, instance, validated_data):
+        files = validated_data.pop('files', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if files is not None:
+            survey_directory_absolute_path = get_absolute_path_regarding_media(instance.directory)
+            self._overwrite_files(files, survey_directory_absolute_path)
+
+        instance.save()
+        return instance
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -46,3 +52,13 @@ class SurveySerializer(serializers.ModelSerializer):
         data['directory'] = self.context['request'].build_absolute_uri(directory)
 
         return data
+
+    def _overwrite_files(self, files, directory):
+        try:
+            shutil.rmtree(directory)
+        except FileNotFoundError:
+            pass
+
+        for file in files:
+            path_to_save = directory + '/' + file.name
+            default_storage.save(path_to_save, ContentFile(file.read()))

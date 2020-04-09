@@ -8,6 +8,6 @@ def transaction_atomic(func):
             with transaction.atomic():
                 return func(*args, **kwargs)
         except Exception as e:
-            raise ValidationError({'exception': e.__class__.__name__, 'detail': e.__dict__})
+            raise ValidationError({'exception': e.__class__.__name__, 'details': e.__dict__})
 
     return wrapper

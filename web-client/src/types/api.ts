@@ -62,5 +62,17 @@ export namespace API {
 
       export type Resp = Survey
     }
+
+    export namespace Update {
+      export const URL = MLW_SURVEY_PREFIX + ''
+
+      export type Req = {
+        name?: string
+        description?: string
+        files?: File[]
+      }
+
+      export type Resp = Survey
+    }
   }
 }

@@ -9,6 +9,7 @@ export type RequestHeaders = {
 export type RequestOptions = {
   headers?: RequestHeaders
   timeout?: number
+  formData?: boolean
 }
 
 export type QueryType = string | number | boolean | Array<QueryType>
@@ -45,19 +46,20 @@ export class AjaxObservable {
   post(url: string, body?: object, options?: RequestOptions): Observable<any> {
     const requestHeaders = this.mergeHeaders(options?.headers)
     const requestTimeout = options?.timeout ?? this.timeout
+    const reqBody = options?.formData ? this.mapBodyToFormData(body) : body
 
-    return ajax.post(url, body, requestHeaders).pipe(
+    return ajax.post(url, reqBody, requestHeaders).pipe(
       timeout(requestTimeout),
       map((result) => result.response),
     )
   }
 
-  postFormData(url: string, body?: object, options?: RequestOptions): Observable<any> {
+  path(url: string, body?: object, options?: RequestOptions): Observable<any> {
     const requestHeaders = this.mergeHeaders(options?.headers)
     const requestTimeout = options?.timeout ?? this.timeout
-    const formData = this.mapBodyToFormData(body)
+    const reqBody = options?.formData ? this.mapBodyToFormData(body) : body
 
-    return ajax.post(url, formData, requestHeaders).pipe(
+    return ajax.patch(url, reqBody, requestHeaders).pipe(
       timeout(requestTimeout),
       map((result) => result.response),
     )
@@ -105,6 +107,10 @@ export class AjaxObservable {
     }
 
     for (const [key, value] of Object.entries(body)) {
+      if (value === undefined) {
+        continue
+      }
+
       if (Array.isArray(value)) {
         value.forEach((nestedValue) => {
           formData.append(key, nestedValue)
