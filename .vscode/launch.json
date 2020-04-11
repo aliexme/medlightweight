@@ -16,8 +16,8 @@
       "name": "Remote Visualizer",
       "type": "python",
       "request": "launch",
-      "cwd": "${workspaceFolder}/remote-vizualizer",
-      "program": "${workspaceFolder}/remote-vizualizer/src/main.py",
+      "cwd": "${workspaceFolder}/remote-visualizer",
+      "program": "${workspaceFolder}/remote-visualizer/src/main.py",
       "console": "internalConsole",
       "pythonPath": "/usr/local/bin/pvpython",
       "args": ["--port", "1234"]
