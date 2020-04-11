@@ -3,7 +3,7 @@ import { ofType } from 'redux-observable'
 
 import { Actions, createAction } from 'actions'
 import { Epic } from 'epics/rootEpic'
-import { guardSwitchMap } from 'utils/epicUtils'
+import { guardSwitchMap } from 'utils/epicsUtils'
 import { URLS } from 'urls'
 import { LocalStorageKey } from 'localStorage'
 

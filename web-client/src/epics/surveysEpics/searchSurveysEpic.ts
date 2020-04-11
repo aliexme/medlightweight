@@ -3,7 +3,7 @@ import { ofType } from 'redux-observable'
 
 import { Epic } from 'epics/rootEpic'
 import { Actions, createAction } from 'actions'
-import { guardSwitchMap, searchDebounce } from 'utils/epicUtils'
+import { guardSwitchMap, searchDebounce } from 'utils/epicsUtils'
 
 export const searchSurveysEpic: Epic = (action$) => action$.pipe(
   ofType<Actions.SearchSurveys>(Actions.SEARCH_SURVEYS),

@@ -6,7 +6,7 @@ import { CLIENT } from 'types/client'
 import { API } from 'types/api'
 import { Actions, createAction } from 'actions'
 import { Epic } from 'epics/rootEpic'
-import { guardMergeMap } from 'utils/epicUtils'
+import { guardMergeMap } from 'utils/epicsUtils'
 import { mapApiSurveyToClient } from 'utils/surveysUtils'
 
 export const fetchSurveyInfoEpic: Epic = (action$, _state$, deps) => action$.pipe(
