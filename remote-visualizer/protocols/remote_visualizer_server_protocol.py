@@ -1,10 +1,10 @@
 from paraview.web import pv_wslink
 from paraview.web import protocols as pv_protocols
 
-from src.protocols.remote_render_protocol import RemoteRenderProtocol
+from protocols.remote_render_protocol import RemoteRenderProtocol
 
 
-class RemoteVizualizerServerProtocol(pv_wslink.PVServerProtocol):
+class RemoteVisualizerServerProtocol(pv_wslink.PVServerProtocol):
     authKey = "wslink-secret"
 
     def initialize(self):
@@ -12,4 +12,4 @@ class RemoteVizualizerServerProtocol(pv_wslink.PVServerProtocol):
         self.registerVtkWebProtocol(pv_protocols.ParaViewWebViewPort())
         self.registerVtkWebProtocol(pv_protocols.ParaViewWebViewPortImageDelivery())
         self.registerVtkWebProtocol(RemoteRenderProtocol())
-        self.updateSecret(RemoteVizualizerServerProtocol.authKey)
+        self.updateSecret(RemoteVisualizerServerProtocol.authKey)

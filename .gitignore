@@ -1,6 +1,6 @@
-# remote-vizualizer
-remote-vizualizer/env
-remote-vizualizer/**/*.pyc
+# remote-visualizer
+remote-visualizer/env
+remote-visualizer/**/*.pyc
 
 #api-server
 api-server/env

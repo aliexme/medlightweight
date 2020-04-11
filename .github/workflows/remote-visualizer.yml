@@ -1,4 +1,4 @@
-name: RemoteVizualizer
+name: RemoteVisualizer
 
 on: push
 
@@ -12,6 +12,6 @@ jobs:
           python-version: '3.x'
       - name: install requirements
         run: pip install -r requirements.txt
-        working-directory: ./remote-vizualizer
+        working-directory: ./remote-visualizer
       - name: pylint
-        run: pylint remote-vizualizer --rcfile=.pylintrc
+        run: pylint remote-visualizer --rcfile=.pylintrc
