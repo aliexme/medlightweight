@@ -4,34 +4,32 @@ import { ofType } from 'redux-observable'
 
 import { CLIENT } from 'types/client'
 import { API } from 'types/api'
+import { Actions, createAction } from 'actions'
 import { Epic } from 'epics/rootEpic'
-import { Actions, createAction, createActionEmpty } from 'actions'
-import { guardMergeMap, takeUntilCancelRequest } from 'utils/epicUtils'
+import { guardMergeMap } from 'utils/epicUtils'
 import { mapApiSurveyToClient } from 'utils/surveysUtils'
 
-export const editSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
-  ofType<Actions.ApiEditSurvey>(Actions.API_EDIT_SURVEY),
+export const fetchSurveyInfoEpic: Epic = (action$, _state$, deps) => action$.pipe(
+  ofType<Actions.ApiSurveyInfo>(Actions.API_SURVEY_INFO),
   guardMergeMap((action) => {
-    const url = API.MlwSurvey.MLW_SURVEYS_BASE_URL + action.data.id + '/'
-    const req: API.MlwSurvey.Update.Req = action.data
+    const url = API.MlwSurvey.MLW_SURVEYS_BASE_URL + action.data.surveyId + '/'
+    const req: API.MlwSurvey.Info.Req = {}
 
-    return deps.ajax.path(url, req, { formData: true }).pipe(
-      takeUntilCancelRequest(action$, CLIENT.Requests.EDIT_SURVEY_REQUEST),
-      mergeMap((resp: API.MlwSurvey.Update.Resp) => {
+    return deps.ajax.get(url, req).pipe(
+      mergeMap((resp: API.MlwSurvey.Info.Resp) => {
         const clientSurvey = mapApiSurveyToClient(resp)
 
         return of(
-          createActionEmpty(Actions.POP_MODAL),
           createAction(Actions.UPDATE_SURVEYS, { surveys: [clientSurvey] }),
           createAction(Actions.CHANGE_REQUEST_STATUS, {
-            request: CLIENT.Requests.EDIT_SURVEY_REQUEST,
+            request: CLIENT.Requests.FETCH_SURVEY_INFO_REQUEST,
             status: CLIENT.RequestStatus.LOADED,
           }),
         )
       }),
       startWith(
         createAction(Actions.CHANGE_REQUEST_STATUS, {
-          request: CLIENT.Requests.EDIT_SURVEY_REQUEST,
+          request: CLIENT.Requests.FETCH_SURVEY_INFO_REQUEST,
           status: CLIENT.RequestStatus.LOADING,
         }),
       ),
@@ -39,7 +37,7 @@ export const editSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
         return concat(
           of(
             createAction(Actions.CHANGE_REQUEST_STATUS, {
-              request: CLIENT.Requests.EDIT_SURVEY_REQUEST,
+              request: CLIENT.Requests.FETCH_SURVEY_INFO_REQUEST,
               status: CLIENT.RequestStatus.ERROR,
             }),
           ),

@@ -1,5 +1,6 @@
 export enum URLS {
   INDEX = '/',
   SIGN_IN = '/signin',
-  SURVEYS = '/surveys'
+  SURVEYS = '/surveys',
+  SURVEY = '/survey',
 }

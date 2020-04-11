@@ -17,6 +17,7 @@ export namespace CLIENT {
     | Requests.FetchSurveysListRequest
     | Requests.CreateSurveyRequest
     | Requests.EditSurveyRequest
+    | Requests.FetchSurveyInfoRequest
   )
 
   export namespace Requests {
@@ -34,6 +35,9 @@ export namespace CLIENT {
 
     export const EDIT_SURVEY_REQUEST = 'EDIT_SURVEY_REQUEST' as const
     export type EditSurveyRequest = typeof EDIT_SURVEY_REQUEST
+
+    export const FETCH_SURVEY_INFO_REQUEST = 'FETCH_SURVEY_INFO_REQUEST' as const
+    export type FetchSurveyInfoRequest = typeof FETCH_SURVEY_INFO_REQUEST
   }
 
   /* Modals */

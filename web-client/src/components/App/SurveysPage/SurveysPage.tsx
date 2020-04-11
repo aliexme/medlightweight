@@ -6,8 +6,6 @@ import { Action, Actions, createAction } from 'actions'
 import { PageContainer } from 'components/common/PageContainer/PageContainer'
 import { SurveysTable } from './SurveysTable/SurveysTable'
 
-import styles from './SurveysPage.scss'
-
 type DispatchedProps = {
   changeSurveysListFilters(filters: CLIENT.SurveysListFilters, options?: CLIENT.SurveysListFiltersOptions): Action
 }
@@ -24,9 +22,7 @@ const SurveysPageCmp: React.FC<Props> = (props) => {
 
   return (
     <PageContainer>
-      <div className={styles.surveysTableContainer}>
-        <SurveysTable/>
-      </div>
+      <SurveysTable/>
     </PageContainer>
   )
 }

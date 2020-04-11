@@ -19,7 +19,7 @@ export const fetchSurveysListEpic: Epic = (action$, state$, deps) => action$.pip
       searchText: filters.searchText || undefined,
     }
 
-    return deps.ajax.get(API.MlwSurvey.List.URL, req).pipe(
+    return deps.ajax.get(API.MlwSurvey.MLW_SURVEYS_BASE_URL, req).pipe(
       mergeMap((resp: API.MlwSurvey.List.Resp) => {
         const clientSurveys = resp.results.map((apiSurvey) => mapApiSurveyToClient(apiSurvey))
 

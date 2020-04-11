@@ -5,6 +5,7 @@ import { changeSurveysListFiltersEpic } from './changeSurveysListFiltersEpic'
 import { createSurveyEpic } from './createSurveyEpic'
 import { searchSurveysEpic } from './searchSurveysEpic'
 import { editSurveyEpic } from './editSurveyEpic'
+import { fetchSurveyInfoEpic } from './fetchSurveyInfoEpic'
 
 export const surveysEpics: Epic[] = [
   fetchSurveysListEpic,
@@ -12,4 +13,5 @@ export const surveysEpics: Epic[] = [
   createSurveyEpic,
   editSurveyEpic,
   searchSurveysEpic,
+  fetchSurveyInfoEpic,
 ]
