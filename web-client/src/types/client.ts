@@ -86,4 +86,63 @@ export namespace CLIENT {
   export type SurveysListFiltersOptions = {
     fetchSurveysList?: boolean
   }
+
+  /* Events */
+
+  export type InteractionEvent = {
+    srcEvent: Event
+    target: HTMLElement
+    isFirst: boolean
+    isFinal: boolean
+  }
+
+  export type PanInteractionEvent = InteractionEvent & {
+    srcEvent: MouseEvent | PointerEvent | TouchEvent
+  }
+
+  export type PointerInteractionEvent = PanInteractionEvent & {
+    srcEvent: PointerEvent
+  }
+
+  export type ZoomInteractionEvent = InteractionEvent & {
+    srcEvent: WheelEvent
+    deltaX: number
+    deltaY: number
+  }
+
+  /* Remote Rendering */
+
+  export namespace RemoteRendering {
+    export type RenderImageOptions = {
+      size: [number, number]
+      interact: boolean
+    }
+  }
+
+  export namespace ParaView {
+    export namespace ViewportMouseInteraction {
+      export type Options = {
+        x: number
+        y: number
+        buttonLeft: boolean
+        buttonMiddle: boolean
+        buttonRight: boolean
+        shiftKey: number | boolean
+        ctrlKey: number | boolean
+        altKey: number | boolean
+        metaKey: number | boolean
+        action: 'down' | 'move' | 'up'
+      }
+    }
+
+    export namespace ViewportImageRender {
+      export type Options = {
+        size: [number, number]
+        mtime: number
+        quality: number
+        localTime: number
+        clearCache: boolean
+      }
+    }
+  }
 }

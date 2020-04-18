@@ -3,7 +3,7 @@ import { ofType } from 'redux-observable'
 
 import { Action, Actions, createActionEmpty } from 'actions'
 import { Epic } from 'epics/rootEpic'
-import { guardMergeMap } from 'utils/epicUtils'
+import { guardMergeMap } from 'utils/epicsUtils'
 
 export const changeSurveysListFiltersEpic: Epic = (action$) => action$.pipe(
   ofType<Actions.ChangeSurveysListFilters>(Actions.CHANGE_SURVEYS_LIST_FILTERS),

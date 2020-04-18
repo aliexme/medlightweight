@@ -1,8 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
-import { CircularProgress } from '@material-ui/core'
+import { withSnackbar, WithSnackbarProps } from 'notistack'
 
 import { CLIENT } from 'types/client'
+import { ParaViewRemoteVisualizer } from 'components/common/ParaViewRemoteVisualizer/ParaViewRemoteVisualizer'
+import { ParaViewRemoteRenderingSession } from 'remoteRendering/ParaViewRemoteRenderingSession'
+import { showUnexpectedError } from 'utils/snackbarUtils'
 
 import styles from './SurveyRemoteVisualizer.scss'
 
@@ -11,14 +14,39 @@ type OwnProps = {
   className?: string
 }
 
-type Props = OwnProps
+type Props = OwnProps & WithSnackbarProps
 
-const SurveyRemoteVisualizerCmp: React.FC<Props> = (props) => {
-  return (
-    <div className={classNames(styles.container, props.className)}>
-      <CircularProgress style={{ color: 'white' }}/>
-    </div>
-  )
+class SurveyRemoteVisualizerCmp extends React.Component<Props> {
+  session: ParaViewRemoteRenderingSession
+
+  constructor(props: Props) {
+    super(props)
+
+    this.session = new ParaViewRemoteRenderingSession({
+      url: 'ws://localhost:1234/ws',
+      wslinkSecret: 'wslink-secret',
+    })
+
+    this.session.onError(() => {
+      showUnexpectedError(this.props.enqueueSnackbar)
+    })
+
+    this.session.connect()
+  }
+
+  componentWillUnmount() {
+    this.session.close()
+  }
+
+  render() {
+    return (
+      <div className={classNames(styles.container, this.props.className)}>
+        <ParaViewRemoteVisualizer
+          session={this.session}
+        />
+      </div>
+    )
+  }
 }
 
-export const SurveyRemoteVisualizer = SurveyRemoteVisualizerCmp
+export const SurveyRemoteVisualizer = withSnackbar(SurveyRemoteVisualizerCmp)

@@ -6,7 +6,7 @@ import { CLIENT } from 'types/client'
 import { API } from 'types/api'
 import { Actions, createAction, createActionEmpty } from 'actions'
 import { Epic } from 'epics/rootEpic'
-import { guardMergeMap, takeUntilCancelRequest } from 'utils/epicUtils'
+import { guardMergeMap, takeUntilCancelRequest } from 'utils/epicsUtils'
 
 export const createSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
   ofType<Actions.ApiCreateSurvey>(Actions.API_CREATE_SURVEY),

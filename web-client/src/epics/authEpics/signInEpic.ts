@@ -6,7 +6,7 @@ import { CLIENT } from 'types/client'
 import { API } from 'types/api'
 import { createAction, Actions } from 'actions'
 import { Epic } from 'epics/rootEpic'
-import { guardSwitchMap } from 'utils/epicUtils'
+import { guardSwitchMap } from 'utils/epicsUtils'
 import { LocalStorageKey } from 'localStorage'
 import { URLS } from 'urls'
 

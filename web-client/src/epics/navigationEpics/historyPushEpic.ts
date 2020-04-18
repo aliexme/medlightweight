@@ -3,7 +3,7 @@ import { ofType } from 'redux-observable'
 
 import { Actions } from 'actions'
 import { Epic } from 'epics/rootEpic'
-import { guardMergeMap } from 'utils/epicUtils'
+import { guardMergeMap } from 'utils/epicsUtils'
 
 export const historyPushEpic: Epic = (action$, _$store, deps) => action$.pipe(
   ofType<Actions.HistoryPush>(Actions.HISTORY_PUSH),

@@ -75,4 +75,93 @@ export namespace API {
       export type Resp = Survey
     }
   }
+
+  export namespace ParaView {
+    export enum KeyCodeModifier {
+      NONE = 0,
+      ALT = 1,
+      META = 2,
+      SHIFT = 4,
+      CTRL = 8,
+    }
+
+    export type RpcCallReq = {
+      wslink: string
+      id: string
+      method: string
+      args: Array<any>
+      kwargs: object
+    }
+
+    export type RpcCallResp<Result = any> = {
+      wslink: string
+      id: string
+      result: Result
+    }
+
+    export namespace WslinkHello {
+      export const Method = 'wslink.hello'
+
+      export type Options = { secret: string }
+      export type Args = [Options]
+
+      export type Result = { clientID: string }
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererInitialize {
+      export const Method = 'renderer.initialize'
+
+      export type Result = string
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace ViewportMouseInteraction {
+      export const Method = 'viewport.mouse.interaction'
+
+      export type Options = {
+        view: string
+        x: number
+        y: number
+        buttonLeft: boolean
+        buttonMiddle: boolean
+        buttonRight: boolean
+        shiftKey: number | boolean
+        ctrlKey: number | boolean
+        altKey: number | boolean
+        metaKey: number | boolean
+        action: 'down' | 'move' | 'up'
+      }
+      export type Args = [Options]
+
+      export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace ViewportImageRender {
+      export const Method = 'viewport.image.render'
+
+      export type Options = {
+        view: string
+        size: [number, number]
+        mtime: number
+        quality: number
+        localTime: number
+        clearCache: boolean
+      }
+      export type Args = [Options]
+
+      export type Result = {
+        format: string
+        image: string
+        workTime: number
+        global_id: string
+        mtime: number
+        stale: boolean
+        localTime: number
+        size: [number, number]
+      }
+      export type Resp = RpcCallResp<Result>
+    }
+  }
 }
