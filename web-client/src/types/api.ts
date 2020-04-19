@@ -109,13 +109,6 @@ export namespace API {
       export type Resp = RpcCallResp<Result>
     }
 
-    export namespace RendererInitialize {
-      export const Method = 'renderer.initialize'
-
-      export type Result = string
-      export type Resp = RpcCallResp<Result>
-    }
-
     export namespace ViewportMouseInteraction {
       export const Method = 'viewport.mouse.interaction'
 
@@ -161,6 +154,36 @@ export namespace API {
         localTime: number
         size: [number, number]
       }
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererDestroy {
+      export const Method = 'renderer.destroy'
+
+      export type Options = { view: string }
+      export type Args = [Options]
+
+      export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererPing {
+      export const Method = 'renderer.ping'
+
+      export type Options = { view: string }
+      export type Args = [Options]
+
+      export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererDICOMRender {
+      export const Method = 'renderer.dicom.render'
+
+      export type Options = { path: string }
+      export type Args = [Options]
+
+      export type Result = { view: string }
       export type Resp = RpcCallResp<Result>
     }
   }

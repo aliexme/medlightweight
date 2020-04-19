@@ -73,8 +73,13 @@ export class Session<Config extends SessionConfig = SessionConfig> {
     this.onSessionReadyCallback = onSessionReadyCallback
   }
 
+  sessionReady() {
+    if (this.onSessionReadyCallback) {
+      this.onSessionReadyCallback()
+    }
+  }
+
   sendMessage(data: string | ArrayBufferLike | Blob | ArrayBufferView) {
-    this.throwErrorIfNotConnection()
     this.connection.send(data)
   }
 
@@ -99,12 +104,6 @@ export class Session<Config extends SessionConfig = SessionConfig> {
 
   protected onWsMessage(_event: MessageEvent) {
     return
-  }
-
-  protected throwErrorIfNotConnection() {
-    if (!this.connection) {
-      throw new SessionError('Not connection')
-    }
   }
 
   private onOpenHandler(event: Event) {

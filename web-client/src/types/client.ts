@@ -144,5 +144,11 @@ export namespace CLIENT {
         clearCache: boolean
       }
     }
+
+    export namespace RendererDICOMRender {
+      export type Options = {
+        path: string
+      }
+    }
   }
 }
