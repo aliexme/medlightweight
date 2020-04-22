@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 import { withSnackbar, WithSnackbarProps } from 'notistack'
 
 import { CLIENT } from 'types/client'
@@ -7,10 +6,9 @@ import { ParaViewRemoteVisualizer } from 'components/common/ParaViewRemoteVisual
 import { ParaViewRemoteRenderingSession } from 'remoteRendering/ParaViewRemoteRenderingSession'
 import { showUnexpectedError } from 'utils/snackbarUtils'
 
-import styles from './SurveyRemoteVisualizer.scss'
-
 type OwnProps = {
   survey: CLIENT.Survey
+  goBackUrl?: string
   className?: string
 }
 
@@ -54,12 +52,13 @@ class SurveyRemoteVisualizerCmp extends React.Component<Props> {
   }
 
   render() {
+    const { goBackUrl } = this.props
+
     return (
-      <div className={classNames(styles.container, this.props.className)}>
-        <ParaViewRemoteVisualizer
-          session={this.session}
-        />
-      </div>
+      <ParaViewRemoteVisualizer
+        session={this.session}
+        goBackUrl={goBackUrl}
+      />
     )
   }
 }

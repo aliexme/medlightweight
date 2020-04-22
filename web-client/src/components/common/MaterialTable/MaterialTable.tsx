@@ -67,7 +67,6 @@ class MaterialTableCmp<RowData extends object> extends React.Component<Props<Row
         icons={tableIcons}
         localization={localization}
         {...this.props}
-        style={{ boxShadow: 'none', borderRadius: 0, ...this.props.style }}
       />
     )
   }

@@ -3,10 +3,7 @@
   align-items: center;
 }
 
-.backIconContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1.5em;
-  cursor: pointer;
+.backButton {
+  margin-left: -12px;
+  margin-right: 12px;
 }

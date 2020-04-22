@@ -8,7 +8,10 @@ type Props = {}
 
 const SurveyPageBreadcrumbsCmp: React.FC<Props> = () => {
   return (
-    <Breadcrumbs withBackButton>
+    <Breadcrumbs
+      withBackButton
+      goBackUrl={URLS.SURVEYS}
+    >
       <BreadcrumbsLink to={URLS.SURVEYS}>
         Все обследования
       </BreadcrumbsLink>

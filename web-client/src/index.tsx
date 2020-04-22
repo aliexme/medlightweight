@@ -12,16 +12,19 @@ import './styles/fonts.scss'
 import './styles/global.scss'
 
 import { App } from './components/App/App'
+import { ThemeProvider } from './components/common/ThemeProvider/ThemeProvider'
 
 ReactDOM.render(
   <StylesProvider injectFirst>
-    <Provider store={store}>
-      <Router history={browserHistory}>
-        <SnackbarProvider maxSnack={5} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-          <App/>
-        </SnackbarProvider>
-      </Router>
-    </Provider>
+    <ThemeProvider>
+      <Provider store={store}>
+        <Router history={browserHistory}>
+          <SnackbarProvider maxSnack={5} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
+            <App/>
+          </SnackbarProvider>
+        </Router>
+      </Provider>
+    </ThemeProvider>
   </StylesProvider>,
   document.getElementById('root'),
 )

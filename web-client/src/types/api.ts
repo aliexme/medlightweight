@@ -85,6 +85,11 @@ export namespace API {
       CTRL = 8,
     }
 
+    export enum InteractionMode {
+      MODE_2D = '2D',
+      MODE_3D = '3D',
+    }
+
     export type RpcCallReq = {
       wslink: string
       id: string
@@ -128,6 +133,16 @@ export namespace API {
       export type Args = [Options]
 
       export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace ViewportCameraReset {
+      export const Method = 'viewport.camera.reset'
+
+      export type ViewId = string
+      export type Args = [ViewId]
+
+      export type Result = string
       export type Resp = RpcCallResp<Result>
     }
 
@@ -177,6 +192,19 @@ export namespace API {
       export type Resp = RpcCallResp<Result>
     }
 
+    export namespace RendererInteractionModeSet {
+      export const Method = 'renderer.interactionmode.set'
+
+      export type Options = {
+        view: string
+        mode: InteractionMode
+      }
+      export type Args = [Options]
+
+      export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
     export namespace RendererDICOMRender {
       export const Method = 'renderer.dicom.render'
 
@@ -184,6 +212,21 @@ export namespace API {
       export type Args = [Options]
 
       export type Result = { view: string }
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererDICOMOpacityInteraction {
+      export const Method = 'renderer.dicom.opacity.interaction'
+
+      export type Options = {
+        view: string
+        pointDelta: number
+        opacityDelta: number
+        action: 'down' | 'move' | 'up'
+      }
+      export type Args = [Options]
+
+      export type Result = boolean
       export type Resp = RpcCallResp<Result>
     }
   }

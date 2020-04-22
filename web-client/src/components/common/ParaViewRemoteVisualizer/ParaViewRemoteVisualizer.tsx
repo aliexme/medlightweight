@@ -11,6 +11,7 @@ type OwnProps = {
   fps?: number
   quality?: number
   interactQuality?: number
+  goBackUrl?: string
 }
 
 type Props = OwnProps
@@ -19,15 +20,19 @@ class ParaViewRemoteVisualizerCmp extends React.Component<Props> {
   mtime = 0
 
   render() {
-    const { session, fps } = this.props
+    const { session, fps, goBackUrl } = this.props
 
     return (
       <RemoteVisualizer
         session={session}
         fps={fps}
+        goBackUrl={goBackUrl}
         renderImage={this.renderImage}
         pointerInteraction={this.pointerInteraction}
+        opacityInteraction={this.opacityInteraction}
         zoomInteraction={this.zoomInteraction}
+        resetCamera={this.resetCamera}
+        setInteractionMode={this.setInteractionMode}
       />
     )
   }
@@ -59,11 +64,32 @@ class ParaViewRemoteVisualizerCmp extends React.Component<Props> {
     await session.viewportMouseInteraction(interactionOptions)
   }
 
+  opacityInteraction = async (event: CLIENT.PointerInteractionEvent) => {
+    const { session } = this.props
+    const opacityOptions = this.getOpacityInteractionOptions(event)
+
+    await session.rendererDICOMOpacityInteraction(opacityOptions)
+  }
+
   zoomInteraction = async (event: CLIENT.ZoomInteractionEvent) => {
     const { session } = this.props
     const zoomOptions = this.getZoomInteractionOptions(event)
 
     await session.viewportMouseInteraction(zoomOptions)
+  }
+
+  resetCamera = async () => {
+    const { session } = this.props
+
+    await session.viewportCameraReset()
+  }
+
+  setInteractionMode = async (interactionMode: CLIENT.RemoteRendering.InteractionMode) => {
+    const { session } = this.props
+
+    if (interactionMode !== CLIENT.RemoteRendering.InteractionMode.OPACITY) {
+      await session.rendererInteractionModeSet({ mode: interactionMode as API.ParaView.InteractionMode })
+    }
   }
 
   getPointerInteractionOptions = (
@@ -83,6 +109,19 @@ class ParaViewRemoteVisualizerCmp extends React.Component<Props> {
       ctrlKey: srcEvent.ctrlKey ? API.ParaView.KeyCodeModifier.CTRL : API.ParaView.KeyCodeModifier.NONE,
       altKey: srcEvent.altKey ? API.ParaView.KeyCodeModifier.ALT : API.ParaView.KeyCodeModifier.NONE,
       metaKey: srcEvent.metaKey ? API.ParaView.KeyCodeModifier.META : API.ParaView.KeyCodeModifier.NONE,
+      action: event.isFirst ? 'down' : event.isFinal ? 'up' : 'move',
+    }
+  }
+
+  getOpacityInteractionOptions = (
+    event: CLIENT.PointerInteractionEvent,
+  ): CLIENT.ParaView.RendererDICOMOpacityInteraction.Options => {
+    const pointDelta = event.deltaX / event.target.clientWidth
+    const opacityDelta = (1.0 - event.deltaY) / event.target.clientHeight
+
+    return {
+      pointDelta,
+      opacityDelta,
       action: event.isFirst ? 'down' : event.isFinal ? 'up' : 'move',
     }
   }

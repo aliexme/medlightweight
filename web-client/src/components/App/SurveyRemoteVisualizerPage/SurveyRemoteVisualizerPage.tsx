@@ -1,23 +1,21 @@
-import React, { useCallback, useEffect } from 'react'
-import { useParams, RouteComponentProps, useHistory } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { RouteComponentProps, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { useSnackbar } from 'notistack'
-import { Button } from '@material-ui/core'
 
 import { CLIENT } from 'types/client'
-import { Store } from 'store/store'
 import { Action, Actions, createAction } from 'actions'
-import { PageContainer } from 'components/common/PageContainer/PageContainer'
-import { BackdropLoading } from 'components/common/BackdropLoading/BackdropLoading'
+import { Store } from 'store/store'
 import { getFromMap } from 'utils/immutableUtils'
 import { usePrevious } from 'hooks'
 import { showUnexpectedError } from 'utils/snackbarUtils'
+import { BackdropLoading } from 'components/common/BackdropLoading/BackdropLoading'
+import { PageAppBar } from 'components/common/PageAppBar/PageAppBar'
 import { URLS } from 'urls'
 
-import styles from './SurveyPage.scss'
+import styles from './SurveyRemoteVisualizerPage.scss'
 
-import { SurveyPageBreadcrumbs } from './SurveyPageBreadcrumbs/SurveyPageBreadcrumbs'
-import { SurveyInfo } from './SurveyInfo/SurveyInfo'
+import { SurveyRemoteVisualizer } from './SurveyRemoteVisualizer/SurveyRemoteVisualizer'
 
 type RouteParams = {
   surveyId: string
@@ -36,11 +34,10 @@ type DispatchedProps = {
 
 type Props = OwnProps & ConnectedProps & DispatchedProps
 
-const SurveyPageCmp: React.FC<Props> = (props) => {
+const SurveyRemoteVisualizerPageCmp: React.FC<Props> = (props) => {
   const { survey, fetchSurveyInfoRequest } = props
   const isLoading = fetchSurveyInfoRequest === CLIENT.RequestStatus.LOADING
 
-  const history = useHistory()
   const { surveyId } = useParams<RouteParams>()
   const { enqueueSnackbar } = useSnackbar()
   const prevRequest = usePrevious(fetchSurveyInfoRequest)
@@ -57,32 +54,19 @@ const SurveyPageCmp: React.FC<Props> = (props) => {
     }
   }, [prevRequest, fetchSurveyInfoRequest])
 
-  const navigateToSurveyRemoteVisualizerPage = useCallback(() => {
-    history.push(`${URLS.SURVEY}/${survey.id}/visualizer`)
-  }, [survey, history])
-
   return (
-    <PageContainer>
+    <div className={styles.container}>
       <BackdropLoading open={isLoading && !survey}/>
-      <SurveyPageBreadcrumbs/>
-      {survey &&
-        <>
-          <SurveyInfo
+      <PageAppBar/>
+      <div className={styles.content}>
+        {survey &&
+          <SurveyRemoteVisualizer
             survey={survey}
-            style={{ marginTop: 24 }}
+            goBackUrl={`${URLS.SURVEY}/${survey.id}`}
           />
-          <div className={styles.footer}>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={navigateToSurveyRemoteVisualizerPage}
-            >
-              Открыть просмотрщик
-            </Button>
-          </div>
-        </>
-      }
-    </PageContainer>
+        }
+      </div>
+    </div>
   )
 }
 
@@ -101,4 +85,4 @@ const mapDispatchToProps: DispatchedProps = {
   fetchSurveyInfo: (surveyId) => createAction(Actions.API_SURVEY_INFO, { surveyId }),
 }
 
-export const SurveyPage = connect(mapStateToProps, mapDispatchToProps)(SurveyPageCmp)
+export const SurveyRemoteVisualizerPage = connect(mapStateToProps, mapDispatchToProps)(SurveyRemoteVisualizerPageCmp)
