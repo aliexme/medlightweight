@@ -1,7 +1,7 @@
 from paraview.web import pv_wslink
 from paraview.web import protocols as pv_protocols
 
-from protocols.remote_render_protocol import RemoteRenderProtocol
+from protocols.dicom_render_manager_protocol import DICOMRenderManagerProtocol
 
 
 class RemoteVisualizerServerProtocol(pv_wslink.PVServerProtocol):
@@ -11,5 +11,5 @@ class RemoteVisualizerServerProtocol(pv_wslink.PVServerProtocol):
         self.registerVtkWebProtocol(pv_protocols.ParaViewWebMouseHandler())
         self.registerVtkWebProtocol(pv_protocols.ParaViewWebViewPort())
         self.registerVtkWebProtocol(pv_protocols.ParaViewWebViewPortImageDelivery())
-        self.registerVtkWebProtocol(RemoteRenderProtocol())
+        self.registerVtkWebProtocol(DICOMRenderManagerProtocol())
         self.updateSecret(RemoteVisualizerServerProtocol.authKey)

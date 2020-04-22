@@ -12,6 +12,9 @@ type ConstructorConfig = Omit<ParaViewRemoteRenderingSessionConfig, 'requestIdPr
 export class ParaViewRemoteRenderingSession extends RemoteRenderingSession<ParaViewRemoteRenderingSessionConfig> {
   static readonly WSLINK_VERSION = '1.0'
   static readonly REQUEST_ID_PROP = 'id'
+  static readonly PING_INTERVAL = 10 * 1000
+
+  private pingIntervalId: NodeJS.Timeout = null
 
   private systemRpcCallId = 0
   private clientRpcCallId = 0
@@ -25,16 +28,27 @@ export class ParaViewRemoteRenderingSession extends RemoteRenderingSession<ParaV
     })
   }
 
-  protected async onWsOpen() {
-    const { result: { clientID } } = await this.wslinkHello()
-    this.clientId = clientID
+  protected onWsClose(_event: CloseEvent) {
+    this.clearRendererPingInterval()
+  }
 
-    const { result: viewId } = await this.rendererInitialize()
+  setClientId(clientId: string) {
+    this.clientId = clientId
+  }
+
+  setViewId(viewId: string) {
     this.viewId = viewId
+  }
 
-    if (this.onSessionReadyCallback) {
-      this.onSessionReadyCallback()
-    }
+  startRendererPingInterval() {
+    this.pingIntervalId = setInterval(() => {
+      this.rendererPing().then()
+    }, ParaViewRemoteRenderingSession.PING_INTERVAL)
+  }
+
+  clearRendererPingInterval() {
+    clearInterval(this.pingIntervalId)
+    this.pingIntervalId = null
   }
 
   async wslinkHello(): Promise<API.ParaView.WslinkHello.Resp> {
@@ -43,8 +57,26 @@ export class ParaViewRemoteRenderingSession extends RemoteRenderingSession<ParaV
     return await this.systemRpcCall(API.ParaView.WslinkHello.Method, args)
   }
 
-  async rendererInitialize(): Promise<API.ParaView.RendererInitialize.Resp> {
-    return await this.clientRpcCall(API.ParaView.RendererInitialize.Method)
+  async rendererDestroy(): Promise<API.ParaView.RendererDestroy.Resp> {
+    const options: API.ParaView.RendererDestroy.Options = { view: this.viewId }
+    const args: API.ParaView.RendererDestroy.Args = [options]
+    return await this.clientRpcCall(API.ParaView.RendererDestroy.Method, args)
+  }
+
+  async rendererPing(): Promise<API.ParaView.RendererPing.Resp> {
+    const options: API.ParaView.RendererPing.Options = { view: this.viewId }
+    const args: API.ParaView.RendererPing.Args = [options]
+    return await this.clientRpcCall(API.ParaView.RendererPing.Method, args)
+  }
+
+  async rendererDICOMRender(
+    options: CLIENT.ParaView.RendererDICOMRender.Options,
+  ): Promise<API.ParaView.RendererDICOMRender.Resp> {
+    const reqOptions: API.ParaView.RendererDICOMRender.Options = {
+      ...options,
+    }
+    const args: API.ParaView.RendererDICOMRender.Args = [reqOptions]
+    return await this.clientRpcCall(API.ParaView.RendererDICOMRender.Method, args)
   }
 
   async viewportMouseInteraction(

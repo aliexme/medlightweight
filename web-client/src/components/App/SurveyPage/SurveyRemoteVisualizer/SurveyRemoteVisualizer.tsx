@@ -22,9 +22,24 @@ class SurveyRemoteVisualizerCmp extends React.Component<Props> {
   constructor(props: Props) {
     super(props)
 
+    const { survey } = props
+
     this.session = new ParaViewRemoteRenderingSession({
       url: 'ws://localhost:1234/ws',
       wslinkSecret: 'wslink-secret',
+    })
+
+    this.session.onOpen(async () => {
+      const { result: { clientID } } = await this.session.wslinkHello()
+      this.session.setClientId(clientID)
+
+      const { result: { view } } = await this.session.rendererDICOMRender({
+        path: survey.directory,
+      })
+      this.session.setViewId(view)
+
+      this.session.startRendererPingInterval()
+      this.session.sessionReady()
     })
 
     this.session.onError(() => {
