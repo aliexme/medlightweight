@@ -9,6 +9,10 @@ from utils.decorators import debounce
 
 
 class DICOMRenderManagerProtocol(RenderManagerProtocol):
+    def __init__(self):
+        super(DICOMRenderManagerProtocol, self).__init__()
+        self.opacity_middle_point = ()
+
     @exportRpc('renderer.dicom.render')
     def render_dicom(self, options):
         # TODO do ok
@@ -30,3 +34,24 @@ class DICOMRenderManagerProtocol(RenderManagerProtocol):
         }
 
         return resp
+
+    @exportRpc('renderer.dicom.opacity.interaction')
+    def dicom_opacity_interaction(self, options):
+        view_id = options['view']
+        action = options['action']
+        point_delta = options['pointDelta']
+        opacity_delta = options['opacityDelta']
+
+        render_manager = self.get_render_manager(view_id)
+        scale_min, scale_max = render_manager.scale_range
+
+        if action == 'down':
+            self.opacity_middle_point = render_manager.get_opacity_middle_point()
+
+        normalize_point_delta = point_delta * (scale_max - scale_min)
+        normalize_point = max(min(self.opacity_middle_point[0] + normalize_point_delta, scale_max), scale_min)
+        normalize_opacity = max(min(self.opacity_middle_point[1] + opacity_delta, 1), 0)
+
+        render_manager.set_opacity_middle_point(normalize_point, normalize_opacity)
+
+        return True

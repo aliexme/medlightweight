@@ -79,6 +79,28 @@ export class ParaViewRemoteRenderingSession extends RemoteRenderingSession<ParaV
     return await this.clientRpcCall(API.ParaView.RendererDICOMRender.Method, args)
   }
 
+  async rendererDICOMOpacityInteraction(
+    options: CLIENT.ParaView.RendererDICOMOpacityInteraction.Options,
+  ): Promise<API.ParaView.RendererDICOMOpacityInteraction.Resp> {
+    const reqOptions: API.ParaView.RendererDICOMOpacityInteraction.Options = {
+      ...options,
+      view: this.viewId,
+    }
+    const args: API.ParaView.RendererDICOMOpacityInteraction.Args = [reqOptions]
+    return await this.clientRpcCall(API.ParaView.RendererDICOMOpacityInteraction.Method, args)
+  }
+
+  async rendererInteractionModeSet(
+    options: CLIENT.ParaView.RendererInteractionModeSet.Options,
+  ): Promise<API.ParaView.RendererInteractionModeSet.Resp> {
+    const reqOptions: API.ParaView.RendererInteractionModeSet.Options = {
+      ...options,
+      view: this.viewId,
+    }
+    const args: API.ParaView.RendererInteractionModeSet.Args = [reqOptions]
+    return await this.clientRpcCall(API.ParaView.RendererInteractionModeSet.Method, args)
+  }
+
   async viewportMouseInteraction(
     options: CLIENT.ParaView.ViewportMouseInteraction.Options,
   ): Promise<API.ParaView.ViewportMouseInteraction.Resp> {
@@ -99,6 +121,11 @@ export class ParaViewRemoteRenderingSession extends RemoteRenderingSession<ParaV
     }
     const args: API.ParaView.ViewportImageRender.Args = [reqOptions]
     return await this.clientRpcCall(API.ParaView.ViewportImageRender.Method, args)
+  }
+
+  async viewportCameraReset(): Promise<API.ParaView.ViewportCameraReset.Resp> {
+    const args: API.ParaView.ViewportCameraReset.Args = [this.viewId]
+    return await this.clientRpcCall(API.ParaView.ViewportCameraReset.Method, args)
   }
 
   private async systemRpcCall(method: string, args: Array<any> = [], kwargs: object = {}) {

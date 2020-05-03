@@ -1,5 +1,7 @@
 import { Map as IMap } from 'immutable'
 
+import { API } from 'types/api'
+
 export namespace CLIENT {
   /* Requests */
 
@@ -102,6 +104,8 @@ export namespace CLIENT {
 
   export type PointerInteractionEvent = PanInteractionEvent & {
     srcEvent: PointerEvent
+    deltaX: number
+    deltaY: number
   }
 
   export type ZoomInteractionEvent = InteractionEvent & {
@@ -113,6 +117,12 @@ export namespace CLIENT {
   /* Remote Rendering */
 
   export namespace RemoteRendering {
+    export enum InteractionMode {
+      MODE_2D = '2D',
+      MODE_3D = '3D',
+      OPACITY = 'OPACITY',
+    }
+
     export type RenderImageOptions = {
       size: [number, number]
       interact: boolean
@@ -148,6 +158,20 @@ export namespace CLIENT {
     export namespace RendererDICOMRender {
       export type Options = {
         path: string
+      }
+    }
+
+    export namespace RendererInteractionModeSet {
+      export type Options = {
+        mode: API.ParaView.InteractionMode
+      }
+    }
+
+    export namespace RendererDICOMOpacityInteraction {
+      export type Options = {
+        pointDelta: number
+        opacityDelta: number
+        action: 'down' | 'move' | 'up'
       }
     }
   }

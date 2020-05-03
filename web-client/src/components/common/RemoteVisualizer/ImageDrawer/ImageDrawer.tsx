@@ -33,7 +33,9 @@ class ImageDrawerCmp extends React.Component<Props, State> {
 
   throttleOnPan: (event: HammerInput) => void
   throttleOnZoom: (event: CLIENT.ZoomInteractionEvent) => void
+  throttleOnResizeCallback: () => void
   debounceOnZoomEnd: (event: CLIENT.ZoomInteractionEvent) => void
+  debounceOnResizeEnd: () => void
 
   state: State = {
     width: 300,
@@ -48,7 +50,9 @@ class ImageDrawerCmp extends React.Component<Props, State> {
 
     this.throttleOnPan = throttle(this.onPan, throttleDelay)
     this.throttleOnZoom = throttle(this.onZoom, throttleDelay)
+    this.throttleOnResizeCallback = throttle(this.onResizeCallback, throttleDelay)
     this.debounceOnZoomEnd = debounce(this.onZoomEnd, 100)
+    this.debounceOnResizeEnd = debounce(this.onResizeCallback, 100)
   }
 
   componentDidMount() {
@@ -107,7 +111,10 @@ class ImageDrawerCmp extends React.Component<Props, State> {
   onResize = (sizes: ResizeSensorSizes) => {
     const { width, height } = sizes
 
-    this.setState({ width, height }, this.onResizeCallback)
+    this.setState({ width, height }, () => {
+      this.throttleOnResizeCallback()
+      this.debounceOnResizeEnd()
+    })
   }
 
   onResizeCallback = () => {
@@ -121,8 +128,7 @@ class ImageDrawerCmp extends React.Component<Props, State> {
   }
 
   onPanStart = (event: HammerInput) => {
-    event.isFirst = true
-    this.onPan(event)
+    this.onPan(Object.assign({}, event, { isFirst: true }))
   }
 
   onPanEnd = (event: HammerInput) => {
@@ -136,6 +142,11 @@ class ImageDrawerCmp extends React.Component<Props, State> {
   }
 
   onWheel = (event: WheelEvent) => {
+    const { disabled } = this.props
+    if (disabled) {
+      return
+    }
+
     event.preventDefault()
 
     this.zoomDeltaX += event.deltaX

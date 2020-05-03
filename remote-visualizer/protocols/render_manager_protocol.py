@@ -29,6 +29,14 @@ class RenderManagerProtocol(protocols.ParaViewWebProtocol):
         debounce_destroy_renderer(view_id)
         return True
 
+    @exportRpc('renderer.interactionmode.set')
+    def set_renderer_interaction_mode(self, options):
+        view_id = options['view']
+        interaction_mode = options['mode']
+        render_manager = self.get_render_manager(view_id)
+        render_manager.set_interaction_mode(interaction_mode)
+        return True
+
     def debounce_destroy_renderer(self, view_id):
         self.destroy_renderer({'view': view_id})
 

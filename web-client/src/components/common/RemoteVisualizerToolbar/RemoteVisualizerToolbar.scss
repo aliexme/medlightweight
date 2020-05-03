@@ -1,0 +1,45 @@
+$topBarHeight: 64px;
+$bottomBarHeight: 0px;
+$leftBarWidth: 0px;
+$rightBarWidth: 0px;
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.topBar {
+  height: $topBarHeight;
+  display: flex;
+  align-items: center;
+}
+
+.bottomBar {
+  height: $bottomBarHeight;
+  display: none;
+  align-items: center;
+}
+
+.middleContainer {
+  height: calc(100% - #{$topBarHeight} - #{$bottomBarHeight});
+  display: flex;
+}
+
+.leftBar {
+  width: $leftBarWidth;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rightBar {
+  width: $rightBarWidth;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: calc(100% - #{$leftBarWidth} - #{$rightBarWidth});
+  height: 100%;
+}

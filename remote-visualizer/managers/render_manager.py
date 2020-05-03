@@ -27,3 +27,7 @@ class RenderManager(object):
         self.source = None
         self.display = None
         self.view = None
+
+    def set_interaction_mode(self, interaction_mode):
+        self.view.InteractionMode = str(interaction_mode)
+        paraview.Render(self.view)
