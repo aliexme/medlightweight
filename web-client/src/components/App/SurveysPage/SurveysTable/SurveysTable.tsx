@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { useSnackbar } from 'notistack'
 import AddIcon from '@material-ui/icons/Add'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import EditIcon from '@material-ui/icons/Edit'
 
 import { CLIENT } from 'types/client'
 import { Store } from 'store/store'
@@ -96,15 +95,6 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
     props.pushModal({ type: CLIENT.Modals.SURVEY_MODAL_TYPE })
   }, [])
 
-  const openEditSurveyModal = useCallback((_event: any, data: CLIENT.Survey | CLIENT.Survey[]) => {
-    if (!Array.isArray(data)) {
-      props.pushModal({
-        type: CLIENT.Modals.SURVEY_MODAL_TYPE,
-        props: { survey: data },
-      })
-    }
-  }, [])
-
   const onSurveyClick = useCallback((event?: React.MouseEvent, rowData?: CLIENT.Survey) => {
     if (rowData) {
       history.push(`${URLS.SURVEY}/${rowData.id}`)
@@ -124,11 +114,6 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
         tooltip: 'Добавить обследование',
         isFreeAction: true,
         onClick: openCreateSurveyModal,
-      },
-      {
-        icon: () => <EditIcon fontSize='small'/>,
-        tooltip: 'Редактировать',
-        onClick: openEditSurveyModal,
       },
     ]
   }, [])

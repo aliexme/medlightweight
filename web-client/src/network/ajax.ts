@@ -54,12 +54,22 @@ export class AjaxObservable {
     )
   }
 
-  path(url: string, body?: object, options?: RequestOptions): Observable<any> {
+  patch(url: string, body?: object, options?: RequestOptions): Observable<any> {
     const requestHeaders = this.mergeHeaders(options?.headers)
     const requestTimeout = options?.timeout ?? this.timeout
     const reqBody = options?.formData ? this.mapBodyToFormData(body) : body
 
     return ajax.patch(url, reqBody, requestHeaders).pipe(
+      timeout(requestTimeout),
+      map((result) => result.response),
+    )
+  }
+
+  delete(url: string, options?: RequestOptions): Observable<any> {
+    const requestHeaders = this.mergeHeaders(options?.headers)
+    const requestTimeout = options?.timeout ?? this.timeout
+
+    return ajax.delete(url, requestHeaders).pipe(
       timeout(requestTimeout),
       map((result) => result.response),
     )

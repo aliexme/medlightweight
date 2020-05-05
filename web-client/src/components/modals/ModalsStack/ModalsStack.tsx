@@ -6,6 +6,7 @@ import { Store } from 'store/store'
 import { Actions, createActionEmpty } from 'actions'
 
 import { SurveyModal } from '../SurveyModal/SurveyModal'
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 
 type ConnectedProps = {
   modals: CLIENT.Modal[]
@@ -25,7 +26,18 @@ const ModalsStackCmp: React.FC<Props> = (props) => {
     <>
       {modals.map((modal) => {
         switch (modal.type) {
-          case CLIENT.Modals.SURVEY_MODAL_TYPE:
+          case CLIENT.Modals.CONFIRM_MODAL_TYPE: {
+            return (
+              <ConfirmModal
+                key={modal.type}
+                close={props.popModal}
+                closeAll={props.closeAllModal}
+                {...modal.props}
+              />
+            )
+          }
+
+          case CLIENT.Modals.SURVEY_MODAL_TYPE: {
             return (
               <SurveyModal
                 key={modal.type}
@@ -34,6 +46,7 @@ const ModalsStackCmp: React.FC<Props> = (props) => {
                 {...modal.props}
               />
             )
+          }
         }
       })}
     </>
