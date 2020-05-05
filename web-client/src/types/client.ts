@@ -19,6 +19,7 @@ export namespace CLIENT {
     | Requests.FetchSurveysListRequest
     | Requests.CreateSurveyRequest
     | Requests.EditSurveyRequest
+    | Requests.DeleteSurveyRequest
     | Requests.FetchSurveyInfoRequest
   )
 
@@ -38,6 +39,9 @@ export namespace CLIENT {
     export const EDIT_SURVEY_REQUEST = 'EDIT_SURVEY_REQUEST' as const
     export type EditSurveyRequest = typeof EDIT_SURVEY_REQUEST
 
+    export const DELETE_SURVEY_REQUEST = 'DELETE_SURVEY_REQUEST' as const
+    export type DeleteSurveyRequest = typeof DELETE_SURVEY_REQUEST
+
     export const FETCH_SURVEY_INFO_REQUEST = 'FETCH_SURVEY_INFO_REQUEST' as const
     export type FetchSurveyInfoRequest = typeof FETCH_SURVEY_INFO_REQUEST
   }
@@ -45,7 +49,8 @@ export namespace CLIENT {
   /* Modals */
 
   export type Modal = (
-    Modals.AddSurveyModal
+    Modals.SurveyModal
+    | Modals.ConfirmModal
   )
 
   export type ModalProps<T extends Modal> = T['props'] & {
@@ -54,9 +59,23 @@ export namespace CLIENT {
   }
 
   export namespace Modals {
+    export const CONFIRM_MODAL_TYPE = 'CONFIRM_MODAL_TYPE' as const
     export const SURVEY_MODAL_TYPE = 'SURVEY_MODAL_TYPE' as const
 
-    export type AddSurveyModal = {
+    export type ConfirmModal = {
+      type: typeof CONFIRM_MODAL_TYPE
+      props: {
+        title?: string
+        description?: string
+        cancelButtonText?: string
+        okButtonText?: string
+        requestName?: RequestName
+        onCancelClick?(): void
+        onOkClick?(): void
+      }
+    }
+
+    export type SurveyModal = {
       type: typeof SURVEY_MODAL_TYPE
       props?: {
         survey?: Survey

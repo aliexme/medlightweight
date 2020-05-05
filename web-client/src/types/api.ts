@@ -74,6 +74,11 @@ export namespace API {
 
       export type Resp = Survey
     }
+
+    export namespace Delete {
+      export type Req = void
+      export type Resp = void
+    }
   }
 
   export namespace ParaView {

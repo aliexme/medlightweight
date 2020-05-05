@@ -26,7 +26,7 @@ import { Upload } from 'components/common/Upload/Upload'
 
 import styles from './SurveyModal.scss'
 
-type OwnProps = CLIENT.ModalProps<CLIENT.Modals.AddSurveyModal>
+type OwnProps = CLIENT.ModalProps<CLIENT.Modals.SurveyModal>
 
 type ConnectedProps = {
   createSurveyRequest: CLIENT.RequestStatus
@@ -94,10 +94,11 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
   return (
     <Dialog
       open
+      fullWidth
+      maxWidth='sm'
       disableBackdropClick={loading}
       scroll='body'
       onClose={props.closeAll}
-      className={styles.container}
     >
       <DialogTitle
         disabled={loading}

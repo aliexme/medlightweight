@@ -20,14 +20,16 @@ const TooltipIconButtonCmp: React.FC<Props> = (props) => {
       title={tooltip}
       className={props.tooltipClassName}
     >
-      <IconButton
-        disabled={disabled}
-        color={isActive ? 'primary' : undefined}
-        className={props.className}
-        onClick={props.onClick}
-      >
-        {props.children}
-      </IconButton>
+      <span>
+        <IconButton
+          disabled={disabled}
+          color={isActive ? 'primary' : undefined}
+          className={props.className}
+          onClick={props.onClick}
+        >
+          {props.children}
+        </IconButton>
+      </span>
     </Tooltip>
   )
 }
