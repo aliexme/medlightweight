@@ -58,7 +58,7 @@ const SurveyPageCmp: React.FC<Props> = (props) => {
   }, [prevRequest, fetchSurveyInfoRequest])
 
   const navigateToSurveyRemoteVisualizerPage = useCallback(() => {
-    history.push(`${URLS.SURVEY}/${survey.id}/visualizer`)
+    history.push(`${URLS.SURVEYS}/${survey.id}/visualizer`)
   }, [survey, history])
 
   return (

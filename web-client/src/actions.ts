@@ -20,6 +20,9 @@ export namespace Actions {
   export const SET_AUTHORIZED_STATE = 'SET_AUTHORIZED_STATE' as const
   export type SetAuthorizedState = A<typeof SET_AUTHORIZED_STATE, { authorized: boolean }>
 
+  export const SET_DRAWER_OPEN = 'SET_DRAWER_OPEN' as const
+  export type SetDrawerOpen = A<typeof SET_DRAWER_OPEN, { open: boolean }>
+
   export const CHANGE_REQUEST_STATUS = 'CHANGE_REQUEST_STATUS' as const
   export type ChangeRequestStatus = A<typeof CHANGE_REQUEST_STATUS, {
     request: CLIENT.RequestName
@@ -84,6 +87,7 @@ export namespace Actions {
 export type Action = (
   Actions.AppLoadedState
   | Actions.SetAuthorizedState
+  | Actions.SetDrawerOpen
   | Actions.ChangeRequestStatus
   | Actions.CancelRequest
   | Actions.PushModal

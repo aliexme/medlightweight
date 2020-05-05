@@ -97,7 +97,7 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
 
   const onSurveyClick = useCallback((event?: React.MouseEvent, rowData?: CLIENT.Survey) => {
     if (rowData) {
-      history.push(`${URLS.SURVEY}/${rowData.id}`)
+      history.push(`${URLS.SURVEYS}/${rowData.id}`)
     }
   }, [history])
 
