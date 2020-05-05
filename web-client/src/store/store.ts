@@ -11,9 +11,11 @@ import { appReducer, AppState } from './app'
 import { modalsReducer, ModalsState } from './modals'
 import { requestsReducer, RequestsState } from './requests'
 import { surveysReducer, SurveysState } from './surveys'
+import { drawerReducer, DrawerState } from './drawer'
 
 export type Store = {
   app: AppState
+  drawer: DrawerState
   modals: ModalsState
   requests: RequestsState
   surveys: SurveysState
@@ -21,6 +23,7 @@ export type Store = {
 
 const rootReducer = combineReducers<Store, Action>({
   app: appReducer,
+  drawer: drawerReducer,
   modals: modalsReducer,
   requests: requestsReducer,
   surveys: surveysReducer,

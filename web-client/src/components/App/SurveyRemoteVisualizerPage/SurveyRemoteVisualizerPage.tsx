@@ -62,7 +62,7 @@ const SurveyRemoteVisualizerPageCmp: React.FC<Props> = (props) => {
         {survey &&
           <SurveyRemoteVisualizer
             survey={survey}
-            goBackUrl={`${URLS.SURVEY}/${survey.id}`}
+            goBackUrl={`${URLS.SURVEYS}/${survey.id}`}
           />
         }
       </div>
