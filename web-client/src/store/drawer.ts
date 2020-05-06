@@ -10,7 +10,7 @@ export const defaultDrawerState: DrawerState = {
   open: false,
 }
 
-export const drawerReducer: Reducer<DrawerState, Action> = (state = defaultDrawerState, action): DrawerState => {
+export const drawerReducer: Reducer<DrawerState, Action> = (state = defaultDrawerState, action) => {
   switch (action.type) {
     case Actions.SET_DRAWER_OPEN: {
       return {

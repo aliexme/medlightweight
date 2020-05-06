@@ -15,6 +15,11 @@ export const defaultRequestsState: RequestsState = {
   [CLIENT.Requests.EDIT_SURVEY_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
   [CLIENT.Requests.DELETE_SURVEY_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
   [CLIENT.Requests.FETCH_SURVEY_INFO_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.FETCH_PATIENTS_LIST_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.FETCH_PATIENT_INFO_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.CREATE_PATIENT_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.EDIT_PATIENT_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.DELETE_PATIENT_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
 }
 
 export const requestsReducer: Reducer<RequestsState, Action> = (state = defaultRequestsState, action) => {

@@ -82,6 +82,39 @@ export namespace Actions {
 
   export const API_SURVEY_INFO = 'API_SURVEY_INFO' as const
   export type ApiSurveyInfo = A<typeof API_SURVEY_INFO, { surveyId: number }>
+
+  export const API_FETCH_PATIENTS_LIST = 'API_FETCH_PATIENTS_LIST' as const
+  export type ApiFetchPatientsList = AE<typeof API_FETCH_PATIENTS_LIST>
+
+  export const SET_PATIENTS_LIST = 'SET_PATIENTS_LIST' as const
+  export type SetPatientsList = A<typeof SET_PATIENTS_LIST, {
+    patients: CLIENT.Patient[]
+    totalCount: number
+  }>
+
+  export const CHANGE_PATIENTS_LIST_FILTERS = 'CHANGE_PATIENTS_LIST_FILTERS' as const
+  export type ChangePatientsListFilters = A<typeof CHANGE_PATIENTS_LIST_FILTERS, {
+    filters: CLIENT.PatientsListFilters
+    options?: CLIENT.PatientsListFiltersOptions
+  }>
+
+  export const SEARCH_PATIENTS = 'SEARCH_PATIENTS' as const
+  export type SearchPatients = A<typeof SEARCH_PATIENTS, { searchText: string }>
+
+  export const UPDATE_PATIENTS = 'UPDATE_PATIENTS' as const
+  export type UpdatePatients = A<typeof UPDATE_PATIENTS, { patients: CLIENT.Patient[] }>
+
+  export const API_PATIENT_INFO = 'API_PATIENT_INFO' as const
+  export type ApiPatientInfo = A<typeof API_PATIENT_INFO, { patientId: number }>
+
+  export const API_CREATE_PATIENT = 'API_CREATE_PATIENT' as const
+  export type ApiCreatePatient = A<typeof API_CREATE_PATIENT, API.MlwPatients.Create.Req>
+
+  export const API_EDIT_PATIENT = 'API_EDIT_PATIENT' as const
+  export type ApiEditPatient = A<typeof API_EDIT_PATIENT, API.MlwPatients.Update.Req & { id: number }>
+
+  export const API_DELETE_PATIENT = 'API_DELETE_PATIENT' as const
+  export type ApiDeletePatient = A<typeof API_DELETE_PATIENT, { patientId: number }>
 }
 
 export type Action = (
@@ -105,4 +138,13 @@ export type Action = (
   | Actions.UpdateSurveys
   | Actions.ApiDeleteSurvey
   | Actions.ApiSurveyInfo
+  | Actions.ApiFetchPatientsList
+  | Actions.SetPatientsList
+  | Actions.ChangePatientsListFilters
+  | Actions.SearchPatients
+  | Actions.UpdatePatients
+  | Actions.ApiPatientInfo
+  | Actions.ApiCreatePatient
+  | Actions.ApiEditPatient
+  | Actions.ApiDeletePatient
 )

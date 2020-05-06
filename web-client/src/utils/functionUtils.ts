@@ -1,3 +1,5 @@
+export function noop() {/**/}
+
 export const throttle = <F extends (...args: any) => void>(func: F, delay: number): F => {
   let isCooldown = false
 

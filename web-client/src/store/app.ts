@@ -13,7 +13,7 @@ export const defaultAppState: AppState = {
   authorized: localStorage.getItem(LocalStorageKey.TOKEN) !== null,
 }
 
-export const appReducer: Reducer<AppState, Action> = (state = defaultAppState, action): AppState => {
+export const appReducer: Reducer<AppState, Action> = (state = defaultAppState, action) => {
   switch (action.type) {
     case Actions.APP_LOADED_STATE: {
       return {

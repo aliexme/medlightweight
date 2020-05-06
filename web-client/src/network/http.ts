@@ -4,7 +4,10 @@ import { AjaxObservable } from './ajax'
 
 export const DEFAULT_REQUEST_TIMEOUT = 30000
 
-export const ajaxObservable = new AjaxObservable({ timeout: DEFAULT_REQUEST_TIMEOUT })
+export const ajaxObservable = new AjaxObservable({
+  timeout: DEFAULT_REQUEST_TIMEOUT,
+  headers: { 'Content-Type': 'application/json' },
+})
 
 const authToken: string | null = localStorage.getItem(LocalStorageKey.TOKEN)
 

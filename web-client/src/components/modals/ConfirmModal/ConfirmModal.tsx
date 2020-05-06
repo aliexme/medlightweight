@@ -37,7 +37,7 @@ const ConfirmModalCmp: React.FC<Props> = (props) => {
       fullWidth
       maxWidth='sm'
       disableBackdropClick={loading}
-      onClose={props.close}
+      onClose={props.closeAll}
     >
       <DialogTitle
         disabled={loading}

@@ -81,7 +81,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
         }
       }
     })
-  }, [])
+  }, [survey])
 
   const onCancelClick = useCallback(() => {
     if (loading) {
@@ -89,7 +89,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
     } else {
       props.close()
     }
-  }, [loading])
+  }, [loading, survey])
 
   return (
     <Dialog
@@ -170,12 +170,11 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
         </Button>
         <Button
           color='primary'
-          type='submit'
           disabled={loading}
           endIcon={loading && <CircularProgress size='1em' color='secondary'/>}
           onClick={submitSurvey}
         >
-          {survey ? 'Редактировать' : 'Создать'}
+          {survey ? 'Редактировать' : 'Добавить'}
         </Button>
       </DialogActions>
     </Dialog>
