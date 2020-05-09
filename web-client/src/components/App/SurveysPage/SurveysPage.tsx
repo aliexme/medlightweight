@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { CLIENT } from 'types/client'
 import { Action, Actions, createAction } from 'actions'
 import { PageContainer } from 'components/common/PageContainer/PageContainer'
+
 import { SurveysTable } from './SurveysTable/SurveysTable'
 
 type DispatchedProps = {

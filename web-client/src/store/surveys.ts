@@ -24,7 +24,7 @@ export const defaultSurveysState: SurveysState = {
   surveysTotalCount: 0,
 }
 
-export const surveysReducer: Reducer<SurveysState, Action> = (state = defaultSurveysState, action): SurveysState => {
+export const surveysReducer: Reducer<SurveysState, Action> = (state = defaultSurveysState, action) => {
   switch (action.type) {
     case Actions.SET_SURVEYS_LIST: {
       const { surveys, totalCount } = action.data

@@ -10,6 +10,7 @@ import { logError } from 'logging'
 import { authEpics } from './authEpics/authEpics'
 import { navigationEpics } from './navigationEpics/navigationEpics'
 import { surveysEpics } from './surveysEpics/surveysEpics'
+import { patientsEpics } from './patientsEpics/patientsEpics'
 
 export type EpicDependencies = {
   history: History
@@ -22,6 +23,7 @@ const epics: Epic[] = [
   ...authEpics,
   ...navigationEpics,
   ...surveysEpics,
+  ...patientsEpics,
 ]
 
 export const rootEpic: Epic = (action$, store$, dependencies) => {

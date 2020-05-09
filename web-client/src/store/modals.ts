@@ -11,7 +11,7 @@ export const defaultModalsState: ModalsState = {
   stack: [],
 }
 
-export const modalsReducer: Reducer<ModalsState, Action> = (state = defaultModalsState, action): ModalsState => {
+export const modalsReducer: Reducer<ModalsState, Action> = (state = defaultModalsState, action) => {
   switch (action.type) {
     case Actions.PUSH_MODAL: {
       return {

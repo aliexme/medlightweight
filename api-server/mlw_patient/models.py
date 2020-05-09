@@ -23,3 +23,6 @@ class Patient(models.Model):
         today = date.today()
         delta = relativedelta(today, self.birth)
         return delta.years
+
+    class Meta:
+        ordering = ['-created_at']

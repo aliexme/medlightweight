@@ -8,6 +8,11 @@ export namespace API {
     results: T[]
   }
 
+  export enum Gender {
+    MALE = 'M',
+    FEMALE = 'F',
+  }
+
   export type Survey = {
     id: number
     name: string
@@ -15,6 +20,17 @@ export namespace API {
     directory: string
     owner: number
     patient: number | null
+    created_at: string
+    updated_at: string
+  }
+
+  export type Patient = {
+    id: number
+    name: string
+    gender: Gender
+    birth: string
+    age: number
+    owner: number
     created_at: string
     updated_at: string
   }
@@ -73,6 +89,51 @@ export namespace API {
       }
 
       export type Resp = Survey
+    }
+
+    export namespace Delete {
+      export type Req = void
+      export type Resp = void
+    }
+  }
+
+  export namespace MlwPatients {
+    export const MLW_PATIENTS_BASE_URL = API_PREFIX + '/patients/'
+
+    export namespace List {
+      export type Req = {
+        page: number
+        pageSize: number
+        searchText?: string
+      }
+
+      export type Resp = Pagination<Patient>
+    }
+
+    export namespace Info {
+      export type Req = {}
+
+      export type Resp = Patient
+    }
+
+    export namespace Create {
+      export type Req = {
+        name: string
+        gender: Gender
+        birth: string
+      }
+
+      export type Resp = Patient
+    }
+
+    export namespace Update {
+      export type Req = {
+        name?: string
+        gender?: Gender
+        birth?: string
+      }
+
+      export type Resp = Patient
     }
 
     export namespace Delete {

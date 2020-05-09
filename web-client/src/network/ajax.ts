@@ -48,6 +48,10 @@ export class AjaxObservable {
     const requestTimeout = options?.timeout ?? this.timeout
     const reqBody = options?.formData ? this.mapBodyToFormData(body) : body
 
+    if (options?.formData) {
+      delete requestHeaders['Content-Type']
+    }
+
     return ajax.post(url, reqBody, requestHeaders).pipe(
       timeout(requestTimeout),
       map((result) => result.response),
@@ -58,6 +62,10 @@ export class AjaxObservable {
     const requestHeaders = this.mergeHeaders(options?.headers)
     const requestTimeout = options?.timeout ?? this.timeout
     const reqBody = options?.formData ? this.mapBodyToFormData(body) : body
+
+    if (options?.formData) {
+      delete requestHeaders['Content-Type']
+    }
 
     return ajax.patch(url, reqBody, requestHeaders).pipe(
       timeout(requestTimeout),
