@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Button, Container, Grid, Input, CircularProgress } from '@material-ui/core'
+import { Button, Container, Grid, Input, CircularProgress, InputLabel } from '@material-ui/core'
 import { FormComponentProps, createForm } from 'rc-form'
 import { useSnackbar } from 'notistack'
 
@@ -68,6 +68,7 @@ const SignInPageCmp: React.FC<Props> = (props) => {
                   label='Имя пользователя'
                   fullWidth
                   disabled={loading}
+                  LabelComponent={InputLabel}
                 >
                   {form.getFieldDecorator(SignInFormField.USERNAME, {
                     initialValue: '',
@@ -81,6 +82,7 @@ const SignInPageCmp: React.FC<Props> = (props) => {
                   label='Пароль'
                   fullWidth
                   disabled={loading}
+                  LabelComponent={InputLabel}
                 >
                   {form.getFieldDecorator(SignInFormField.PASSWORD, {
                     initialValue: '',

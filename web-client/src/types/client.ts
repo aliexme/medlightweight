@@ -26,6 +26,7 @@ export namespace CLIENT {
     | Requests.CreatePatientRequest
     | Requests.EditPatientRequest
     | Requests.DeletePatientRequest
+    | Requests.FetchAutocompletePatientsRequest
   )
 
   export namespace Requests {
@@ -64,6 +65,9 @@ export namespace CLIENT {
 
     export const DELETE_PATIENT_REQUEST = 'DELETE_PATIENT_REQUEST' as const
     export type DeletePatientRequest = typeof DELETE_PATIENT_REQUEST
+
+    export const FETCH_AUTOCOMPLETE_PATIENTS_REQUEST = 'FETCH_AUTOCOMPLETE_PATIENTS_REQUEST' as const
+    export type FetchAutocompletePatientsRequest = typeof FETCH_AUTOCOMPLETE_PATIENTS_REQUEST
   }
 
   /* Modals */
@@ -108,6 +112,8 @@ export namespace CLIENT {
       type: typeof PATIENT_MODAL_TYPE
       props?: {
         patient?: Patient
+        initialName?: string
+        submitCallback?(patient: Patient): void
       }
     }
   }

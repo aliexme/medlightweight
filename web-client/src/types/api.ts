@@ -75,6 +75,7 @@ export namespace API {
       export type Req = {
         name: string
         description?: string
+        patient?: number
         files: File[]
       }
 
@@ -85,6 +86,7 @@ export namespace API {
       export type Req = {
         name?: string
         description?: string
+        patient?: number
         files?: File[]
       }
 

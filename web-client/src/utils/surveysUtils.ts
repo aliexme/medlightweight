@@ -17,8 +17,8 @@ export function mapApiSurveyToClient(apiSurvey: API.Survey): CLIENT.Survey {
   }
 }
 
-export function getSurveys(surveysListIds: number[], surveysMap: CLIENT.SurveysMap): CLIENT.Survey[] {
-  return surveysListIds
+export function getSurveysByIds(surveyIds: number[], surveysMap: CLIENT.SurveysMap): CLIENT.Survey[] {
+  return surveyIds
     .map((surveyId) => getFromMap(surveysMap, surveyId))
     .filter((survey): survey is CLIENT.Survey => survey !== undefined)
 }

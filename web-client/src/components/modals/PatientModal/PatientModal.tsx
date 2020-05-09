@@ -6,9 +6,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  FormLabel,
   Grid,
-  Input,
+  TextField,
 } from '@material-ui/core'
 import { createForm, FormComponentProps } from 'rc-form'
 import { connect } from 'react-redux'
@@ -36,7 +35,7 @@ type ConnectedProps = {
 }
 
 type DispatchedProps = {
-  createPatient(data: API.MlwPatients.Create.Req): Action
+  createPatient(data: API.MlwPatients.Create.Req, submitCallback?: (patient: CLIENT.Patient) => void): Action
   editPatient(id: number, data: API.MlwPatients.Update.Req): Action
   cancelRequest(request: CLIENT.RequestName): Action
 }
@@ -79,7 +78,7 @@ const PatientModalCmp: React.FC<Props> = (props) => {
             name: values[PatientModalFields.NAME],
             gender: values[PatientModalFields.GENDER],
             birth,
-          })
+          }, props.submitCallback)
         }
       }
     })
@@ -112,18 +111,20 @@ const PatientModalCmp: React.FC<Props> = (props) => {
         <Grid container direction='column' spacing={3}>
           <Grid item>
             <FormField
-              label='Имя'
               fullWidth
-              disabled={loading}
               errors={form.getFieldError(PatientModalFields.NAME)}
             >
               {form.getFieldDecorator(PatientModalFields.NAME, {
-                initialValue: patient && patient.name || '',
+                initialValue: patient && patient.name || props.initialName || '',
                 rules: [
                   { required: true, message: FORM_FIELD_IS_REQUIRED },
                 ],
               })(
-                <Input/>,
+                <TextField
+                  label='Имя'
+                  variant='outlined'
+                  disabled={loading}
+                />,
               )}
             </FormField>
           </Grid>
@@ -132,7 +133,6 @@ const PatientModalCmp: React.FC<Props> = (props) => {
               label='Пол'
               disabled={loading}
               errors={form.getFieldError(PatientModalFields.GENDER)}
-              LabelComponent={FormLabel}
             >
               {form.getFieldDecorator(PatientModalFields.GENDER, {
                 initialValue: patient ? patient.gender : API.Gender.MALE,
@@ -146,10 +146,7 @@ const PatientModalCmp: React.FC<Props> = (props) => {
           </Grid>
           <Grid item>
             <FormField
-              label='Дата рождения'
-              disabled={loading}
               errors={form.getFieldError(PatientModalFields.BIRTH)}
-              LabelComponent={FormLabel}
             >
               {form.getFieldDecorator(PatientModalFields.BIRTH, {
                 initialValue: patient ? patient.birth : new Date('1990-01-01'),
@@ -158,8 +155,11 @@ const PatientModalCmp: React.FC<Props> = (props) => {
                 ],
               })(
                 <DatePicker
+                  label='Дата рождения'
+                  inputVariant='outlined'
                   openTo='year'
                   views={['year', 'month', 'date']}
+                  disabled={loading}
                 />,
               )}
             </FormField>
@@ -194,7 +194,7 @@ const mapStateToProps = (state: Store): ConnectedProps => {
 }
 
 const mapDispatchToProps: DispatchedProps = {
-  createPatient: (data) => createAction(Actions.API_CREATE_PATIENT, data),
+  createPatient: (data, submitCallback) => createAction(Actions.API_CREATE_PATIENT, { ...data, submitCallback }),
   editPatient: (id, data) => createAction(Actions.API_EDIT_PATIENT, { id, ...data }),
   cancelRequest: (request) => createAction(Actions.CANCEL_REQUEST, { request }),
 }

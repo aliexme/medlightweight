@@ -7,6 +7,7 @@ import { API } from 'types/api'
 import { Epic } from 'epics/rootEpic'
 import { Actions, createAction, createActionEmpty } from 'actions'
 import { guardMergeMap } from 'utils/epicsUtils'
+import { mapApiPatientToClient } from 'utils/patientsUtils'
 
 export const createPatientEpic: Epic = (action$, _state$, deps) => action$.pipe(
   ofType<Actions.ApiCreatePatient>(Actions.API_CREATE_PATIENT),
@@ -14,7 +15,12 @@ export const createPatientEpic: Epic = (action$, _state$, deps) => action$.pipe(
     const req: API.MlwPatients.Create.Req = action.data
 
     return deps.ajax.post(API.MlwPatients.MLW_PATIENTS_BASE_URL, req).pipe(
-      mergeMap(() => {
+      mergeMap((resp: API.MlwPatients.Create.Resp) => {
+        const clientPatient = mapApiPatientToClient(resp)
+        if (action.data.submitCallback) {
+          action.data.submitCallback(clientPatient)
+        }
+
         return of(
           createActionEmpty(Actions.POP_MODAL),
           createAction(Actions.CHANGE_PATIENTS_LIST_FILTERS, {

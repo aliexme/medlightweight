@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 
 import { CLIENT } from 'types/client'
 import { Store } from 'store/store'
-import { getSurveys } from 'utils/surveysUtils'
+import { getSurveysByIds } from 'utils/surveysUtils'
 
 export const getSurveysSelector = createSelector<
   Store,
@@ -15,6 +15,6 @@ export const getSurveysSelector = createSelector<
     (state) => state.surveys.surveysMap,
   ],
   (surveysListIds, surveysMap) => {
-    return getSurveys(surveysListIds, surveysMap)
+    return getSurveysByIds(surveysListIds, surveysMap)
   },
 )
