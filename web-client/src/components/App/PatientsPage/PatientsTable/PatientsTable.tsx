@@ -2,11 +2,13 @@ import React, { useMemo, useEffect, useCallback } from 'react'
 import { Column, Options, Action as MaterialTableAction } from 'material-table'
 import { connect } from 'react-redux'
 import { useSnackbar } from 'notistack'
+import { useHistory } from 'react-router-dom'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import AddIcon from '@material-ui/icons/Add'
 
 import { CLIENT } from 'types/client'
 import { Store } from 'store/store'
+import { URLS } from 'urls'
 import { Action, Actions, createAction } from 'actions'
 import { MaterialTable } from 'components/common/MaterialTable/MaterialTable'
 import { getPatientsSelector } from 'selectors/patientsSelectors'
@@ -34,6 +36,7 @@ const PatientsTableCmp: React.FC<Props> = (props) => {
   const { patients, patientsTotalCount, patientsListFilters, fetchPatientsListRequest } = props
   const isLoading = fetchPatientsListRequest === CLIENT.RequestStatus.LOADING
 
+  const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
   const prevRequest = usePrevious(fetchPatientsListRequest)
 
@@ -96,6 +99,12 @@ const PatientsTableCmp: React.FC<Props> = (props) => {
     props.pushModal({ type: CLIENT.Modals.PATIENT_MODAL_TYPE })
   }, [])
 
+  const onPatientClick = useCallback((_event?: React.MouseEvent, patient?: CLIENT.Patient) => {
+    if (patient) {
+      history.push(`${URLS.PATIENTS}/${patient.id}`)
+    }
+  }, [history])
+
   const actions = useMemo<MaterialTableAction<CLIENT.Patient>[]>(() => {
     return [
       {
@@ -126,6 +135,7 @@ const PatientsTableCmp: React.FC<Props> = (props) => {
       onChangePage={onPageChange}
       onChangeRowsPerPage={onPageSizeChange}
       onSearchChange={onSearchChange}
+      onRowClick={onPatientClick}
     />
   )
 }
