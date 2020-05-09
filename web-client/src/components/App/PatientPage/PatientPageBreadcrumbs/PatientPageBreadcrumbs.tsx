@@ -6,14 +6,14 @@ import { BreadcrumbsLink } from 'components/common/Breadcrumbs/BreadcrumbsLink/B
 
 type Props = {}
 
-const SurveyPageBreadcrumbsCmp: React.FC<Props> = () => {
+const PatientPageBreadcrumbsCmp: React.FC<Props> = () => {
   return (
     <Breadcrumbs withBackButton>
-      <BreadcrumbsLink to={URLS.SURVEYS}>
-        Все обследования
+      <BreadcrumbsLink to={URLS.PATIENTS}>
+        Все пациенты
       </BreadcrumbsLink>
     </Breadcrumbs>
   )
 }
 
-export const SurveyPageBreadcrumbs = SurveyPageBreadcrumbsCmp
+export const PatientPageBreadcrumbs = PatientPageBreadcrumbsCmp

@@ -95,9 +95,9 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
     props.pushModal({ type: CLIENT.Modals.SURVEY_MODAL_TYPE })
   }, [])
 
-  const onSurveyClick = useCallback((event?: React.MouseEvent, rowData?: CLIENT.Survey) => {
-    if (rowData) {
-      history.push(`${URLS.SURVEYS}/${rowData.id}`)
+  const onSurveyClick = useCallback((_event?: React.MouseEvent, survey?: CLIENT.Survey) => {
+    if (survey) {
+      history.push(`${URLS.SURVEYS}/${survey.id}`)
     }
   }, [history])
 
