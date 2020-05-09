@@ -108,13 +108,21 @@ export namespace Actions {
   export type ApiPatientInfo = A<typeof API_PATIENT_INFO, { patientId: number }>
 
   export const API_CREATE_PATIENT = 'API_CREATE_PATIENT' as const
-  export type ApiCreatePatient = A<typeof API_CREATE_PATIENT, API.MlwPatients.Create.Req>
+  export type ApiCreatePatient = A<typeof API_CREATE_PATIENT, API.MlwPatients.Create.Req & {
+    submitCallback?(patient: CLIENT.Patient): void
+  }>
 
   export const API_EDIT_PATIENT = 'API_EDIT_PATIENT' as const
   export type ApiEditPatient = A<typeof API_EDIT_PATIENT, API.MlwPatients.Update.Req & { id: number }>
 
   export const API_DELETE_PATIENT = 'API_DELETE_PATIENT' as const
   export type ApiDeletePatient = A<typeof API_DELETE_PATIENT, { patientId: number }>
+
+  export const API_FETCH_AUTOCOMPLETE_PATIENTS = 'API_FETCH_AUTOCOMPLETE_PATIENTS' as const
+  export type ApiFetchAutocompletePatients = A<typeof API_FETCH_AUTOCOMPLETE_PATIENTS, { searchText: string }>
+
+  export const SET_AUTOCOMPLETE_PATIENTS = 'SET_AUTOCOMPLETE_PATIENTS' as const
+  export type SetAutocompletePatients = A<typeof SET_AUTOCOMPLETE_PATIENTS, { patients: CLIENT.Patient[] }>
 }
 
 export type Action = (
@@ -147,4 +155,6 @@ export type Action = (
   | Actions.ApiCreatePatient
   | Actions.ApiEditPatient
   | Actions.ApiDeletePatient
+  | Actions.ApiFetchAutocompletePatients
+  | Actions.SetAutocompletePatients
 )

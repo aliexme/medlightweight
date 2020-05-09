@@ -11,6 +11,7 @@ export type PatientsState = {
   patientsMap: CLIENT.PatientsMap
   patientsTotalCount: number
   filters: CLIENT.PatientsListFilters
+  autocompletePatientIds: number[]
 }
 
 export const defaultPatientsState: PatientsState = {
@@ -21,6 +22,7 @@ export const defaultPatientsState: PatientsState = {
     page: 1,
     pageSize: DEFAULT_PATIENTS_LIST_FILTERS_PAGE_SIZE,
   },
+  autocompletePatientIds: [],
 }
 
 export const patientsReducer: Reducer<PatientsState, Action> = (state = defaultPatientsState, action) => {
@@ -53,6 +55,17 @@ export const patientsReducer: Reducer<PatientsState, Action> = (state = defaultP
 
       return {
         ...state,
+        patientsMap: mergeArrayToMap(state.patientsMap, patients),
+      }
+    }
+
+    case Actions.SET_AUTOCOMPLETE_PATIENTS: {
+      const { patients } = action.data
+      const patientIds = patients.map((patient) => patient.id)
+
+      return {
+        ...state,
+        autocompletePatientIds: patientIds,
         patientsMap: mergeArrayToMap(state.patientsMap, patients),
       }
     }

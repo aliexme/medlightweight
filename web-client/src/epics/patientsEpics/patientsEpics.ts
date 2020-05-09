@@ -7,6 +7,7 @@ import { fetchPatientInfoEpic } from './fetchPatientInfoEpic'
 import { deletePatientEpic } from './deletePatientEpic'
 import { createPatientEpic } from './createPatientEpic'
 import { editPatientEpic } from './editPatientEpic'
+import { fetchAutocompletePatientsEpic } from './fetchAutocompletePatientsEpic'
 
 export const patientsEpics: Epic[] = [
   fetchPatientsListEpic,
@@ -16,4 +17,5 @@ export const patientsEpics: Epic[] = [
   deletePatientEpic,
   createPatientEpic,
   editPatientEpic,
+  fetchAutocompletePatientsEpic,
 ]

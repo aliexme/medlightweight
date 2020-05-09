@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormControl, FormHelperText, InputLabel } from '@material-ui/core'
+import { FormControl, FormHelperText, FormLabel } from '@material-ui/core'
 
 type OwnProps = {
   label?: string
@@ -12,7 +12,7 @@ type OwnProps = {
 type Props = OwnProps
 
 const FormFieldCmp: React.FC<Props> = (props) => {
-  const { label, errors, disabled, fullWidth, LabelComponent = InputLabel } = props
+  const { label, errors, disabled, fullWidth, LabelComponent = FormLabel } = props
   const hasError = errors?.length > 0
 
   return (

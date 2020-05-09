@@ -7,7 +7,7 @@ import {
   DialogContent,
   FormHelperText,
   Grid,
-  Input,
+  TextField,
 } from '@material-ui/core'
 import { createForm, FormComponentProps } from 'rc-form'
 import { connect } from 'react-redux'
@@ -23,6 +23,7 @@ import { FORM_FIELD_IS_REQUIRED } from 'utils/formUtils'
 import { usePrevious } from 'hooks'
 import { showUnexpectedError } from 'utils/snackbarUtils'
 import { Upload } from 'components/common/Upload/Upload'
+import { PatientsSelect } from 'components/common/PatientsSelect/PatientsSelect'
 
 import styles from './SurveyModal.scss'
 
@@ -44,6 +45,7 @@ type Props = OwnProps & ConnectedProps & DispatchedProps & FormComponentProps
 enum SurveyModalFields {
   NAME = 'NAME',
   DESCRIPTION = 'DESCRIPTION',
+  PATIENT = 'PATIENT',
   FILES = 'FILES',
 }
 
@@ -64,18 +66,21 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
   const submitSurvey = useCallback(() => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const fileList = values[SurveyModalFields.FILES]
+        const patient: CLIENT.Patient | null = values[SurveyModalFields.PATIENT]
+        const fileList: FileList = values[SurveyModalFields.FILES]
 
         if (survey) {
           props.editSurvey(survey.id, {
             name: values[SurveyModalFields.NAME],
             description: values[SurveyModalFields.DESCRIPTION],
+            patient: patient ? patient.id : undefined,
             files: fileList && Array.from(fileList),
           })
         } else {
           props.createSurvey({
             name: values[SurveyModalFields.NAME],
             description: values[SurveyModalFields.DESCRIPTION],
+            patient: patient ? patient.id : undefined,
             files: Array.from(fileList),
           })
         }
@@ -110,9 +115,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
         <Grid container direction='column' spacing={3}>
           <Grid item>
             <FormField
-              label='Название'
               fullWidth
-              disabled={loading}
               errors={form.getFieldError(SurveyModalFields.NAME)}
             >
               {form.getFieldDecorator(SurveyModalFields.NAME, {
@@ -121,20 +124,43 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
                   { required: true, message: FORM_FIELD_IS_REQUIRED },
                 ],
               })(
-                <Input/>,
+                <TextField
+                  label='Название'
+                  variant='outlined'
+                  disabled={loading}
+                />,
               )}
             </FormField>
           </Grid>
           <Grid item>
             <FormField
-              label='Описание'
               fullWidth
-              disabled={loading}
             >
               {form.getFieldDecorator(SurveyModalFields.DESCRIPTION, {
                 initialValue: survey && survey.description || '',
               })(
-                <Input multiline rows={3} rowsMax={Infinity}/>,
+                <TextField
+                  label='Описание'
+                  variant='outlined'
+                  multiline
+                  rows={3}
+                  rowsMax={Infinity}
+                  disabled={loading}
+                />,
+              )}
+            </FormField>
+          </Grid>
+          <Grid item>
+            <FormField
+              fullWidth
+            >
+              {form.getFieldDecorator(SurveyModalFields.PATIENT, {
+                initialValue: survey ? survey.patientId : null,
+                getValueFromEvent: (_event, value) => value,
+              })(
+                <PatientsSelect
+                  disabled={loading}
+                />,
               )}
             </FormField>
           </Grid>
