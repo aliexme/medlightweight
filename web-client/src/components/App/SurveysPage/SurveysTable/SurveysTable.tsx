@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import { Column, Action as MaterialTableAction, Options } from 'material-table'
 import { connect } from 'react-redux'
 import { useSnackbar } from 'notistack'
@@ -47,9 +47,21 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
     }
   }, [prevRequest, fetchSurveysListRequest])
 
+  const onClickStopPropagation = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation()
+  } ,[])
+
   const renderSurveyPatient = useCallback((survey: CLIENT.Survey) => {
     const patient = survey.patientId !== undefined ? getFromMap(patientsMap, survey.patientId) : undefined
-    return patient ? patient.name : '-'
+    if (patient) {
+      return (
+        <NavLink to={`${URLS.PATIENTS}/${patient.id}`} onClick={onClickStopPropagation}>
+          {patient.name}
+        </NavLink>
+      )
+    }
+
+    return '-'
   } ,[patientsMap])
 
   const columns = useMemo<Column<CLIENT.Survey>[]>(() => {
