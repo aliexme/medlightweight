@@ -4,6 +4,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from rest_framework import serializers
 
+from mlw_patient.serializers import PatientSerializer
 from mlw_survey.models import Survey
 from utils.decorators import transaction_atomic
 from utils.storage import get_absolute_path_regarding_media
@@ -50,6 +51,9 @@ class SurveySerializer(serializers.ModelSerializer):
 
         directory = data['directory']
         data['directory'] = self.context['request'].build_absolute_uri(directory)
+
+        if instance.patient is not None:
+            data['patient'] = PatientSerializer().to_representation(instance.patient)
 
         return data
 

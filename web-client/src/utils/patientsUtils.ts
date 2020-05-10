@@ -29,6 +29,19 @@ export function mapApiPatientToClient(apiPatient: API.Patient): CLIENT.Patient {
   }
 }
 
+export function getPatientsFromApiSurveys(apiSurveys: API.Survey[]): CLIENT.Patient[] {
+  const patients: CLIENT.Patient[] = []
+
+  apiSurveys.forEach((apiSurvey) => {
+    if (apiSurvey.patient) {
+      const clientPatient = mapApiPatientToClient(apiSurvey.patient)
+      patients.push(clientPatient)
+    }
+  })
+
+  return patients
+}
+
 export function getPatientsByIds(patientIds: number[], patientsMap: CLIENT.PatientsMap): CLIENT.Patient[] {
   return patientIds
     .map((patientId) => getFromMap(patientsMap, patientId))

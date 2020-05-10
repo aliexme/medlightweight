@@ -8,19 +8,21 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 
 import { CLIENT } from 'types/client'
 import { Store } from 'store/store'
+import { URLS } from 'urls'
 import { Action, Actions, createAction } from 'actions'
 import { usePrevious } from 'hooks'
 import { getSurveysSelector } from 'selectors/surveysSelectors'
 import { MaterialTable } from 'components/common/MaterialTable/MaterialTable'
 import { showUnexpectedError } from 'utils/snackbarUtils'
 import { DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE } from 'utils/surveysUtils'
-import { URLS } from 'urls'
+import { getFromMap } from 'utils/immutableUtils'
 
 type ConnectedProps = {
   surveys: CLIENT.Survey[]
   surveysTotalCount: number
   surveysListFilters: CLIENT.SurveysListFilters
   fetchSurveysListRequest: CLIENT.RequestStatus
+  patientsMap: CLIENT.PatientsMap
 }
 
 type DispatchedProps = {
@@ -32,7 +34,7 @@ type DispatchedProps = {
 type Props = ConnectedProps & DispatchedProps
 
 const SurveysTableCmp: React.FC<Props> = (props) => {
-  const { surveys, surveysTotalCount, surveysListFilters, fetchSurveysListRequest } = props
+  const { surveys, surveysTotalCount, surveysListFilters, fetchSurveysListRequest, patientsMap } = props
   const isLoading = fetchSurveysListRequest === CLIENT.RequestStatus.LOADING
 
   const history = useHistory()
@@ -45,14 +47,20 @@ const SurveysTableCmp: React.FC<Props> = (props) => {
     }
   }, [prevRequest, fetchSurveysListRequest])
 
+  const renderSurveyPatient = useCallback((survey: CLIENT.Survey) => {
+    const patient = survey.patientId !== undefined ? getFromMap(patientsMap, survey.patientId) : undefined
+    return patient ? patient.name : '-'
+  } ,[patientsMap])
+
   const columns = useMemo<Column<CLIENT.Survey>[]>(() => {
     return [
       { title: 'Название', field: 'name' },
-      { title: 'Описание', field: 'description' },
+      { title: 'Описание', field: 'description', emptyValue: '-' },
+      { title: 'Пациент', render: renderSurveyPatient },
       { title: 'Дата создания', field: 'createdAt', type: 'datetime', searchable: false },
       { title: 'Дата обновления', field: 'updatedAt', type: 'datetime', searchable: false },
     ]
-  }, [])
+  }, [renderSurveyPatient])
 
   const options = useMemo<Options>(() => {
     return {
@@ -142,6 +150,7 @@ const mapStateToProps = (state: Store): ConnectedProps => {
     surveysTotalCount: state.surveys.surveysTotalCount,
     surveysListFilters: state.surveys.filters,
     fetchSurveysListRequest: state.requests[CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST],
+    patientsMap: state.patients.patientsMap,
   }
 }
 

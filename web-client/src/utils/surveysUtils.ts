@@ -13,7 +13,7 @@ export function mapApiSurveyToClient(apiSurvey: API.Survey): CLIENT.Survey {
     createdAt: new Date(apiSurvey.created_at),
     updatedAt: new Date(apiSurvey.updated_at),
     ownerId: apiSurvey.owner,
-    patientId: apiSurvey.patient || undefined,
+    patientId: apiSurvey.patient?.id || undefined,
   }
 }
 

@@ -5,12 +5,18 @@ import EditIcon from '@material-ui/icons/Edit'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 
 import { CLIENT } from 'types/client'
+import { Store } from 'store/store'
 import { Action, Actions, createAction } from 'actions'
 import { MaterialTable } from 'components/common/MaterialTable/MaterialTable'
+import { getFromMap } from 'utils/immutableUtils'
 
 type OwnProps = {
   survey: CLIENT.Survey
   style?: React.CSSProperties
+}
+
+type ConnectedProps = {
+  surveyPatient?: CLIENT.Patient
 }
 
 type DispatchedProps = {
@@ -18,19 +24,24 @@ type DispatchedProps = {
   deleteSurvey(surveyId: number): Action
 }
 
-type Props = OwnProps & DispatchedProps
+type Props = OwnProps & ConnectedProps & DispatchedProps
 
 const SurveyInfoCmp: React.FC<Props> = (props) => {
-  const { survey } = props
+  const { survey, surveyPatient } = props
+
+  const renderSurveyPatient = useCallback(() => {
+    return surveyPatient ? surveyPatient.name : '-'
+  }, [surveyPatient])
 
   const columns = useMemo<Column<CLIENT.Survey>[]>(() => {
     return [
       { title: 'Название', field: 'name' },
-      { title: 'Описание', field: 'description' },
+      { title: 'Описание', field: 'description', emptyValue: '-' },
+      { title: 'Пациент', render: renderSurveyPatient },
       { title: 'Дата создания', field: 'createdAt', type: 'datetime' },
       { title: 'Дата обновления', field: 'updatedAt', type: 'datetime' },
     ]
-  }, [])
+  }, [renderSurveyPatient])
 
   const tableData = useMemo(() => {
     return [survey]
@@ -92,9 +103,21 @@ const SurveyInfoCmp: React.FC<Props> = (props) => {
   )
 }
 
+const mapStateToProps = (state: Store, ownProps: OwnProps): ConnectedProps => {
+  const { patientsMap } = state.patients
+  const { survey } = ownProps
+  const surveyPatient = survey.patientId !== undefined
+    ? getFromMap(patientsMap, survey.patientId)
+    : undefined
+
+  return {
+    surveyPatient,
+  }
+}
+
 const mapDispatchToProps: DispatchedProps = {
   pushModal: (modal) => createAction(Actions.PUSH_MODAL, modal),
   deleteSurvey: (surveyId) => createAction(Actions.API_DELETE_SURVEY, { surveyId }),
 }
 
-export const SurveyInfo = connect(null, mapDispatchToProps)(SurveyInfoCmp)
+export const SurveyInfo = connect(mapStateToProps, mapDispatchToProps)(SurveyInfoCmp)
