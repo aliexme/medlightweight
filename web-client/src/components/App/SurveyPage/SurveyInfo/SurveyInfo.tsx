@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
+import { NavLink } from 'react-router-dom'
 import { Column, Options, Action as MaterialTableAction } from 'material-table'
 import { connect } from 'react-redux'
 import EditIcon from '@material-ui/icons/Edit'
@@ -6,6 +7,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 
 import { CLIENT } from 'types/client'
 import { Store } from 'store/store'
+import { URLS } from 'urls'
 import { Action, Actions, createAction } from 'actions'
 import { MaterialTable } from 'components/common/MaterialTable/MaterialTable'
 import { getFromMap } from 'utils/immutableUtils'
@@ -30,7 +32,15 @@ const SurveyInfoCmp: React.FC<Props> = (props) => {
   const { survey, surveyPatient } = props
 
   const renderSurveyPatient = useCallback(() => {
-    return surveyPatient ? surveyPatient.name : '-'
+    if (surveyPatient) {
+      return (
+        <NavLink to={`${URLS.PATIENTS}/${surveyPatient.id}`}>
+          {surveyPatient.name}
+        </NavLink>
+      )
+    }
+
+    return '-'
   }, [surveyPatient])
 
   const columns = useMemo<Column<CLIENT.Survey>[]>(() => {

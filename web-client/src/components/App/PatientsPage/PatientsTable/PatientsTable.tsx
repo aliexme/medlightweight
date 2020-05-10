@@ -55,6 +55,7 @@ const PatientsTableCmp: React.FC<Props> = (props) => {
       { title: 'Имя', field: 'name' },
       { title: 'Пол', field: 'gender', render: renderPatientGender },
       { title: 'Возраст', field: 'age' },
+      { title: 'Дата рождения', field: 'birth', type: 'date' },
     ]
   }, [])
 
