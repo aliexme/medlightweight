@@ -34,6 +34,7 @@ type ConnectedProps = {
   createSurveyRequest: CLIENT.RequestStatus
   editSurveyRequest: CLIENT.RequestStatus
   surveyPatient?: CLIENT.Patient
+  initialPatient?: CLIENT.Patient
 }
 
 type DispatchedProps = {
@@ -52,7 +53,7 @@ enum SurveyModalFields {
 }
 
 const SurveyModalCmp: React.FC<Props> = (props) => {
-  const { form, survey, surveyPatient, createSurveyRequest, editSurveyRequest } = props
+  const { form, survey, surveyPatient, createSurveyRequest, editSurveyRequest, initialPatient, disablePatient } = props
   const request = survey ? editSurveyRequest : createSurveyRequest
   const loading = request === CLIENT.RequestStatus.LOADING
 
@@ -62,6 +63,10 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
   useEffect(() => {
     if (prevRequest === CLIENT.RequestStatus.LOADING && request === CLIENT.RequestStatus.ERROR) {
       showUnexpectedError(enqueueSnackbar)
+    }
+
+    if (prevRequest === CLIENT.RequestStatus.LOADING && request === CLIENT.RequestStatus.LOADED) {
+      props.close()
     }
   }, [prevRequest, request])
 
@@ -157,11 +162,11 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
               fullWidth
             >
               {form.getFieldDecorator(SurveyModalFields.PATIENT, {
-                initialValue: surveyPatient || null,
+                initialValue: surveyPatient || initialPatient || null,
                 getValueFromEvent: (_event, value) => value,
               })(
                 <PatientsSelect
-                  disabled={loading}
+                  disabled={disablePatient || loading}
                 />,
               )}
             </FormField>
@@ -211,15 +216,15 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
 
 const mapStateToProps = (state: Store, ownProps: OwnProps): ConnectedProps => {
   const { patientsMap } = state.patients
-  const { survey } = ownProps
-  const surveyPatient = survey && survey.patientId !== undefined
-    ? getFromMap(patientsMap, survey.patientId)
-    : undefined
+  const { survey, initialPatientId } = ownProps
+  const surveyPatient = survey && survey.patientId !== undefined ? getFromMap(patientsMap, survey.patientId) : undefined
+  const initialPatient = initialPatientId !== undefined ? getFromMap(patientsMap, initialPatientId) : undefined
 
   return {
     createSurveyRequest: state.requests[CLIENT.Requests.CREATE_SURVEY_REQUEST],
     editSurveyRequest: state.requests[CLIENT.Requests.EDIT_SURVEY_REQUEST],
     surveyPatient,
+    initialPatient,
   }
 }
 

@@ -1,8 +1,8 @@
 import { of } from 'rxjs'
 import { ofType } from 'redux-observable'
 
-import { Action, Actions, createActionEmpty } from 'actions'
 import { Epic } from 'epics/rootEpic'
+import { Action, Actions, createActionEmpty } from 'actions'
 import { guardMergeMap } from 'utils/epicsUtils'
 
 export const changeSurveysListFiltersEpic: Epic = (action$) => action$.pipe(

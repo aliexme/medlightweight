@@ -27,6 +27,7 @@ export namespace CLIENT {
     | Requests.EditPatientRequest
     | Requests.DeletePatientRequest
     | Requests.FetchAutocompletePatientsRequest
+    | Requests.FetchPatientSurveysRequest
   )
 
   export namespace Requests {
@@ -68,6 +69,9 @@ export namespace CLIENT {
 
     export const FETCH_AUTOCOMPLETE_PATIENTS_REQUEST = 'FETCH_AUTOCOMPLETE_PATIENTS_REQUEST' as const
     export type FetchAutocompletePatientsRequest = typeof FETCH_AUTOCOMPLETE_PATIENTS_REQUEST
+
+    export const FETCH_PATIENT_SURVEYS_REQUEST = 'FETCH_PATIENT_SURVEYS_REQUEST' as const
+    export type FetchPatientSurveysRequest = typeof FETCH_PATIENT_SURVEYS_REQUEST
   }
 
   /* Modals */
@@ -105,6 +109,8 @@ export namespace CLIENT {
       type: typeof SURVEY_MODAL_TYPE
       props?: {
         survey?: Survey
+        initialPatientId?: number
+        disablePatient?: boolean
       }
     }
 
@@ -166,6 +172,19 @@ export namespace CLIENT {
 
   export type PatientsListFiltersOptions = {
     fetchPatientsList?: boolean
+  }
+
+  /* Patients Surveys */
+
+  export type PatientSurveysInfo = {
+    surveysListIds: number[]
+    totalCount: number
+  }
+
+  export type PatientsSurveysMap = IMap<number, PatientSurveysInfo>
+
+  export type PatientSurveysFiltersOptions = {
+    fetchPatientSurveys?: boolean
   }
 
   /* Events */

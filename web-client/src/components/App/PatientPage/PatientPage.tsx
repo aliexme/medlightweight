@@ -14,6 +14,7 @@ import { BackdropLoading } from 'components/common/BackdropLoading/BackdropLoadi
 
 import { PatientPageBreadcrumbs } from './PatientPageBreadcrumbs/PatientPageBreadcrumbs'
 import { PatientInfo } from './PatientInfo/PatientInfo'
+import { PatientSurveysTable } from './PatientSurveysTable/PatientSurveysTable'
 
 type RouteParams = {
   patientId: string
@@ -61,6 +62,10 @@ const PatientPageCmp: React.FC<Props> = (props) => {
           <PatientInfo
             patient={patient}
             style={{ marginTop: 24 }}
+          />
+          <PatientSurveysTable
+            patient={patient}
+            style={{ marginTop: 48 }}
           />
         </>
       }

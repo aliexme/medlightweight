@@ -50,6 +50,9 @@ export namespace Actions {
   export const HISTORY_PUSH = 'HISTORY_PUSH' as const
   export type HistoryPush = A<typeof HISTORY_PUSH, { path: string }>
 
+  export const HISTORY_GO_BACK = 'HISTORY_GO_BACK' as const
+  export type HistoryGoBack = AE<typeof HISTORY_GO_BACK>
+
   export const API_FETCH_SURVEYS_LIST = 'API_FETCH_SURVEYS_LIST' as const
   export type ApiFetchSurveysList = AE<typeof API_FETCH_SURVEYS_LIST>
 
@@ -123,6 +126,25 @@ export namespace Actions {
 
   export const SET_AUTOCOMPLETE_PATIENTS = 'SET_AUTOCOMPLETE_PATIENTS' as const
   export type SetAutocompletePatients = A<typeof SET_AUTOCOMPLETE_PATIENTS, { patients: CLIENT.Patient[] }>
+
+  export const API_FETCH_PATIENT_SURVEYS = 'API_FETCH_PATIENT_SURVEYS' as const
+  export type ApiFetchPatientSurveys = A<typeof API_FETCH_PATIENT_SURVEYS, { patientId: number }>
+
+  export const SET_PATIENT_SURVEYS_LIST = 'SET_PATIENT_SURVEYS_LIST' as const
+  export type SetPatientSurveysList = A<typeof SET_PATIENT_SURVEYS_LIST, {
+    patientId: number
+    patientSurveysInfo: CLIENT.PatientSurveysInfo
+  }>
+
+  export const CHANGE_PATIENT_SURVEYS_FILTERS = 'CHANGE_PATIENT_SURVEYS_FILTERS' as const
+  export type ChangePatientSurveysFilters = A<typeof CHANGE_PATIENT_SURVEYS_FILTERS, {
+    patientId: number
+    filters: CLIENT.SurveysListFilters
+    options?: CLIENT.PatientSurveysFiltersOptions
+  }>
+
+  export const SEARCH_PATIENT_SURVEYS = 'SEARCH_PATIENT_SURVEYS' as const
+  export type SearchPatientSurveys = A<typeof SEARCH_PATIENT_SURVEYS, { patientId: number, searchText: string }>
 }
 
 export type Action = (
@@ -137,6 +159,7 @@ export type Action = (
   | Actions.SignIn
   | Actions.Logout
   | Actions.HistoryPush
+  | Actions.HistoryGoBack
   | Actions.ApiFetchSurveysList
   | Actions.SetSurveysList
   | Actions.ChangeSurveysListFilters
@@ -157,4 +180,8 @@ export type Action = (
   | Actions.ApiDeletePatient
   | Actions.ApiFetchAutocompletePatients
   | Actions.SetAutocompletePatients
+  | Actions.ApiFetchPatientSurveys
+  | Actions.SetPatientSurveysList
+  | Actions.ChangePatientSurveysFilters
+  | Actions.SearchPatientSurveys
 )

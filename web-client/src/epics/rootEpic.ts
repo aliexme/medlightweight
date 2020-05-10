@@ -11,6 +11,7 @@ import { authEpics } from './authEpics/authEpics'
 import { navigationEpics } from './navigationEpics/navigationEpics'
 import { surveysEpics } from './surveysEpics/surveysEpics'
 import { patientsEpics } from './patientsEpics/patientsEpics'
+import { patientsSurveysEpics } from './patientsSurveysEpics/patientsSurveysEpics'
 
 export type EpicDependencies = {
   history: History
@@ -24,6 +25,7 @@ const epics: Epic[] = [
   ...navigationEpics,
   ...surveysEpics,
   ...patientsEpics,
+  ...patientsSurveysEpics,
 ]
 
 export const rootEpic: Epic = (action$, store$, dependencies) => {

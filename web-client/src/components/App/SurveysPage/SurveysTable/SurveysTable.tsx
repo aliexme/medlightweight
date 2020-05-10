@@ -22,6 +22,7 @@ type ConnectedProps = {
   surveysTotalCount: number
   surveysListFilters: CLIENT.SurveysListFilters
   fetchSurveysListRequest: CLIENT.RequestStatus
+  createSurveyRequest: CLIENT.RequestStatus
   patientsMap: CLIENT.PatientsMap
 }
 
@@ -34,18 +35,38 @@ type DispatchedProps = {
 type Props = ConnectedProps & DispatchedProps
 
 const SurveysTableCmp: React.FC<Props> = (props) => {
-  const { surveys, surveysTotalCount, surveysListFilters, fetchSurveysListRequest, patientsMap } = props
+  const {
+    surveys,
+    surveysTotalCount,
+    surveysListFilters,
+    fetchSurveysListRequest,
+    createSurveyRequest,
+    patientsMap,
+  } = props
   const isLoading = fetchSurveysListRequest === CLIENT.RequestStatus.LOADING
 
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
   const prevRequest = usePrevious(fetchSurveysListRequest)
+  const prevCreateSurveyRequest = usePrevious(createSurveyRequest)
 
   useEffect(() => {
     if (prevRequest === CLIENT.RequestStatus.LOADING && fetchSurveysListRequest === CLIENT.RequestStatus.ERROR) {
       showUnexpectedError(enqueueSnackbar)
     }
   }, [prevRequest, fetchSurveysListRequest])
+
+  useEffect(() => {
+    if (
+      prevCreateSurveyRequest === CLIENT.RequestStatus.LOADING
+      && createSurveyRequest === CLIENT.RequestStatus.LOADED
+    ) {
+      props.changeSurveysListFilters(
+        { page: 1, searchText: '' },
+        { fetchSurveysList: true },
+      )
+    }
+  }, [prevCreateSurveyRequest, createSurveyRequest])
 
   const onClickStopPropagation = useCallback((event: React.MouseEvent) => {
     event.stopPropagation()
@@ -162,6 +183,7 @@ const mapStateToProps = (state: Store): ConnectedProps => {
     surveysTotalCount: state.surveys.surveysTotalCount,
     surveysListFilters: state.surveys.filters,
     fetchSurveysListRequest: state.requests[CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST],
+    createSurveyRequest: state.requests[CLIENT.Requests.CREATE_SURVEY_REQUEST],
     patientsMap: state.patients.patientsMap,
   }
 }
