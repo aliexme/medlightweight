@@ -14,8 +14,8 @@ export const fetchPatientsListEpic: Epic = (action$, state$, deps) => action$.pi
   guardMergeMap(() => {
     const { filters } = state$.value.patients
     const req: API.MlwPatients.List.Req = {
-      page: filters.page || 1,
-      pageSize: filters.pageSize || DEFAULT_PATIENTS_LIST_FILTERS_PAGE_SIZE,
+      page: filters.page ?? 1,
+      pageSize: filters.pageSize ?? DEFAULT_PATIENTS_LIST_FILTERS_PAGE_SIZE,
       searchText: filters.searchText || undefined,
     }
 

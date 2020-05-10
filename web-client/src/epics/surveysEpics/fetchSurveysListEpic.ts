@@ -15,8 +15,8 @@ export const fetchSurveysListEpic: Epic = (action$, state$, deps) => action$.pip
   guardMergeMap(() => {
     const { filters } = state$.value.surveys
     const req: API.MlwSurvey.List.Req = {
-      page: filters.page || 1,
-      pageSize: filters.pageSize || DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE,
+      page: filters.page ?? 1,
+      pageSize: filters.pageSize ?? DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE,
       searchText: filters.searchText || undefined,
     }
 

@@ -60,6 +60,7 @@ export namespace API {
         page: number
         pageSize: number
         searchText?: string
+        patientId?: number
       }
 
       export type Resp = Pagination<Survey>

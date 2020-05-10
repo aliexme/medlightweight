@@ -5,7 +5,6 @@ import { ofType } from 'redux-observable'
 import { CLIENT } from 'types/client'
 import { API } from 'types/api'
 import { Epic } from 'epics/rootEpic'
-import { URLS } from 'urls'
 import { Actions, createAction, createActionEmpty } from 'actions'
 import { guardMergeMap, takeUntilCancelRequest } from 'utils/epicsUtils'
 
@@ -18,7 +17,7 @@ export const deleteSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
       takeUntilCancelRequest(action$, CLIENT.Requests.DELETE_SURVEY_REQUEST),
       mergeMap(() => {
         return of(
-          createAction(Actions.HISTORY_PUSH, { path: URLS.SURVEYS }),
+          createActionEmpty(Actions.HISTORY_GO_BACK),
           createActionEmpty(Actions.POP_MODAL),
           createAction(Actions.CHANGE_REQUEST_STATUS, {
             request: CLIENT.Requests.DELETE_SURVEY_REQUEST,

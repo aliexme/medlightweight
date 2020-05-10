@@ -15,10 +15,15 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         search_text = self.request.GET.get('searchText')
+        patient_id = self.request.GET.get('patientId')
+
         q = Q(owner=self.request.user)
 
         if search_text is not None:
             q &= Q(name__icontains=search_text) | Q(description__icontains=search_text)
+
+        if patient_id is not None:
+            q &= Q(patient_id=patient_id)
 
         return Survey.objects.filter(q)
 

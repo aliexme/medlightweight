@@ -45,7 +45,7 @@ export const patientsReducer: Reducer<PatientsState, Action> = (state = defaultP
         filters: {
           ...state.filters,
           ...action.data.filters,
-          page: action.data.filters.page || 1,
+          page: action.data.filters.page ?? 1,
         },
       }
     }

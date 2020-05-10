@@ -16,7 +16,7 @@ type Props = DispatchedProps
 const SurveysPageCmp: React.FC<Props> = (props) => {
   useEffect(() => {
     props.changeSurveysListFilters(
-      { page: 1 },
+      { page: 1, searchText: '' },
       { fetchSurveysList: true },
     )
   }, [])

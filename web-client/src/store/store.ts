@@ -13,6 +13,7 @@ import { requestsReducer, RequestsState } from './requests'
 import { surveysReducer, SurveysState } from './surveys'
 import { drawerReducer, DrawerState } from './drawer'
 import { patientsReducer, PatientsState } from './patients'
+import { patientsSurveysReducer, PatientsSurveysState } from './patientsSurveys'
 
 export type Store = {
   app: AppState
@@ -21,6 +22,7 @@ export type Store = {
   requests: RequestsState
   surveys: SurveysState
   patients: PatientsState
+  patientsSurveys: PatientsSurveysState
 }
 
 const rootReducer = combineReducers<Store, Action>({
@@ -30,6 +32,7 @@ const rootReducer = combineReducers<Store, Action>({
   requests: requestsReducer,
   surveys: surveysReducer,
   patients: patientsReducer,
+  patientsSurveys: patientsSurveysReducer,
 })
 
 const epicMiddleware = createEpicMiddleware<Action, Action, Store, EpicDependencies>({

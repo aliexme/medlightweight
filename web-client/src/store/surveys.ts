@@ -44,7 +44,7 @@ export const surveysReducer: Reducer<SurveysState, Action> = (state = defaultSur
         filters: {
           ...state.filters,
           ...action.data.filters,
-          page: action.data.filters.page || 1,
+          page: action.data.filters.page ?? 1,
         },
       }
     }
