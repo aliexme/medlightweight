@@ -24,6 +24,7 @@ import { usePrevious } from 'hooks'
 import { showUnexpectedError } from 'utils/snackbarUtils'
 import { Upload } from 'components/common/Upload/Upload'
 import { PatientsSelect } from 'components/common/PatientsSelect/PatientsSelect'
+import { getFromMap } from 'utils/immutableUtils'
 
 import styles from './SurveyModal.scss'
 
@@ -32,6 +33,7 @@ type OwnProps = CLIENT.ModalProps<CLIENT.Modals.SurveyModal>
 type ConnectedProps = {
   createSurveyRequest: CLIENT.RequestStatus
   editSurveyRequest: CLIENT.RequestStatus
+  surveyPatient?: CLIENT.Patient
 }
 
 type DispatchedProps = {
@@ -50,7 +52,7 @@ enum SurveyModalFields {
 }
 
 const SurveyModalCmp: React.FC<Props> = (props) => {
-  const { form, survey, createSurveyRequest, editSurveyRequest } = props
+  const { form, survey, surveyPatient, createSurveyRequest, editSurveyRequest } = props
   const request = survey ? editSurveyRequest : createSurveyRequest
   const loading = request === CLIENT.RequestStatus.LOADING
 
@@ -155,7 +157,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
               fullWidth
             >
               {form.getFieldDecorator(SurveyModalFields.PATIENT, {
-                initialValue: survey ? survey.patientId : null,
+                initialValue: surveyPatient || null,
                 getValueFromEvent: (_event, value) => value,
               })(
                 <PatientsSelect
@@ -207,10 +209,17 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
   )
 }
 
-const mapStateToProps = (state: Store): ConnectedProps => {
+const mapStateToProps = (state: Store, ownProps: OwnProps): ConnectedProps => {
+  const { patientsMap } = state.patients
+  const { survey } = ownProps
+  const surveyPatient = survey && survey.patientId !== undefined
+    ? getFromMap(patientsMap, survey.patientId)
+    : undefined
+
   return {
     createSurveyRequest: state.requests[CLIENT.Requests.CREATE_SURVEY_REQUEST],
     editSurveyRequest: state.requests[CLIENT.Requests.EDIT_SURVEY_REQUEST],
+    surveyPatient,
   }
 }
 

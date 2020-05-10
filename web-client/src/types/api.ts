@@ -19,7 +19,7 @@ export namespace API {
     description: string | null
     directory: string
     owner: number
-    patient: number | null
+    patient: Patient | null
     created_at: string
     updated_at: string
   }

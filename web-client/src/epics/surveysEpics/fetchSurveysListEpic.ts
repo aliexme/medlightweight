@@ -8,6 +8,7 @@ import { Actions, createAction } from 'actions'
 import { Epic } from 'epics/rootEpic'
 import { guardMergeMap } from 'utils/epicsUtils'
 import { DEFAULT_SURVEYS_LIST_FILTERS_PAGE_SIZE, mapApiSurveyToClient } from 'utils/surveysUtils'
+import { getPatientsFromApiSurveys } from 'utils/patientsUtils'
 
 export const fetchSurveysListEpic: Epic = (action$, state$, deps) => action$.pipe(
   ofType<Actions.ApiFetchSurveysList>(Actions.API_FETCH_SURVEYS_LIST),
@@ -22,12 +23,14 @@ export const fetchSurveysListEpic: Epic = (action$, state$, deps) => action$.pip
     return deps.ajax.get(API.MlwSurvey.MLW_SURVEYS_BASE_URL, req).pipe(
       mergeMap((resp: API.MlwSurvey.List.Resp) => {
         const clientSurveys = resp.results.map((apiSurvey) => mapApiSurveyToClient(apiSurvey))
+        const clientPatients = getPatientsFromApiSurveys(resp.results)
 
         return of(
           createAction(Actions.SET_SURVEYS_LIST, {
             surveys: clientSurveys,
             totalCount: resp.count,
           }),
+          createAction(Actions.UPDATE_PATIENTS, { patients: clientPatients }),
           createAction(Actions.CHANGE_REQUEST_STATUS, {
             request: CLIENT.Requests.FETCH_SURVEYS_LIST_REQUEST,
             status: CLIENT.RequestStatus.LOADED,
