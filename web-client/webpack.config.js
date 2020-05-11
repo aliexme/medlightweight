@@ -91,6 +91,9 @@ module.exports = (env, options) => {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
+                sassOptions: {
+                  includePaths: [path.resolve(PATH_SRC, 'styles')],
+                },
               },
             },
           ],

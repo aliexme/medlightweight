@@ -55,3 +55,39 @@ class DICOMRenderManagerProtocol(RenderManagerProtocol):
         render_manager.set_opacity_middle_point(normalize_point, normalize_opacity)
 
         return True
+
+    @exportRpc('renderer.dicom.representation.set')
+    def set_dicom_representation_mode(self, options):
+        view_id = options['view']
+        representation_mode = options['mode']
+
+        render_manager = self.get_render_manager(view_id)
+        render_manager.set_representation_mode(representation_mode)
+
+        return True
+
+    @exportRpc('renderer.dicom.slicemode.set')
+    def set_dicom_slice_mode(self, options):
+        view_id = options['view']
+        slice_mode = options['mode']
+
+        render_manager = self.get_render_manager(view_id)
+        render_manager.set_slice_mode(slice_mode)
+
+        return True
+
+    @exportRpc('renderer.dicom.currentslice.get')
+    def get_dicom_current_slice(self, options):
+        view_id = options['view']
+        render_manager = self.get_render_manager(view_id)
+        return render_manager.current_slice
+
+    @exportRpc('renderer.dicom.currentslice.set')
+    def set_dicom_current_slice(self, options):
+        view_id = options['view']
+        slice_number = options['slice']
+
+        render_manager = self.get_render_manager(view_id)
+        render_manager.set_current_slice_number(slice_number)
+
+        return True

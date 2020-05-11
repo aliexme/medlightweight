@@ -1,0 +1,22 @@
+@import 'vars';
+
+
+.slider {
+  color: white;
+  border-width: 2px;
+
+  :global(.MuiSlider-rail), :global(.MuiSlider-track) {
+    height: 4px;
+  }
+
+  :global(.MuiSlider-thumb) {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.currentSlice {
+  color: white;
+  font-size: $fontSize18px;
+  font-weight: 500;
+}

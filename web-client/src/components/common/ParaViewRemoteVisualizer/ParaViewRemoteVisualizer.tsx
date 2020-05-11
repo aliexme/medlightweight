@@ -31,8 +31,12 @@ class ParaViewRemoteVisualizerCmp extends React.Component<Props> {
         pointerInteraction={this.pointerInteraction}
         opacityInteraction={this.opacityInteraction}
         zoomInteraction={this.zoomInteraction}
+        slicingInteraction={this.slicingInteraction}
         resetCamera={this.resetCamera}
         setInteractionMode={this.setInteractionMode}
+        setRepresentationMode={this.setRepresentationMode}
+        setSliceMode={this.setSliceMode}
+        getCurrentSlice={this.getCurrentSlice}
       />
     )
   }
@@ -78,6 +82,11 @@ class ParaViewRemoteVisualizerCmp extends React.Component<Props> {
     await session.viewportMouseInteraction(zoomOptions)
   }
 
+  slicingInteraction = async (event: CLIENT.SlicingInteractionEvent) => {
+    const { session } = this.props
+    await session.rendererDICOMCurrentSliceSet({ slice: event.value })
+  }
+
   resetCamera = async () => {
     const { session } = this.props
 
@@ -90,6 +99,22 @@ class ParaViewRemoteVisualizerCmp extends React.Component<Props> {
     if (interactionMode !== CLIENT.RemoteRendering.InteractionMode.OPACITY) {
       await session.rendererInteractionModeSet({ mode: interactionMode as API.ParaView.InteractionMode })
     }
+  }
+
+  setRepresentationMode = async (representationMode: CLIENT.RemoteRendering.RepresentationMode) => {
+    const { session } = this.props
+    await session.rendererDICOMRepresentationSet({ mode: representationMode })
+  }
+
+  setSliceMode = async (sliceMode: CLIENT.RemoteRendering.SliceMode) => {
+    const { session } = this.props
+    await session.rendererDICOMSliceModeSet({ mode: sliceMode })
+  }
+
+  getCurrentSlice = async () => {
+    const { session } = this.props
+    const resp = await session.rendererDICOMCurrentSliceGet()
+    return resp.result
   }
 
   getPointerInteractionOptions = (

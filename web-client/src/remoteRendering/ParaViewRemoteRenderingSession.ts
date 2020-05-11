@@ -128,6 +128,45 @@ export class ParaViewRemoteRenderingSession extends RemoteRenderingSession<ParaV
     return await this.clientRpcCall(API.ParaView.ViewportCameraReset.Method, args)
   }
 
+  async rendererDICOMRepresentationSet(
+    options: CLIENT.ParaView.RendererDICOMRepresentationSet.Options,
+  ): Promise<API.ParaView.RendererDICOMRepresentationSet.Resp> {
+    const reqOptions: API.ParaView.RendererDICOMRepresentationSet.Options = {
+      ...options,
+      view: this.viewId,
+    }
+    const args: API.ParaView.RendererDICOMRepresentationSet.Args = [reqOptions]
+    return await this.clientRpcCall(API.ParaView.RendererDICOMRepresentationSet.Method, args)
+  }
+
+  async rendererDICOMSliceModeSet(
+    options: CLIENT.ParaView.RendererDICOMSliceModeSet.Options,
+  ): Promise<API.ParaView.RendererDICOMSliceModeSet.Resp> {
+    const reqOptions: API.ParaView.RendererDICOMSliceModeSet.Options = {
+      ...options,
+      view: this.viewId,
+    }
+    const args: API.ParaView.RendererDICOMSliceModeSet.Args = [reqOptions]
+    return await this.clientRpcCall(API.ParaView.RendererDICOMSliceModeSet.Method, args)
+  }
+
+  async rendererDICOMCurrentSliceGet(): Promise<API.ParaView.RendererDICOMCurrentSliceGet.Resp> {
+    const options: API.ParaView.RendererDICOMCurrentSliceGet.Options = { view: this.viewId }
+    const args: API.ParaView.RendererDICOMCurrentSliceGet.Args = [options]
+    return await this.clientRpcCall(API.ParaView.RendererDICOMCurrentSliceGet.Method, args)
+  }
+
+  async rendererDICOMCurrentSliceSet(
+    options: CLIENT.ParaView.RendererDICOMCurrentSliceSet.Options,
+  ): Promise<API.ParaView.RendererDICOMCurrentSliceSet.Resp> {
+    const reqOptions: API.ParaView.RendererDICOMCurrentSliceSet.Options = {
+      ...options,
+      view: this.viewId,
+    }
+    const args: API.ParaView.RendererDICOMCurrentSliceSet.Args = [reqOptions]
+    return await this.clientRpcCall(API.ParaView.RendererDICOMCurrentSliceSet.Method, args)
+  }
+
   private async systemRpcCall(method: string, args: Array<any> = [], kwargs: object = {}) {
     return this.rpcCall({
       wslink: ParaViewRemoteRenderingSession.WSLINK_VERSION,

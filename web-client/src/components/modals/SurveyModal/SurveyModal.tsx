@@ -134,6 +134,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
                 <TextField
                   label='Название'
                   variant='outlined'
+                  required
                   disabled={loading}
                 />,
               )}
@@ -176,7 +177,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
               fullWidth
               errors={form.getFieldError(SurveyModalFields.FILES)}
             >
-              <FormHelperText className={styles.uploadLabel}>
+              <FormHelperText className={styles.uploadLabel} required>
                 Выберите файлы
               </FormHelperText>
               {form.getFieldDecorator(SurveyModalFields.FILES, {

@@ -8,26 +8,34 @@ import { RemoteVisualizerTopToolbar } from './RemoteVisualizerTopToolbar/RemoteV
 
 type OwnProps = {
   interactionMode: CLIENT.RemoteRendering.InteractionMode
+  representationMode: CLIENT.RemoteRendering.RepresentationMode
+  sliceMode: CLIENT.RemoteRendering.SliceMode
   disabled?: boolean
   goBackUrl?: string
   resetCamera(): void
   setInteractionMode(interactionMode: CLIENT.RemoteRendering.InteractionMode): void
+  setRepresentationMode(representationMode: CLIENT.RemoteRendering.RepresentationMode): void
+  setSliceMode(sliceMode: CLIENT.RemoteRendering.SliceMode): void
 }
 
 type Props = OwnProps
 
 const RemoteVisualizerToolbarCmp: React.FC<Props> = (props) => {
-  const { interactionMode, disabled, goBackUrl } = props
+  const { interactionMode, representationMode, sliceMode, disabled, goBackUrl } = props
 
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
         <RemoteVisualizerTopToolbar
           interactionMode={interactionMode}
+          representationMode={representationMode}
+          sliceMode={sliceMode}
           disabled={disabled}
           goBackUrl={goBackUrl}
           resetCamera={props.resetCamera}
           setInteractionMode={props.setInteractionMode}
+          setRepresentationMode={props.setRepresentationMode}
+          setSliceMode={props.setSliceMode}
         />
       </div>
       <div className={styles.middleContainer}>

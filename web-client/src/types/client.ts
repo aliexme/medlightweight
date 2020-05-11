@@ -191,7 +191,7 @@ export namespace CLIENT {
 
   export type InteractionEvent = {
     srcEvent: Event
-    target: HTMLElement
+    target: Element
     isFirst: boolean
     isFinal: boolean
   }
@@ -212,6 +212,10 @@ export namespace CLIENT {
     deltaY: number
   }
 
+  export type SlicingInteractionEvent = InteractionEvent & {
+    value: number
+  }
+
   /* Remote Rendering */
 
   export namespace RemoteRendering {
@@ -219,6 +223,17 @@ export namespace CLIENT {
       MODE_2D = '2D',
       MODE_3D = '3D',
       OPACITY = 'OPACITY',
+    }
+
+    export enum RepresentationMode {
+      VOLUME = 'Volume',
+      SLICE = 'Slice',
+    }
+
+    export enum SliceMode {
+      XY = 'XY Plane',
+      XZ = 'XZ Plane',
+      YZ = 'YZ Plane',
     }
 
     export type RenderImageOptions = {
@@ -270,6 +285,24 @@ export namespace CLIENT {
         pointDelta: number
         opacityDelta: number
         action: 'down' | 'move' | 'up'
+      }
+    }
+
+    export namespace RendererDICOMRepresentationSet {
+      export type Options = {
+        mode: API.ParaView.RepresentationMode
+      }
+    }
+
+    export namespace RendererDICOMSliceModeSet {
+      export type Options = {
+        mode: API.ParaView.SliceMode
+      }
+    }
+
+    export namespace RendererDICOMCurrentSliceSet {
+      export type Options = {
+        slice: number
       }
     }
   }

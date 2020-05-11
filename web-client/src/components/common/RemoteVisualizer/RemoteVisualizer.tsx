@@ -5,7 +5,10 @@ import { RemoteRenderingSession } from 'remoteRendering/RemoteRenderingSession'
 import { ResizeSensorSizes } from 'components/common/ResizeSensor/ResizeSensor'
 import { RemoteVisualizerToolbar } from 'components/common/RemoteVisualizerToolbar/RemoteVisualizerToolbar'
 
+import styles from './RemoteVisualizer.scss'
+
 import { ImageDrawer } from './ImageDrawer/ImageDrawer'
+import { RemoteVisualizerSlicing } from './RemoteVisualizerSlicing/RemoteVisualizerSlicing'
 
 export type OwnProps = {
   session: RemoteRenderingSession
@@ -15,8 +18,12 @@ export type OwnProps = {
   pointerInteraction(event: CLIENT.PointerInteractionEvent): Promise<void>
   opacityInteraction(event: CLIENT.PointerInteractionEvent): Promise<void>
   zoomInteraction(event: CLIENT.ZoomInteractionEvent): Promise<void>
+  slicingInteraction(event: CLIENT.SlicingInteractionEvent): Promise<void>
   resetCamera(): Promise<void>
   setInteractionMode(interactionMode: CLIENT.RemoteRendering.InteractionMode): Promise<void>
+  setRepresentationMode(representationMode: CLIENT.RemoteRendering.RepresentationMode): Promise<void>
+  setSliceMode(sliceMode: CLIENT.RemoteRendering.SliceMode): Promise<void>
+  getCurrentSlice(): Promise<number>
 }
 
 type Props = OwnProps
@@ -24,6 +31,9 @@ type Props = OwnProps
 type State = {
   sessionReady: boolean
   interactionMode: CLIENT.RemoteRendering.InteractionMode
+  representationMode: CLIENT.RemoteRendering.RepresentationMode
+  sliceMode: CLIENT.RemoteRendering.SliceMode
+  currentSlice: number
 }
 
 class RemoteVisualizerCmp extends React.Component<Props, State> {
@@ -34,6 +44,9 @@ class RemoteVisualizerCmp extends React.Component<Props, State> {
   state: State = {
     sessionReady: false,
     interactionMode: CLIENT.RemoteRendering.InteractionMode.MODE_3D,
+    representationMode: CLIENT.RemoteRendering.RepresentationMode.VOLUME,
+    sliceMode: CLIENT.RemoteRendering.SliceMode.XY,
+    currentSlice: 0,
   }
 
   componentDidMount() {
@@ -48,15 +61,19 @@ class RemoteVisualizerCmp extends React.Component<Props, State> {
 
   render() {
     const { fps, goBackUrl } = this.props
-    const { sessionReady, interactionMode } = this.state
+    const { sessionReady, interactionMode, representationMode, sliceMode, currentSlice } = this.state
 
     return (
       <RemoteVisualizerToolbar
         interactionMode={interactionMode}
+        representationMode={representationMode}
+        sliceMode={sliceMode}
         disabled={!sessionReady}
         goBackUrl={goBackUrl}
         resetCamera={this.resetCamera}
         setInteractionMode={this.setInteractionMode}
+        setRepresentationMode={this.setRepresentationMode}
+        setSliceMode={this.setSliceMode}
       >
         <ImageDrawer
           ref={this.drawerRef}
@@ -66,6 +83,14 @@ class RemoteVisualizerCmp extends React.Component<Props, State> {
           onPan={this.onPan}
           onZoom={this.onZoom}
         />
+        {representationMode === CLIENT.RemoteRendering.RepresentationMode.SLICE &&
+          <RemoteVisualizerSlicing
+            currentSlice={currentSlice}
+            maxSliceNumber={265}
+            className={styles.slicing}
+            onSlicing={this.onSlicing}
+          />
+        }
       </RemoteVisualizerToolbar>
     )
   }
@@ -73,6 +98,10 @@ class RemoteVisualizerCmp extends React.Component<Props, State> {
   onSessionReady = () => {
     this.setState({ sessionReady: true })
     this.renderImage()
+
+    this.props.getCurrentSlice().then((currentSlice) => {
+      this.setState({ currentSlice })
+    })
   }
 
   onResize = (sizes: ResizeSensorSizes) => {
@@ -134,6 +163,19 @@ class RemoteVisualizerCmp extends React.Component<Props, State> {
     })
   }
 
+  onSlicing = (event: CLIENT.SlicingInteractionEvent) => {
+    this.interact = !event.isFinal
+    this.setState({ currentSlice: event.value })
+
+    this.props.slicingInteraction(event).then(() => {
+      this.renderImage()
+
+      if (event.isFinal) {
+        this.delayRenderImage()
+      }
+    })
+  }
+
   resetCamera = () => {
     this.props.resetCamera().then(() => {
       this.renderImage()
@@ -144,6 +186,21 @@ class RemoteVisualizerCmp extends React.Component<Props, State> {
     this.setState({ interactionMode })
     this.props.setInteractionMode(interactionMode).then(() => {
       this.renderImage()
+    })
+  }
+
+  setRepresentationMode = (representationMode: CLIENT.RemoteRendering.RepresentationMode) => {
+    this.setState({ representationMode })
+    this.props.setRepresentationMode(representationMode).then(() => {
+      this.delayRenderImage()
+    })
+  }
+
+  setSliceMode = (sliceMode: CLIENT.RemoteRendering.SliceMode) => {
+    this.setState({ sliceMode })
+    this.props.setSliceMode(sliceMode).then(() => {
+      this.renderImage()
+      this.delayRenderImage()
     })
   }
 

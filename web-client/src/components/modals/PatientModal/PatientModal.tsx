@@ -123,6 +123,7 @@ const PatientModalCmp: React.FC<Props> = (props) => {
                 <TextField
                   label='Имя'
                   variant='outlined'
+                  required
                   disabled={loading}
                 />,
               )}
@@ -131,6 +132,7 @@ const PatientModalCmp: React.FC<Props> = (props) => {
           <Grid item>
             <FormField
               label='Пол'
+              required
               disabled={loading}
               errors={form.getFieldError(PatientModalFields.GENDER)}
             >
@@ -157,6 +159,7 @@ const PatientModalCmp: React.FC<Props> = (props) => {
                 <DatePicker
                   label='Дата рождения'
                   inputVariant='outlined'
+                  required
                   openTo='year'
                   views={['year', 'month', 'date']}
                   disabled={loading}

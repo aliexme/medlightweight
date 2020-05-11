@@ -5,6 +5,7 @@ type OwnProps = {
   label?: string
   disabled?: boolean
   fullWidth?: boolean
+  required?: boolean
   errors?: string[]
   LabelComponent?: React.ComponentType
 }
@@ -12,7 +13,7 @@ type OwnProps = {
 type Props = OwnProps
 
 const FormFieldCmp: React.FC<Props> = (props) => {
-  const { label, errors, disabled, fullWidth, LabelComponent = FormLabel } = props
+  const { label, errors, disabled, fullWidth, required, LabelComponent = FormLabel } = props
   const hasError = errors?.length > 0
 
   return (
@@ -20,6 +21,7 @@ const FormFieldCmp: React.FC<Props> = (props) => {
       fullWidth={fullWidth}
       disabled={disabled}
       error={hasError}
+      required={required}
     >
       {label &&
         <LabelComponent>{label}</LabelComponent>
