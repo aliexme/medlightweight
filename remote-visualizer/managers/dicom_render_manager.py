@@ -7,8 +7,10 @@ class DICOMRenderManager(RenderManager):
     def __init__(self, directory_path):
         super(DICOMRenderManager, self).__init__()
         self.directory_path = directory_path
-        self.representation = 'Volume'
         self.array_name = 'DICOMImage'
+        self.representation = 'Volume'
+        self.slice_mode = 'XY Plane'
+        self.current_slice = 0
         self.scale_range = ()
 
     def render(self):
@@ -22,6 +24,7 @@ class DICOMRenderManager(RenderManager):
         self.view.CameraParallelProjection = 1
         self.view.Background = [0, 0, 0]
 
+        self.current_slice = self.display.Slice
         self.display.Representation = self.representation
         self.display.ColorArrayName = self.array_name
         paraview.ColorBy(self.display, self.array_name)
@@ -62,3 +65,31 @@ class DICOMRenderManager(RenderManager):
         opacity_map.Points = opacity_points
 
         paraview.Render(self.view)
+
+    def set_representation_mode(self, representation_mode):
+        self.representation = str(representation_mode)
+        self.display.Representation = self.representation
+
+        self.reset_camera_by_slice_mode(self.slice_mode)
+        paraview.Render(self.view)
+
+    def set_slice_mode(self, slice_mode):
+        self.slice_mode = str(slice_mode)
+        self.display.SliceMode = self.slice_mode
+
+        self.reset_camera_by_slice_mode(self.slice_mode)
+        paraview.Render(self.view)
+
+    def set_current_slice_number(self, slice_number):
+        self.current_slice = slice_number
+        self.display.Slice = self.current_slice
+
+        paraview.Render(self.view)
+
+    def reset_camera_by_slice_mode(self, slice_mode):
+        if slice_mode == 'XY Plane':
+            self.reset_camera_to_xy_plane()
+        elif slice_mode == 'XZ Plane':
+            self.reset_camera_to_xz_plane()
+        elif slice_mode == 'YZ Plane':
+            self.reset_camera_to_yz_plane()

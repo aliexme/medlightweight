@@ -11,7 +11,6 @@ import { usePrevious } from 'hooks'
 import { showUnexpectedError } from 'utils/snackbarUtils'
 import { BackdropLoading } from 'components/common/BackdropLoading/BackdropLoading'
 import { PageAppBar } from 'components/common/PageAppBar/PageAppBar'
-import { URLS } from 'urls'
 
 import styles from './SurveyRemoteVisualizerPage.scss'
 
@@ -60,10 +59,7 @@ const SurveyRemoteVisualizerPageCmp: React.FC<Props> = (props) => {
       <PageAppBar/>
       <div className={styles.content}>
         {survey &&
-          <SurveyRemoteVisualizer
-            survey={survey}
-            goBackUrl={`${URLS.SURVEYS}/${survey.id}`}
-          />
+          <SurveyRemoteVisualizer survey={survey}/>
         }
       </div>
     </div>

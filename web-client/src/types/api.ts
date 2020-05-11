@@ -159,6 +159,17 @@ export namespace API {
       MODE_3D = '3D',
     }
 
+    export enum RepresentationMode {
+      VOLUME = 'Volume',
+      SLICE = 'Slice',
+    }
+
+    export enum SliceMode {
+      XY = 'XY Plane',
+      XZ = 'XZ Plane',
+      YZ = 'YZ Plane',
+    }
+
     export type RpcCallReq = {
       wslink: string
       id: string
@@ -292,6 +303,57 @@ export namespace API {
         pointDelta: number
         opacityDelta: number
         action: 'down' | 'move' | 'up'
+      }
+      export type Args = [Options]
+
+      export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererDICOMRepresentationSet {
+      export const Method = 'renderer.dicom.representation.set'
+
+      export type Options = {
+        view: string
+        mode: RepresentationMode
+      }
+      export type Args = [Options]
+
+      export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererDICOMSliceModeSet {
+      export const Method = 'renderer.dicom.slicemode.set'
+
+      export type Options = {
+        view: string
+        mode: SliceMode
+      }
+      export type Args = [Options]
+
+      export type Result = boolean
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererDICOMCurrentSliceGet {
+      export const Method = 'renderer.dicom.currentslice.get'
+
+      export type Options = {
+        view: string
+      }
+      export type Args = [Options]
+
+      export type Result = number
+      export type Resp = RpcCallResp<Result>
+    }
+
+    export namespace RendererDICOMCurrentSliceSet {
+      export const Method = 'renderer.dicom.currentslice.set'
+
+      export type Options = {
+        view: string
+        slice: number
       }
       export type Args = [Options]
 

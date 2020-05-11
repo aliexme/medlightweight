@@ -31,3 +31,18 @@ class RenderManager(object):
     def set_interaction_mode(self, interaction_mode):
         self.view.InteractionMode = str(interaction_mode)
         paraview.Render(self.view)
+
+    def reset_camera_to_xy_plane(self):
+        paraview.ResetCamera(self.view)
+        self.view.CameraPosition = [39.75, 39.75, -194.1]
+        self.view.CameraViewUp = [0.0, 1.0, 0.0]
+
+    def reset_camera_to_xz_plane(self):
+        paraview.ResetCamera(self.view)
+        self.view.CameraPosition = [39.75, 256.26, 29.85]
+        self.view.CameraViewUp = [0.0, 0.0, -1.0]
+
+    def reset_camera_to_yz_plane(self):
+        paraview.ResetCamera(self.view)
+        self.view.CameraPosition = [285.67, 39.75, 29.85]
+        self.view.CameraViewUp = [0.0, 0.0, -1.0]

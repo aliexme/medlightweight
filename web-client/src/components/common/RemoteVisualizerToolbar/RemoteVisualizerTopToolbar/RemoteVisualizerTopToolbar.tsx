@@ -12,18 +12,25 @@ import { TooltipIconButton } from 'components/common/TooltipIconButton/TooltipIc
 
 import styles from './RemoteVisualizerTopToolbar.scss'
 
+import { RepresentationModeSelect } from '../RepresentationModeSelect/RepresentationModeSelect'
+import { SliceModeSelect } from '../SliceModeSelect/SliceModeSelect'
+
 type OwnProps = {
   interactionMode: CLIENT.RemoteRendering.InteractionMode
+  representationMode: CLIENT.RemoteRendering.RepresentationMode
+  sliceMode: CLIENT.RemoteRendering.SliceMode
   disabled?: boolean
   goBackUrl?: string
   resetCamera(): void
   setInteractionMode(interactionMode: CLIENT.RemoteRendering.InteractionMode): void
+  setRepresentationMode(representationMode: CLIENT.RemoteRendering.RepresentationMode): void
+  setSliceMode(sliceMode: CLIENT.RemoteRendering.SliceMode): void
 }
 
 type Props = OwnProps
 
 const RemoteVisualizerTopToolbarCmp: React.FC<Props> = (props) => {
-  const { interactionMode, disabled, goBackUrl } = props
+  const { interactionMode, representationMode, sliceMode, disabled, goBackUrl } = props
 
   const history = useHistory()
 
@@ -35,6 +42,27 @@ const RemoteVisualizerTopToolbarCmp: React.FC<Props> = (props) => {
     }
   }, [history, goBackUrl])
 
+  const onRepresentationModeChange = useCallback((
+    event: React.ChangeEvent<{ value: CLIENT.RemoteRendering.RepresentationMode }>,
+  ) => {
+    const representationMode = event.target.value
+
+    props.setRepresentationMode(representationMode)
+
+    if (representationMode === CLIENT.RemoteRendering.RepresentationMode.VOLUME) {
+      props.setInteractionMode(CLIENT.RemoteRendering.InteractionMode.MODE_3D)
+    } else if (representationMode === CLIENT.RemoteRendering.RepresentationMode.SLICE) {
+      props.setInteractionMode(CLIENT.RemoteRendering.InteractionMode.MODE_2D)
+    }
+  }, [])
+
+  const onSliceModeChange = useCallback((
+    event: React.ChangeEvent<{ value: CLIENT.RemoteRendering.SliceMode }>,
+  ) => {
+    const sliceMode = event.target.value
+    props.setSliceMode(sliceMode)
+  }, [])
+
   return (
     <Toolbar className={styles.container}>
       <TooltipIconButton
@@ -44,6 +72,20 @@ const RemoteVisualizerTopToolbarCmp: React.FC<Props> = (props) => {
       >
         <ArrowBackIcon/>
       </TooltipIconButton>
+      <RepresentationModeSelect
+        value={representationMode}
+        disabled={disabled}
+        onChange={onRepresentationModeChange}
+        className={styles.representationModeSelect}
+      />
+      {representationMode === CLIENT.RemoteRendering.RepresentationMode.SLICE &&
+        <SliceModeSelect
+          value={sliceMode}
+          disabled={disabled}
+          onChange={onSliceModeChange}
+          className={styles.sliceModeSelect}
+        />
+      }
       <TooltipIconButton
         disabled={disabled}
         tooltip='Сбросить камеру'
@@ -51,14 +93,16 @@ const RemoteVisualizerTopToolbarCmp: React.FC<Props> = (props) => {
       >
         <CenterFocusStrongIcon/>
       </TooltipIconButton>
-      <TooltipIconButton
-        isActive={interactionMode === CLIENT.RemoteRendering.InteractionMode.MODE_3D}
-        disabled={disabled}
-        tooltip='Вращение'
-        onClick={() => props.setInteractionMode(CLIENT.RemoteRendering.InteractionMode.MODE_3D)}
-      >
-        <ThreeDRotationIcon/>
-      </TooltipIconButton>
+      {representationMode === CLIENT.RemoteRendering.RepresentationMode.VOLUME &&
+        <TooltipIconButton
+          isActive={interactionMode === CLIENT.RemoteRendering.InteractionMode.MODE_3D}
+          disabled={disabled}
+          tooltip='Вращение'
+          onClick={() => props.setInteractionMode(CLIENT.RemoteRendering.InteractionMode.MODE_3D)}
+        >
+          <ThreeDRotationIcon/>
+        </TooltipIconButton>
+      }
       <TooltipIconButton
         isActive={interactionMode === CLIENT.RemoteRendering.InteractionMode.MODE_2D}
         disabled={disabled}
@@ -67,14 +111,16 @@ const RemoteVisualizerTopToolbarCmp: React.FC<Props> = (props) => {
       >
         <OpenWithIcon/>
       </TooltipIconButton>
-      <TooltipIconButton
-        isActive={interactionMode === CLIENT.RemoteRendering.InteractionMode.OPACITY}
-        disabled={disabled}
-        tooltip='Прозрачность'
-        onClick={() => props.setInteractionMode(CLIENT.RemoteRendering.InteractionMode.OPACITY)}
-      >
-        <OpacityIcon/>
-      </TooltipIconButton>
+      {representationMode === CLIENT.RemoteRendering.RepresentationMode.VOLUME &&
+        <TooltipIconButton
+          isActive={interactionMode === CLIENT.RemoteRendering.InteractionMode.OPACITY}
+          disabled={disabled}
+          tooltip='Прозрачность'
+          onClick={() => props.setInteractionMode(CLIENT.RemoteRendering.InteractionMode.OPACITY)}
+        >
+          <OpacityIcon/>
+        </TooltipIconButton>
+      }
     </Toolbar>
   )
 }
