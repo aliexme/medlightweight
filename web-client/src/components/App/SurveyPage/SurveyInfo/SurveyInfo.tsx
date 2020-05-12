@@ -4,6 +4,7 @@ import { Column, Options, Action as MaterialTableAction } from 'material-table'
 import { connect } from 'react-redux'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import ShareIcon from '@material-ui/icons/Share'
 
 import { CLIENT } from 'types/client'
 import { Store } from 'store/store'
@@ -97,6 +98,11 @@ const SurveyInfoCmp: React.FC<Props> = (props) => {
         icon: () => <DeleteForeverIcon/>,
         tooltip: 'Удалить',
         onClick: openDeleteSurveyConfirmModal,
+      },
+      {
+        icon: () => <ShareIcon fontSize='small'/>,
+        tooltip: 'Поделиться',
+        onClick: () => {},
       },
     ]
   }, [survey])

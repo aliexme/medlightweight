@@ -32,10 +32,10 @@ export class AjaxObservable {
     }
   }
 
-  get(url: string, queryParams: QueryParams, options?: RequestOptions): Observable<any> {
+  get(url: string, queryParams?: QueryParams, options?: RequestOptions): Observable<any> {
     const requestHeaders = this.mergeHeaders(options?.headers)
     const requestTimeout = options?.timeout ?? this.timeout
-    const queryUrl = this.buildUrlWithQueryParams(url, queryParams)
+    const queryUrl = queryParams ? this.buildUrlWithQueryParams(url, queryParams) : url
 
     return ajax.get(queryUrl, requestHeaders).pipe(
       timeout(requestTimeout),

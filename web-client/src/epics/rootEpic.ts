@@ -12,6 +12,8 @@ import { navigationEpics } from './navigationEpics/navigationEpics'
 import { surveysEpics } from './surveysEpics/surveysEpics'
 import { patientsEpics } from './patientsEpics/patientsEpics'
 import { patientsSurveysEpics } from './patientsSurveysEpics/patientsSurveysEpics'
+import { appEpics } from './appEpics/appEpics'
+import { usersEpics } from './usersEpics/usersEpics'
 
 export type EpicDependencies = {
   history: History
@@ -21,11 +23,13 @@ export type EpicDependencies = {
 export type Epic = ReduxObservableEpic<Action, Action, Store, EpicDependencies>
 
 const epics: Epic[] = [
+  ...appEpics,
   ...authEpics,
   ...navigationEpics,
   ...surveysEpics,
   ...patientsEpics,
   ...patientsSurveysEpics,
+  ...usersEpics,
 ]
 
 export const rootEpic: Epic = (action$, store$, dependencies) => {

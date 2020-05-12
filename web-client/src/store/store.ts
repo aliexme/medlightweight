@@ -14,12 +14,14 @@ import { surveysReducer, SurveysState } from './surveys'
 import { drawerReducer, DrawerState } from './drawer'
 import { patientsReducer, PatientsState } from './patients'
 import { patientsSurveysReducer, PatientsSurveysState } from './patientsSurveys'
+import { usersReducer, UsersState } from './users'
 
 export type Store = {
   app: AppState
   drawer: DrawerState
   modals: ModalsState
   requests: RequestsState
+  users: UsersState
   surveys: SurveysState
   patients: PatientsState
   patientsSurveys: PatientsSurveysState
@@ -30,6 +32,7 @@ const rootReducer = combineReducers<Store, Action>({
   drawer: drawerReducer,
   modals: modalsReducer,
   requests: requestsReducer,
+  users: usersReducer,
   surveys: surveysReducer,
   patients: patientsReducer,
   patientsSurveys: patientsSurveysReducer,

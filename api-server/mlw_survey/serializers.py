@@ -4,6 +4,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from rest_framework import serializers
 
+from mlw_auth.models import User
 from mlw_patient.serializers import PatientSerializer
 from mlw_survey.models import Survey
 from utils.decorators import transaction_atomic
@@ -12,6 +13,7 @@ from utils.storage import get_absolute_path_regarding_media
 
 class SurveySerializer(serializers.ModelSerializer):
     files = serializers.ListField(child=serializers.FileField(), allow_empty=False, write_only=True)
+    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
 
     class Meta:
         model = Survey
@@ -21,11 +23,14 @@ class SurveySerializer(serializers.ModelSerializer):
     @transaction_atomic
     def create(self, validated_data):
         files = validated_data.pop('files')
+        users = validated_data.pop('users')
         owner = validated_data.get('owner')
 
         survey = Survey.objects.create(**validated_data)
         survey.directory = 'owner_id_{0}/survey_id_{1}'.format(owner.id, survey.id)
         survey.save()
+
+        self._set_shared_users(survey, users)
 
         survey_directory_absolute_path = get_absolute_path_regarding_media(survey.directory)
         self._overwrite_files(files, survey_directory_absolute_path)
@@ -35,6 +40,7 @@ class SurveySerializer(serializers.ModelSerializer):
     @transaction_atomic
     def update(self, instance, validated_data):
         files = validated_data.pop('files', None)
+        users = validated_data.pop('users', None)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -42,6 +48,9 @@ class SurveySerializer(serializers.ModelSerializer):
         if files is not None:
             survey_directory_absolute_path = get_absolute_path_regarding_media(instance.directory)
             self._overwrite_files(files, survey_directory_absolute_path)
+
+        if users is not None:
+            self._set_shared_users(instance, users)
 
         instance.save()
         return instance
@@ -66,6 +75,10 @@ class SurveySerializer(serializers.ModelSerializer):
             return super().to_internal_value(normalized_data)
 
         return super().to_internal_value(data)
+
+    def _set_shared_users(self, instance, users):
+        instance.users.all().delete()
+        instance.users.add(*users)
 
     def _overwrite_files(self, files, directory):
         try:
