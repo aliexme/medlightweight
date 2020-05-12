@@ -57,6 +57,16 @@ class SurveySerializer(serializers.ModelSerializer):
 
         return data
 
+    def to_internal_value(self, data):
+        patient = data.get('patient')
+
+        if patient is not None and patient == 'null':
+            normalized_data = data.copy()
+            normalized_data['patient'] = None
+            return super().to_internal_value(normalized_data)
+
+        return super().to_internal_value(data)
+
     def _overwrite_files(self, files, directory):
         try:
             shutil.rmtree(directory)

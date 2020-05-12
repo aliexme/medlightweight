@@ -80,7 +80,7 @@ const SurveyModalCmp: React.FC<Props> = (props) => {
           props.editSurvey(survey.id, {
             name: values[SurveyModalFields.NAME],
             description: values[SurveyModalFields.DESCRIPTION],
-            patient: patient ? patient.id : undefined,
+            patient: patient ? patient.id : null,
             files: fileList && Array.from(fileList),
           })
         } else {
