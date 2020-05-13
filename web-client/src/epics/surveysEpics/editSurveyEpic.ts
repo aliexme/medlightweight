@@ -14,8 +14,9 @@ export const editSurveyEpic: Epic = (action$, _state$, deps) => action$.pipe(
   guardMergeMap((action) => {
     const url = API.MlwSurvey.MLW_SURVEYS_BASE_URL + action.data.id + '/'
     const req: API.MlwSurvey.Update.Req = action.data
+    const isFormData = req.files !== undefined
 
-    return deps.ajax.patch(url, req, { formData: true }).pipe(
+    return deps.ajax.patch(url, req, { formData: isFormData }).pipe(
       takeUntilCancelRequest(action$, CLIENT.Requests.EDIT_SURVEY_REQUEST),
       mergeMap((resp: API.MlwSurvey.Update.Resp) => {
         const clientSurvey = mapApiSurveyToClient(resp)

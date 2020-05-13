@@ -17,7 +17,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
         search_text = self.request.GET.get('searchText')
         patient_id = self.request.GET.get('patientId')
 
-        q = Q(owner=self.request.user)
+        q = Q(owner=self.request.user) | Q(users=self.request.user)
 
         if search_text is not None:
             q &= Q(name__icontains=search_text) | Q(description__icontains=search_text)

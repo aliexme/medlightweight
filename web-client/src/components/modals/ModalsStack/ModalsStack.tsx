@@ -8,6 +8,7 @@ import { Actions, createActionEmpty } from 'actions'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 import { SurveyModal } from '../SurveyModal/SurveyModal'
 import { PatientModal } from '../PatientModal/PatientModal'
+import { SelectUsersModal } from '../SelectUsersModal/SelectUsersModal'
 
 type ConnectedProps = {
   modals: CLIENT.Modal[]
@@ -52,6 +53,17 @@ const ModalsStackCmp: React.FC<Props> = (props) => {
           case CLIENT.Modals.PATIENT_MODAL_TYPE: {
             return (
               <PatientModal
+                key={modal.type}
+                close={props.popModal}
+                closeAll={props.closeAllModal}
+                {...modal.props}
+              />
+            )
+          }
+
+          case CLIENT.Modals.SELECT_USERS_MODAL_TYPE: {
+            return (
+              <SelectUsersModal
                 key={modal.type}
                 close={props.popModal}
                 closeAll={props.closeAllModal}
