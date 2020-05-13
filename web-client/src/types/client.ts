@@ -28,6 +28,8 @@ export namespace CLIENT {
     | Requests.DeletePatientRequest
     | Requests.FetchAutocompletePatientsRequest
     | Requests.FetchPatientSurveysRequest
+    | Requests.FetchUsersListRequest
+    | Requests.FetchCurrentUserRequest
   )
 
   export namespace Requests {
@@ -72,6 +74,12 @@ export namespace CLIENT {
 
     export const FETCH_PATIENT_SURVEYS_REQUEST = 'FETCH_PATIENT_SURVEYS_REQUEST' as const
     export type FetchPatientSurveysRequest = typeof FETCH_PATIENT_SURVEYS_REQUEST
+
+    export const FETCH_USERS_LIST_REQUEST = 'FETCH_USERS_LIST_REQUEST' as const
+    export type FetchUsersListRequest = typeof FETCH_USERS_LIST_REQUEST
+
+    export const FETCH_CURRENT_USER_REQUEST = 'FETCH_CURRENT_USER_REQUEST' as const
+    export type FetchCurrentUserRequest = typeof FETCH_CURRENT_USER_REQUEST
   }
 
   /* Modals */
@@ -124,6 +132,18 @@ export namespace CLIENT {
     }
   }
 
+  /* Users */
+
+  export type User = {
+    id: number
+    username: string
+    email: string
+    firstName: string
+    lastName: string
+  }
+
+  export type UsersMap = IMap<number, User>
+
   /* Surveys */
 
   export type Survey = {
@@ -135,6 +155,7 @@ export namespace CLIENT {
     updatedAt: Date
     ownerId: number
     patientId?: number
+    userIds: number[]
   }
 
   export type SurveysMap = IMap<number, Survey>

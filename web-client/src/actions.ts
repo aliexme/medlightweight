@@ -14,6 +14,9 @@ export const createActionEmpty = <T>(type: T): AE<T> => ({ type })
 export const createAction = <T, D>(type: T, data: D): A<T, D> => ({ type, data })
 
 export namespace Actions {
+  export const START_APP_LOADING = 'START_APP_LOADING' as const
+  export type StartAppLoading = AE<typeof START_APP_LOADING>
+
   export const APP_LOADED_STATE = 'APP_LOADED_STATE' as const
   export type AppLoadedState = A<typeof APP_LOADED_STATE, { loaded: boolean }>
 
@@ -145,10 +148,23 @@ export namespace Actions {
 
   export const SEARCH_PATIENT_SURVEYS = 'SEARCH_PATIENT_SURVEYS' as const
   export type SearchPatientSurveys = A<typeof SEARCH_PATIENT_SURVEYS, { patientId: number, searchText: string }>
+
+  export const API_FETCH_USERS_LIST = 'API_FETCH_USERS_LIST' as const
+  export type ApiFetchUsersList = AE<typeof API_FETCH_USERS_LIST>
+
+  export const SET_USERS_LIST = 'SET_USERS_LIST' as const
+  export type SetUsersList = A<typeof SET_USERS_LIST, { users: CLIENT.User[] }>
+
+  export const API_FETCH_CURRENT_USER_INFO = 'API_FETCH_CURRENT_USER_INFO' as const
+  export type ApiFetchCurrentUserInfo = AE<typeof API_FETCH_CURRENT_USER_INFO>
+
+  export const SET_CURRENT_USER = 'SET_CURRENT_USER' as const
+  export type SetCurrentUser = A<typeof SET_CURRENT_USER, { currentUser: CLIENT.User }>
 }
 
 export type Action = (
-  Actions.AppLoadedState
+  Actions.StartAppLoading
+  | Actions.AppLoadedState
   | Actions.SetAuthorizedState
   | Actions.SetDrawerOpen
   | Actions.ChangeRequestStatus
@@ -184,4 +200,8 @@ export type Action = (
   | Actions.SetPatientSurveysList
   | Actions.ChangePatientSurveysFilters
   | Actions.SearchPatientSurveys
+  | Actions.ApiFetchUsersList
+  | Actions.SetUsersList
+  | Actions.ApiFetchCurrentUserInfo
+  | Actions.SetCurrentUser
 )

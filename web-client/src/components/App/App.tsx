@@ -7,14 +7,9 @@ import { URLS } from 'urls'
 import { ProtectedRoute } from 'components/common/ProtectedRoute/ProtectedRoute'
 import { ModalsStack } from 'components/modals/ModalsStack/ModalsStack'
 
-import { LeftMenuDrawer } from './LeftMenuDrawer/LeftMenuDrawer'
 import { SignInPage } from './SignInPage/SignInPage'
-import { IndexPage } from './IndexPage/IndexPage'
-import { SurveysPage } from './SurveysPage/SurveysPage'
-import { SurveyPage } from './SurveyPage/SurveyPage'
-import { SurveyRemoteVisualizerPage } from './SurveyRemoteVisualizerPage/SurveyRemoteVisualizerPage'
-import { PatientsPage } from './PatientsPage/PatientsPage'
-import { PatientPage } from './PatientPage/PatientPage'
+import { ProtectedApp } from './ProtectedApp/ProtectedApp'
+import { LeftMenuDrawer } from './LeftMenuDrawer/LeftMenuDrawer'
 
 type ConnectedProps = {
   authorized: boolean
@@ -29,27 +24,7 @@ const AppCmp: React.FC<Props> = (props) => {
     <>
       <Switch>
         <Route path={URLS.SIGN_IN} component={SignInPage}/>
-        <ProtectedRoute
-          path={`${URLS.SURVEYS}/:surveyId/visualizer`}
-          component={SurveyRemoteVisualizerPage}
-          allow={authorized}
-          redirectTo={URLS.SIGN_IN}
-        />
-        <ProtectedRoute
-          path={`${URLS.SURVEYS}/:surveyId`}
-          component={SurveyPage}
-          allow={authorized}
-          redirectTo={URLS.SIGN_IN}
-        />
-        <ProtectedRoute path={URLS.SURVEYS} component={SurveysPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
-        <ProtectedRoute
-          path={`${URLS.PATIENTS}/:patientId`}
-          component={PatientPage}
-          allow={authorized}
-          redirectTo={URLS.SIGN_IN}
-        />
-        <ProtectedRoute path={URLS.PATIENTS} component={PatientsPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
-        <ProtectedRoute path={URLS.INDEX} component={IndexPage} allow={authorized} redirectTo={URLS.SIGN_IN}/>
+        <ProtectedRoute path={URLS.INDEX} component={ProtectedApp} allow={authorized} redirectTo={URLS.SIGN_IN}/>
         <Redirect to={URLS.INDEX}/>
       </Switch>
       <LeftMenuDrawer/>

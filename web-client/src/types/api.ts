@@ -13,6 +13,14 @@ export namespace API {
     FEMALE = 'F',
   }
 
+  export type User = {
+    id: number
+    username: string
+    email: string
+    first_name: string
+    last_name: string
+  }
+
   export type Survey = {
     id: number
     name: string
@@ -22,6 +30,7 @@ export namespace API {
     patient: Patient | null
     created_at: string
     updated_at: string
+    users: number[]
   }
 
   export type Patient = {
@@ -48,6 +57,21 @@ export namespace API {
 
       export type Resp = {
         token: string
+      }
+    }
+
+    export namespace Users {
+      export const MLW_AUTH_USERS_BASE_URL = MLW_AUTH_PREFIX + '/users/'
+
+      export namespace List {
+        export type Req = void
+        export type Resp = User[]
+      }
+
+      export namespace Current {
+        export const URL = MLW_AUTH_USERS_BASE_URL + 'current/'
+        export type Req = void
+        export type Resp = User
       }
     }
   }
@@ -78,6 +102,7 @@ export namespace API {
         description?: string
         patient?: number
         files: File[]
+        users?: number[]
       }
 
       export type Resp = Survey
@@ -89,6 +114,7 @@ export namespace API {
         description?: string
         patient?: number | null
         files?: File[]
+        users?: number[]
       }
 
       export type Resp = Survey

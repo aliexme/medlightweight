@@ -14,8 +14,17 @@ class Survey(models.Model):
     directory = MediaPathField(root='survey')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              null=True,
+                              on_delete=models.SET_NULL,
+                              related_name='own_surveys')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserSurvey', related_name='shared_surveys')
 
     class Meta:
         ordering = ['-created_at']
+
+
+class UserSurvey(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
