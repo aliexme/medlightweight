@@ -77,7 +77,7 @@ class SurveySerializer(serializers.ModelSerializer):
         return super().to_internal_value(data)
 
     def _set_shared_users(self, instance, users):
-        instance.users.all().delete()
+        instance.users.clear()
         instance.users.add(*users)
 
     def _overwrite_files(self, files, directory):

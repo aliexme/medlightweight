@@ -88,6 +88,7 @@ export namespace CLIENT {
     Modals.SurveyModal
     | Modals.ConfirmModal
     | Modals.PatientModal
+    | Modals.SelectUsersModal
   )
 
   export type ModalProps<T extends Modal> = T['props'] & {
@@ -99,6 +100,7 @@ export namespace CLIENT {
     export const CONFIRM_MODAL_TYPE = 'CONFIRM_MODAL_TYPE' as const
     export const SURVEY_MODAL_TYPE = 'SURVEY_MODAL_TYPE' as const
     export const PATIENT_MODAL_TYPE = 'PATIENT_MODAL_TYPE' as const
+    export const SELECT_USERS_MODAL_TYPE = 'SELECT_USERS_MODAL_TYPE' as const
 
     export type ConfirmModal = {
       type: typeof CONFIRM_MODAL_TYPE
@@ -128,6 +130,17 @@ export namespace CLIENT {
         patient?: Patient
         initialName?: string
         submitCallback?(patient: Patient): void
+      }
+    }
+
+    export type SelectUsersModal = {
+      type: typeof SELECT_USERS_MODAL_TYPE
+      props?: {
+        multiple?: boolean
+        initialUserIds?: number | number[]
+        requestName?: RequestName
+        onCancelClick?(): void
+        onOkClick?(value?: User | User[]): void
       }
     }
   }

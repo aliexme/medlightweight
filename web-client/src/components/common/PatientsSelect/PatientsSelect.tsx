@@ -54,12 +54,13 @@ class PatientsSelectCmp extends React.Component<Props> {
 
     return (
       <Autocomplete
-        {...autocompleteProps}
         openOnFocus
+        {...autocompleteProps}
         options={autocompletePatients}
         filterOptions={this.filterOptions}
         renderInput={this.renderInput}
         getOptionLabel={this.getOptionLabel}
+        getOptionSelected={this.getOptionSelected}
         renderOption={this.renderOption}
         onChange={this.onChange}
         onBlur={this.onBlur}
@@ -96,6 +97,10 @@ class PatientsSelectCmp extends React.Component<Props> {
     }
 
     return option.name
+  }
+
+  getOptionSelected = (option: PatientOptionType, value: PatientOptionType): boolean => {
+    return option.id === value.id
   }
 
   renderOption = (option: PatientOptionType): React.ReactNode => {

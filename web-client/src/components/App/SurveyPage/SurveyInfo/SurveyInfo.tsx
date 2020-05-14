@@ -7,11 +7,13 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import ShareIcon from '@material-ui/icons/Share'
 
 import { CLIENT } from 'types/client'
+import { API } from 'types/api'
 import { Store } from 'store/store'
 import { URLS } from 'urls'
 import { Action, Actions, createAction } from 'actions'
 import { MaterialTable } from 'components/common/MaterialTable/MaterialTable'
 import { getFromMap } from 'utils/immutableUtils'
+import { getCurrentUser } from 'utils/usersUtils'
 
 type OwnProps = {
   survey: CLIENT.Survey
@@ -19,18 +21,20 @@ type OwnProps = {
 }
 
 type ConnectedProps = {
+  currentUser: CLIENT.User
   surveyPatient?: CLIENT.Patient
 }
 
 type DispatchedProps = {
   pushModal(modal: CLIENT.Modal): Action
   deleteSurvey(surveyId: number): Action
+  editSurvey(id: number, data: API.MlwSurvey.Update.Req): Action
 }
 
 type Props = OwnProps & ConnectedProps & DispatchedProps
 
 const SurveyInfoCmp: React.FC<Props> = (props) => {
-  const { survey, surveyPatient } = props
+  const { survey, surveyPatient, currentUser } = props
 
   const renderSurveyPatient = useCallback(() => {
     if (surveyPatient) {
@@ -68,6 +72,11 @@ const SurveyInfoCmp: React.FC<Props> = (props) => {
     }
   }, [])
 
+  const shareSurveyUsers = useCallback((users: CLIENT.User[]) => {
+    const userIds = users.map((user) => user.id)
+    props.editSurvey(survey.id, { users: userIds })
+  }, [survey])
+
   const openEditSurveyModal = useCallback(() => {
     props.pushModal({
       type: CLIENT.Modals.SURVEY_MODAL_TYPE,
@@ -87,7 +96,23 @@ const SurveyInfoCmp: React.FC<Props> = (props) => {
     })
   }, [survey])
 
+  const openShareSurveyModal = useCallback(() => {
+    props.pushModal({
+      type: CLIENT.Modals.SELECT_USERS_MODAL_TYPE,
+      props: {
+        multiple: true,
+        initialUserIds: survey.userIds,
+        requestName: CLIENT.Requests.EDIT_SURVEY_REQUEST,
+        onOkClick: (users) => shareSurveyUsers(users as CLIENT.User[]),
+      },
+    })
+  }, [survey])
+
   const actions = useMemo<MaterialTableAction<CLIENT.Survey>[]>(() => {
+    if (survey.ownerId !== currentUser.id) {
+      return []
+    }
+
     return [
       {
         icon: () => <EditIcon fontSize='small'/>,
@@ -102,10 +127,10 @@ const SurveyInfoCmp: React.FC<Props> = (props) => {
       {
         icon: () => <ShareIcon fontSize='small'/>,
         tooltip: 'Поделиться',
-        onClick: () => {},
+        onClick: openShareSurveyModal,
       },
     ]
-  }, [survey])
+  }, [survey, currentUser])
 
   return (
     <MaterialTable
@@ -120,6 +145,7 @@ const SurveyInfoCmp: React.FC<Props> = (props) => {
 }
 
 const mapStateToProps = (state: Store, ownProps: OwnProps): ConnectedProps => {
+  const { usersMap, currentUserId } = state.users
   const { patientsMap } = state.patients
   const { survey } = ownProps
   const surveyPatient = survey.patientId !== undefined
@@ -127,6 +153,7 @@ const mapStateToProps = (state: Store, ownProps: OwnProps): ConnectedProps => {
     : undefined
 
   return {
+    currentUser: getCurrentUser(usersMap, currentUserId),
     surveyPatient,
   }
 }
@@ -134,6 +161,7 @@ const mapStateToProps = (state: Store, ownProps: OwnProps): ConnectedProps => {
 const mapDispatchToProps: DispatchedProps = {
   pushModal: (modal) => createAction(Actions.PUSH_MODAL, modal),
   deleteSurvey: (surveyId) => createAction(Actions.API_DELETE_SURVEY, { surveyId }),
+  editSurvey: (id, data) => createAction(Actions.API_EDIT_SURVEY, { id, ...data }),
 }
 
 export const SurveyInfo = connect(mapStateToProps, mapDispatchToProps)(SurveyInfoCmp)
