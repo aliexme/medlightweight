@@ -19,12 +19,28 @@ class Survey(models.Model):
                               null=True,
                               on_delete=models.SET_NULL,
                               related_name='own_surveys')
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserSurvey', related_name='shared_surveys')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='SurveyUser', related_name='shared_surveys')
 
     class Meta:
         ordering = ['-created_at']
 
+    def __str__(self):
+        return 'Survey "{name}" ({id})'.format(id=self.id, name=self.name)
 
-class UserSurvey(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+class SurveyUser(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class SurveyComment(models.Model):
+    TEXT_MAX_LENGTH = 1024
+
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    text = models.CharField(max_length=TEXT_MAX_LENGTH)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']

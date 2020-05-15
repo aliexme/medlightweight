@@ -33,6 +33,15 @@ export namespace API {
     users: number[]
   }
 
+  export type SurveyComment = {
+    id: number
+    text: string
+    survey: number
+    owner: number
+    created_at: string
+    updated_at: string
+  }
+
   export type Patient = {
     id: number
     name: string
@@ -123,6 +132,28 @@ export namespace API {
     export namespace Delete {
       export type Req = void
       export type Resp = void
+    }
+
+    export namespace Comments {
+      export const URL_PATH = 'comments/'
+      export const MAX_COMMENT_LENGTH = 1024
+
+      export namespace List {
+        export type Req = {
+          surveyId: number
+        }
+
+        export type Resp = SurveyComment[]
+      }
+
+      export namespace Create {
+        export type Req = {
+          survey: number
+          text: string
+        }
+
+        export type Resp = SurveyComment
+      }
     }
   }
 

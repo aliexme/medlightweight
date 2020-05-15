@@ -18,6 +18,8 @@ import styles from './SurveyPage.scss'
 
 import { SurveyPageBreadcrumbs } from './SurveyPageBreadcrumbs/SurveyPageBreadcrumbs'
 import { SurveyInfo } from './SurveyInfo/SurveyInfo'
+import { SurveyComments } from './SurveyComments/SurveyComments'
+import { AddSurveyCommentField } from './AddSurveyCommentField/AddSurveyCommentField'
 
 type RouteParams = {
   surveyId: string
@@ -71,7 +73,7 @@ const SurveyPageCmp: React.FC<Props> = (props) => {
             survey={survey}
             style={{ marginTop: 24 }}
           />
-          <div className={styles.footer}>
+          <div className={styles.openVisualizerButton}>
             <Button
               variant='contained'
               color='primary'
@@ -80,6 +82,14 @@ const SurveyPageCmp: React.FC<Props> = (props) => {
               Открыть просмотрщик
             </Button>
           </div>
+          <AddSurveyCommentField
+            survey={survey}
+            className={styles.addSurveyCommentField}
+          />
+          <SurveyComments
+            survey={survey}
+            className={styles.surveyComments}
+          />
         </>
       }
     </PageContainer>

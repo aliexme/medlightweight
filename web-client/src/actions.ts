@@ -160,6 +160,27 @@ export namespace Actions {
 
   export const SET_CURRENT_USER = 'SET_CURRENT_USER' as const
   export type SetCurrentUser = A<typeof SET_CURRENT_USER, { currentUser: CLIENT.User }>
+
+  export const API_FETCH_SURVEY_COMMENTS = 'API_FETCH_SURVEY_COMMENTS' as const
+  export type ApiFetchSurveyComments = A<typeof API_FETCH_SURVEY_COMMENTS, API.MlwSurvey.Comments.List.Req>
+
+  export const UPDATE_SURVEY_COMMENTS = 'UPDATE_SURVEY_COMMENTS' as const
+  export type UpdateSurveyComments = A<typeof UPDATE_SURVEY_COMMENTS, { surveyComments: CLIENT.SurveyComment[] }>
+
+  export const SET_SURVEY_COMMENTS_INFO = 'SET_SURVEY_COMMENTS_INFO' as const
+  export type SetSurveyCommentsInfo = A<typeof SET_SURVEY_COMMENTS_INFO, {
+    surveyId: number
+    surveyCommentsInfo: CLIENT.SurveyCommentsInfo
+  }>
+
+  export const API_ADD_COMMENT_TO_SURVEY = 'API_ADD_COMMENT_TO_SURVEY' as const
+  export type ApiAddCommentToSurvey = A<typeof API_ADD_COMMENT_TO_SURVEY, API.MlwSurvey.Comments.Create.Req>
+
+  export const ADD_COMMENT_TO_SURVEY_COMMENTS_INFO = 'ADD_COMMENT_TO_SURVEY_COMMENTS_INFO' as const
+  export type AddCommentToSurveyCommentsInfo = A<typeof ADD_COMMENT_TO_SURVEY_COMMENTS_INFO, {
+    surveyId: number
+    surveyCommentId: number
+  }>
 }
 
 export type Action = (
@@ -204,4 +225,9 @@ export type Action = (
   | Actions.SetUsersList
   | Actions.ApiFetchCurrentUserInfo
   | Actions.SetCurrentUser
+  | Actions.ApiFetchSurveyComments
+  | Actions.UpdateSurveyComments
+  | Actions.SetSurveyCommentsInfo
+  | Actions.ApiAddCommentToSurvey
+  | Actions.AddCommentToSurveyCommentsInfo
 )

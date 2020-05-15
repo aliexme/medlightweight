@@ -14,6 +14,7 @@ import { patientsEpics } from './patientsEpics/patientsEpics'
 import { patientsSurveysEpics } from './patientsSurveysEpics/patientsSurveysEpics'
 import { appEpics } from './appEpics/appEpics'
 import { usersEpics } from './usersEpics/usersEpics'
+import { surveysCommentsEpics } from './surveysCommentsEpics/surveysCommentsEpics'
 
 export type EpicDependencies = {
   history: History
@@ -27,6 +28,7 @@ const epics: Epic[] = [
   ...authEpics,
   ...navigationEpics,
   ...surveysEpics,
+  ...surveysCommentsEpics,
   ...patientsEpics,
   ...patientsSurveysEpics,
   ...usersEpics,

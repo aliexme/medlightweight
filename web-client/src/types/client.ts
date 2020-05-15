@@ -3,6 +3,16 @@ import { Map as IMap } from 'immutable'
 import { API } from 'types/api'
 
 export namespace CLIENT {
+  /* Common */
+
+  export type CommentBase = {
+    id: number
+    text: string
+    ownerId: number
+    createdAt: Date
+    updatedAt: Date
+  }
+
   /* Requests */
 
   export enum RequestStatus {
@@ -30,6 +40,8 @@ export namespace CLIENT {
     | Requests.FetchPatientSurveysRequest
     | Requests.FetchUsersListRequest
     | Requests.FetchCurrentUserRequest
+    | Requests.FetchSurveyCommentsRequest
+    | Requests.AddCommentToSurveyRequest
   )
 
   export namespace Requests {
@@ -80,6 +92,12 @@ export namespace CLIENT {
 
     export const FETCH_CURRENT_USER_REQUEST = 'FETCH_CURRENT_USER_REQUEST' as const
     export type FetchCurrentUserRequest = typeof FETCH_CURRENT_USER_REQUEST
+
+    export const FETCH_SURVEY_COMMENTS_REQUEST = 'FETCH_SURVEY_COMMENTS_REQUEST' as const
+    export type FetchSurveyCommentsRequest = typeof FETCH_SURVEY_COMMENTS_REQUEST
+
+    export const ADD_COMMENT_TO_SURVEY_REQUEST = 'ADD_COMMENT_TO_SURVEY_REQUEST' as const
+    export type AddCommentToSurveyRequest = typeof ADD_COMMENT_TO_SURVEY_REQUEST
   }
 
   /* Modals */
@@ -182,6 +200,20 @@ export namespace CLIENT {
   export type SurveysListFiltersOptions = {
     fetchSurveysList?: boolean
   }
+
+  /* Surveys Comments */
+
+  export type SurveyComment = CommentBase & {
+    surveyId: number
+  }
+
+  export type SurveyCommentsMap = IMap<number, SurveyComment>
+
+  export type SurveyCommentsInfo = {
+    commentsListIds: number[]
+  }
+
+  export type SurveysCommentsInfoMap = IMap<number, SurveyCommentsInfo>
 
   /* Patients */
 

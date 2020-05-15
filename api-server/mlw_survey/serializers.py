@@ -6,9 +6,16 @@ from rest_framework import serializers
 
 from mlw_auth.models import User
 from mlw_patient.serializers import PatientSerializer
-from mlw_survey.models import Survey
+from mlw_survey.models import Survey, SurveyComment
 from utils.decorators import transaction_atomic
 from utils.storage import get_absolute_path_regarding_media
+
+
+class SurveyCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurveyComment
+        fields = '__all__'
+        read_only_fields = ('owner', 'created_at', 'updated_at')
 
 
 class SurveySerializer(serializers.ModelSerializer):
@@ -18,7 +25,7 @@ class SurveySerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
         fields = '__all__'
-        read_only_fields = ['directory', 'created_at', 'updated_at']
+        read_only_fields = ('directory', 'created_at', 'updated_at')
 
     @transaction_atomic
     def create(self, validated_data):
