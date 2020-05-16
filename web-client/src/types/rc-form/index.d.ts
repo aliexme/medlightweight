@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 declare module 'rc-form' {
   import * as React from 'react'
 
@@ -60,5 +61,5 @@ declare module 'rc-form' {
 
   export type FormComponentProps = { form: formShape }
 
-  export function createForm(): (node: React.ComponentType<any>) => React.ComponentType<any & FormComponentProps>
+  export function createForm(): <P extends FormComponentProps>(node: React.ComponentType<P>) => React.ComponentType<Omit<P, keyof FormComponentProps>>
 }

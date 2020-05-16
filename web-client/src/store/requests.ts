@@ -24,6 +24,8 @@ export const defaultRequestsState: RequestsState = {
   [CLIENT.Requests.FETCH_PATIENT_SURVEYS_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
   [CLIENT.Requests.FETCH_USERS_LIST_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
   [CLIENT.Requests.FETCH_CURRENT_USER_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.FETCH_SURVEY_COMMENTS_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
+  [CLIENT.Requests.ADD_COMMENT_TO_SURVEY_REQUEST]: CLIENT.RequestStatus.NOT_STARTED,
 }
 
 export const requestsReducer: Reducer<RequestsState, Action> = (state = defaultRequestsState, action) => {

@@ -3,8 +3,8 @@ import shutil
 from django.db.models import Q
 from rest_framework import viewsets
 
-from mlw_survey.models import Survey
-from mlw_survey.serializers import SurveySerializer
+from mlw_survey.models import Survey, SurveyComment
+from mlw_survey.serializers import SurveySerializer, SurveyCommentSerializer
 from utils.pagination import PagePagination
 from utils.storage import get_absolute_path_regarding_media
 
@@ -39,3 +39,14 @@ class SurveyViewSet(viewsets.ModelViewSet):
             pass
 
         instance.delete()
+
+
+class SurveyCommentViewSet(viewsets.ModelViewSet):
+    serializer_class = SurveyCommentSerializer
+
+    def get_queryset(self):
+        survey_id = self.request.GET.get('surveyId')
+        return SurveyComment.objects.filter(survey_id=survey_id)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
